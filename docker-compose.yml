@@ -1,0 +1,7 @@
+#This file will be replaced with a docker orchestrator
+version: '3'
+services:
+  eureka-server:
+    image: arcilli/demetria-eureka-server:0.0.1-SNAPSHOT
+    ports:
+      - '8761:8761'
