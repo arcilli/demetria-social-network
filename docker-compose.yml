@@ -2,6 +2,10 @@
 version: '3'
 services:
   eureka-server:
-    image: arcilli/demetria-eureka-server:0.0.1-SNAPSHOT
+    build: eureka-server/
     ports:
       - '8761:8761'
+  hello-world:
+    build: hello-world/
+    ports:
+      - '8080:8080'

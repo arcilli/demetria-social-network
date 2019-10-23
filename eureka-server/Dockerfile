@@ -13,4 +13,4 @@ RUN mkdir /usr/local/eureka-server
 COPY target/eureka-server-0.0.1-SNAPSHOT.jar /usr/local/eureka-server/
 COPY Docker/run.sh /
 RUN chmod +x run.sh
-RUN ./run.sh
+CMD ./run.sh
