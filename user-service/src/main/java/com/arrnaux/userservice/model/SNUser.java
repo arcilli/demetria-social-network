@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Id;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class SNUser {
     @Id
     private long id;
 
@@ -21,7 +21,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "SNUser{" +
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
@@ -29,7 +29,7 @@ public class User {
     }
 
 //    // TODO: find another solution, not to hard-code these values!
-//    public User(UserDTO userDTO) {
+//    public SNUser(SNUserDTO userDTO) {
 //        this.id = -1; //TODO: this value should be auto-generated
 //        this.lastName = userDTO.getLastName();
 //        this.firstName = userDTO.getFirstName();

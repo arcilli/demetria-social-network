@@ -1,6 +1,6 @@
 package com.arrnaux.userservice.validator;
 
-import com.arrnaux.userservice.model.UserDTO;
+import com.arrnaux.userservice.model.SNUserDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,7 +13,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        UserDTO user = (UserDTO) obj;
+        SNUserDTO user = (SNUserDTO) obj;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

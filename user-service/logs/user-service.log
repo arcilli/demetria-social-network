@@ -1,0 +1,8 @@
+2019-11-01 17:17:50 INFO  Login:23 - User email@ceva is trying to login with: 21
+2019-11-01 17:17:50 INFO  Login:28 - Login failed for attempt with email: email@ceva
+2019-11-01 17:18:05 INFO  Login:23 - User email@ceva is trying to login with: 21
+2019-11-01 17:18:06 INFO  Login:28 - Login failed for attempt with email: email@ceva
+2019-11-01 17:18:54 INFO  Login:23 - User email@pass.com is trying to login with: parola
+2019-11-01 17:18:54 INFO  Login:28 - Login failed for attempt with email: email@pass.com
+2019-11-01 17:20:29 INFO  Login:23 - User parola is trying to login with: email@pass.com
+2019-11-01 17:20:29 INFO  Login:25 - User parola has logged
