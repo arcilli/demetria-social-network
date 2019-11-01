@@ -2,6 +2,7 @@ package com.arrnaux.userservice.services;
 
 import com.arrnaux.userservice.data.SNUserDAO;
 import com.arrnaux.userservice.model.SNUser;
+import com.arrnaux.userservice.model.SNUserDTO;
 import com.arrnaux.userservice.model.Token;
 import com.arrnaux.userservice.model.TokenAuthority;
 import org.apache.log4j.Logger;
@@ -17,19 +18,17 @@ public class Login {
 
     @Autowired
     private TokenAuthority tokenAuthority;
-
-    // Should receive a snUserDTO?
+    
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public Token speak(@RequestParam("email") String email,
-                       @RequestParam("password") String password) {
-        logger.info("User " + email + " is trying to login with: " + password);
-        SNUser snUser = snUserDAO.findUserByEmailAndPassword(email, password);
+    public Token speak(@RequestBody SNUserDTO userDTO) {
+        logger.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
+        SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             Token generatedToken = tokenAuthority.getToken(snUser);
-            logger.info("User " + email + " has logged in.");
+            logger.info("User " + userDTO.getEmail() + " has logged in.s");
             return generatedToken;
         }
-        logger.info("Login attempt failed for  with email: " + email);
+        logger.info("Login attempt failed for  with email: " + userDTO.getEmail());
         return null;
     }
 

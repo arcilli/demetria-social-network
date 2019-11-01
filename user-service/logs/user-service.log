@@ -26,3 +26,10 @@
 2019-11-01 18:55:08 INFO  Login:25 - User mail.boca.nicolae@gmail.com is trying to login with: pass
 2019-11-01 18:55:08 INFO  TokenAuthorityDefault:22 - Generating token for user: SNUser(id=9, lastName=Nicu, firstName=Boca, password=pass, email=mail.boca.nicolae@gmail.com)
 2019-11-01 18:55:08 INFO  Login:29 - User mail.boca.nicolae@gmail.com has logged in.
+2019-11-01 19:19:43 INFO  Login:26 - User null is trying to login with: pass
+2019-11-01 19:19:43 INFO  Login:33 - Login attempt failed for  with email: null
+2019-11-01 19:20:10 INFO  Login:26 - User mail.boca.nicoale@gmail.com is trying to login with: pass
+2019-11-01 19:20:10 INFO  Login:33 - Login attempt failed for  with email: mail.boca.nicoale@gmail.com
+2019-11-01 19:20:27 INFO  Login:26 - User mail.boca.nicolae@gmail.com is trying to login with: pass
+2019-11-01 19:20:28 INFO  TokenAuthorityDefault:22 - Generating token for user: SNUser(id=9, lastName=Nicu, firstName=Boca, password=pass, email=mail.boca.nicolae@gmail.com)
+2019-11-01 19:20:28 INFO  Login:30 - User mail.boca.nicolae@gmail.com has logged in.s
