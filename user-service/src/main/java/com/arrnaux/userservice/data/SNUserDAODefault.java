@@ -40,7 +40,11 @@ public class SNUserDAODefault implements SNUserDAO {
     }
 
     @Override
-    public SNUser findUserByEmailAndPassword (String email, String password){
+    public SNUser findUserByEmailAndPassword(String email, String password) {
+        Optional<SNUser> snUser = snUserRepository.findByEmailAndPassword(email, password);
+        if (snUser.isPresent()) {
+            return snUser.get();
+        }
         return null;
     }
 }

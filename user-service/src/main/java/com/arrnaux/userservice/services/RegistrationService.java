@@ -1,8 +1,8 @@
 package com.arrnaux.userservice.services;
 
+import com.arrnaux.userservice.data.SNUserRepository;
 import com.arrnaux.userservice.model.SNUser;
 import com.arrnaux.userservice.model.SNUserDTO;
-import com.arrnaux.userservice.data.SNUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,11 +21,11 @@ public class RegistrationService {
 
 //        snUserRepository.save(new SNUser(3, "Mihai", "Geroge"));
         snUserRepository.save(new SNUser(
-                4,
-                "Mihai",
-                "Georgescu",
-                "email@pass.com",
-                "parola"
+                9,
+                "Nicu",
+                "Boca",
+                "pass",
+                "mail.boca.nicolae@gmail.com"
         ));
         System.out.println("Customers found with findAll():");
         StringBuilder s = new StringBuilder();

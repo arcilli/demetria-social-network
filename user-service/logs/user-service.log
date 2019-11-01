@@ -6,3 +6,23 @@
 2019-11-01 17:18:54 INFO  Login:28 - Login failed for attempt with email: email@pass.com
 2019-11-01 17:20:29 INFO  Login:23 - User parola is trying to login with: email@pass.com
 2019-11-01 17:20:29 INFO  Login:25 - User parola has logged
+2019-11-01 18:43:21 INFO  Login:25 - User parola is trying to login with: email@pass.com
+2019-11-01 18:43:21 INFO  Login:32 - Login attempt failed for  with email: parola
+2019-11-01 18:44:02 INFO  Login:25 - User parola is trying to login with: email@pass.com
+2019-11-01 18:44:02 INFO  Login:32 - Login attempt failed for  with email: parola
+2019-11-01 18:44:53 INFO  Login:25 - User parola is trying to login with: email@pass.com
+2019-11-01 18:44:53 INFO  Login:32 - Login attempt failed for  with email: parola
+2019-11-01 18:45:03 INFO  Login:25 - User parola is trying to login with: email@pass.com
+2019-11-01 18:45:03 INFO  Login:32 - Login attempt failed for  with email: parola
+2019-11-01 18:45:21 INFO  Login:25 - User john.doe@gmail.com is trying to login with: parola
+2019-11-01 18:45:21 INFO  Login:32 - Login attempt failed for  with email: john.doe@gmail.com
+2019-11-01 18:49:59 INFO  Login:25 - User mihai@georgescu.com is trying to login with: pass
+2019-11-01 18:49:59 INFO  Login:32 - Login attempt failed for  with email: mihai@georgescu.com
+2019-11-01 18:51:15 INFO  Login:25 - User mihai@georgescu.com is trying to login with: pass
+2019-11-01 18:51:15 INFO  Login:32 - Login attempt failed for  with email: mihai@georgescu.com
+2019-11-01 18:53:34 INFO  Login:25 - User mihai@georgescu.com is trying to login with: pass
+2019-11-01 18:54:46 INFO  Login:25 - User mai.boca.nicolae@gmail.com is trying to login with: pass
+2019-11-01 18:54:46 INFO  Login:32 - Login attempt failed for  with email: mai.boca.nicolae@gmail.com
+2019-11-01 18:55:08 INFO  Login:25 - User mail.boca.nicolae@gmail.com is trying to login with: pass
+2019-11-01 18:55:08 INFO  TokenAuthorityDefault:22 - Generating token for user: SNUser(id=9, lastName=Nicu, firstName=Boca, password=pass, email=mail.boca.nicolae@gmail.com)
+2019-11-01 18:55:08 INFO  Login:29 - User mail.boca.nicolae@gmail.com has logged in.

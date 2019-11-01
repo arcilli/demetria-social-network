@@ -1,15 +1,13 @@
 package com.arrnaux.userservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SNUser {
     @Id
     private long id;
@@ -18,15 +16,6 @@ public class SNUser {
     private String firstName;
     private String password;
     private String email;
-
-    @Override
-    public String toString() {
-        return "SNUser{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                '}';
-    }
 
 //    // TODO: find another solution, not to hard-code these values!
 //    public SNUser(SNUserDTO userDTO) {
