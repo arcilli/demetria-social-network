@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("auth")
 @RestController
+// TODO: this should authorize requests by checking the JWT
 public class AuthorizationServer {
 
     @Autowired

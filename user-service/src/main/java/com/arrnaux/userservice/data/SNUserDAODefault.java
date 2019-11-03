@@ -47,4 +47,11 @@ public class SNUserDAODefault implements SNUserDAO {
         }
         return null;
     }
+
+    @Override
+    // TODO: add a case for false, when an error occurs
+    public boolean saveSNUser(SNUser snUser) {
+        snUserRepository.save(snUser);
+        return true;
+    }
 }
