@@ -1,28 +1,36 @@
 package com.arrnaux.userservice.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class SNUser {
+@ToString(callSuper=true)
+// TODO: add fields validation
+public class SNUser extends SNUserLoginDTO {
+
+    // TODO: find a solution for autoincrement user id
     @Id
-    private long id;
+    protected static long id=5;
+    protected String firstName;
+    protected String lastName;
 
-    private String lastName;
-    private String firstName;
-    private String password;
-    private String email;
+    public SNUser(long id, String firstName, String lastName, String email, String password) {
+        super(email, password);
+        this.id = id;
+        this.id += 1;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
-//    // TODO: find another solution, not to hard-code these values!
-//    public SNUser(SNUserDTO userDTO) {
-//        this.id = -1; //TODO: this value should be auto-generated
-//        this.lastName = userDTO.getLastName();
-//        this.firstName = userDTO.getFirstName();
-//        this.password = userDTO.getPassword();
-//        this.email = userDTO.getEmail();
-//    }
+    public SNUser(SNUserRegistrationDTO snUserRegistrationDTO) {
+        super(snUserRegistrationDTO.getEmail(), snUserRegistrationDTO.getPassword());
+        this.firstName = snUserRegistrationDTO.getFirstName();
+        this.lastName = snUserRegistrationDTO.getLastName();
+    }
 }

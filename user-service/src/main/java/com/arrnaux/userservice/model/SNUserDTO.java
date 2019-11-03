@@ -1,21 +1,12 @@
 package com.arrnaux.userservice.model;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-// TODO: ADD validations
-public class SNUserDTO {
-    private String password;
-    private String email;
+@ToString(callSuper=true)
+// Should contain SNUser, but without Password
+public class SNUserDTO extends SNUser {
 
-    public SNUser toUser() {
-        SNUser user = new SNUser();
-        user.setEmail(email);
-        user.setPassword(password);
-        return user;
-    }
 }

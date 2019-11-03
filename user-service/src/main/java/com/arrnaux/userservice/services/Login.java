@@ -2,7 +2,7 @@ package com.arrnaux.userservice.services;
 
 import com.arrnaux.userservice.data.SNUserDAO;
 import com.arrnaux.userservice.model.SNUser;
-import com.arrnaux.userservice.model.SNUserDTO;
+import com.arrnaux.userservice.model.SNUserLoginDTO;
 import com.arrnaux.userservice.model.Token;
 import com.arrnaux.userservice.model.TokenAuthority;
 import org.apache.log4j.Logger;
@@ -18,9 +18,9 @@ public class Login {
 
     @Autowired
     private TokenAuthority tokenAuthority;
-    
+
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public Token speak(@RequestBody SNUserDTO userDTO) {
+    public Token speak(@RequestBody SNUserLoginDTO userDTO) {
         logger.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
         SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
@@ -29,7 +29,7 @@ public class Login {
             return generatedToken;
         }
         logger.info("Login attempt failed for  with email: " + userDTO.getEmail());
-        return null;
+        return new Token("-1");
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
