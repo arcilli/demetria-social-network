@@ -1,4 +1,5 @@
 #This file will be 8761replaced with a docker orchestrator
+#docker system prune may be useful when the containers aren't build
 version: '3'
 services:
   eureka-server:
