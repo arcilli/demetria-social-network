@@ -7,14 +7,14 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
+@Log4j
 public class TokenAuthorityDefault implements TokenAuthority {
-    private final static Logger logger = Logger.getLogger(TokenAuthorityDefault.class);
     private final String KEY_PHRASE = "SECRET";
     private final String ISSUER = "DEMETRIA";
     private Algorithm usedAlgorithm = Algorithm.HMAC256(KEY_PHRASE);
@@ -23,11 +23,11 @@ public class TokenAuthorityDefault implements TokenAuthority {
     // TODO: rename this
     public Token getToken(SNUser user) {
         try {
-            logger.info("Generating token for user: " + user);
+            log.info("Generating token for user: " + user);
             return createTokenForUser(user);
         } catch (JWTCreationException e) {
             e.printStackTrace();
-            logger.error("Error at JWTCreationException");
+            log.error("Error at JWTCreationException");
         }
         return null;
     }
@@ -57,7 +57,7 @@ public class TokenAuthorityDefault implements TokenAuthority {
             return true;
         } catch (JWTVerificationException exception) {
             exception.printStackTrace();
-            logger.error("Invalid signature/claims");
+            log.error("Invalid signature/claims");
         }
         return false;
     }

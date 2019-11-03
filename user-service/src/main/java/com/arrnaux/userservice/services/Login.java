@@ -5,14 +5,14 @@ import com.arrnaux.userservice.model.SNUser;
 import com.arrnaux.userservice.model.SNUserLoginDTO;
 import com.arrnaux.userservice.model.Token;
 import com.arrnaux.userservice.model.TokenAuthority;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "login")
+@Log4j
 public class Login {
-    final static Logger logger = Logger.getLogger(Login.class);
     @Autowired
     private SNUserDAO snUserDAO;
 
@@ -21,14 +21,14 @@ public class Login {
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public Token speak(@RequestBody SNUserLoginDTO userDTO) {
-        logger.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
+        log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
         SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             Token generatedToken = tokenAuthority.getToken(snUser);
-            logger.info("User " + userDTO.getEmail() + " has logged in.s");
+            log.info("User " + userDTO.getEmail() + " has logged in.");
             return generatedToken;
         }
-        logger.info("Login attempt failed for  with email: " + userDTO.getEmail());
+        log.info("Login attempt failed for  with email: " + userDTO.getEmail());
         return new Token("-1");
     }
 

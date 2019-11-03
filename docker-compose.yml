@@ -1,11 +1,15 @@
-#This file will be replaced with a docker orchestrator
+#This file will be 8761replaced with a docker orchestrator
 version: '3'
 services:
   eureka-server:
-    build: eureka-server/
+    image: arcilli/demetria-eureka-server:0.0.1-SNAPSHOT
     ports:
       - '8761:8761'
-  hello-world:
-    build: hello-world/
+#  hello-world:
+#    build: hello-world/
+#    ports:
+#      - '8080:8080'
+  user-service:
+    image: arcilli/demetria-user-service:0.0.1-SNAPSHOT
     ports:
       - '8080:8080'
