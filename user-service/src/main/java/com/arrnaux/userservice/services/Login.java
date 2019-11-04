@@ -24,7 +24,7 @@ public class Login {
         log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
         SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
-            Token generatedToken = tokenAuthority.getToken(snUser);
+            Token generatedToken = tokenAuthority.generateToken(snUser);
             log.info("User " + userDTO.getEmail() + " has logged in.");
             return generatedToken;
         }

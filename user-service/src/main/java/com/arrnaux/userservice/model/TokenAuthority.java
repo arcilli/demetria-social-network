@@ -2,7 +2,7 @@ package com.arrnaux.userservice.model;
 
 public interface TokenAuthority {
 
-    public Token getToken(SNUser user);
+    Token generateToken(SNUser user);
 
-    public boolean tokenIsValid (Token token);
+    boolean tokenIsValid (Token token);
 }

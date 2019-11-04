@@ -10,21 +10,22 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Map;
 
 @Component
 @Log4j
 public class TokenAuthorityDefault implements TokenAuthority {
-    private final String KEY_PHRASE = "SECRET";
+    private final String KEY_PHRASE = "KcT4V4PeMwKmwAqv";
     private final String ISSUER = "DEMETRIA";
     private Algorithm usedAlgorithm = Algorithm.HMAC256(KEY_PHRASE);
 
     @Override
     // TODO: rename this
-    public Token getToken(SNUser user) {
+    public Token generateToken(SNUser user) {
         try {
             log.info("Generating token for user: " + user);
-            return createTokenForUser(user);
+            return buildToken(user);
         } catch (JWTCreationException e) {
             e.printStackTrace();
             log.error("Error at JWTCreationException");
@@ -32,10 +33,14 @@ public class TokenAuthorityDefault implements TokenAuthority {
         return null;
     }
 
-    private Token createTokenForUser(SNUser snUser) {
+    private Token buildToken(SNUser snUser) {
         // TODO: add here USER characteristics
+        // TODO: add an expiration date
+        // TODO: add a session ID (maybe encrypt id)
         String rawToken = JWT.create()
                 .withIssuer(ISSUER)
+                .withSubject("userInfo")
+//                .withExpiresAt(Date.UTC()+ datetime.timedelta(seconds=30))
                 .withClaim("firstName", snUser.getFirstName())
                 .withClaim("lastName", snUser.getLastName())
                 .withClaim("email", snUser.getEmail())
@@ -43,6 +48,8 @@ public class TokenAuthorityDefault implements TokenAuthority {
         return new Token(rawToken);
     }
 
+    // TODO: add a method for signature check (tokenValitation)
+    // A token is considered valid when all the restrictions specified in its header & payload are satisfied.
     @Override
     public boolean tokenIsValid(Token token) {
         try {
