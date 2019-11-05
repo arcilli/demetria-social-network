@@ -1,4 +1,4 @@
-package com.arrnaux.userservice.model;
+package com.arrnaux.userservice.userAccount.model;
 
 import lombok.Getter;
 import lombok.Setter;

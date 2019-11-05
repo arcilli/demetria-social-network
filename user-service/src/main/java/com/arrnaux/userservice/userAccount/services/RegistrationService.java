@@ -1,8 +1,8 @@
-package com.arrnaux.userservice.services;
+package com.arrnaux.userservice.userAccount.services;
 
-import com.arrnaux.userservice.data.SNUserDAO;
-import com.arrnaux.userservice.model.SNUser;
-import com.arrnaux.userservice.model.SNUserRegistrationDTO;
+import com.arrnaux.userservice.userAccount.data.SNUserDAO;
+import com.arrnaux.userservice.userAccount.model.SNUser;
+import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

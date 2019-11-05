@@ -1,6 +1,6 @@
-package com.arrnaux.userservice.data;
+package com.arrnaux.userservice.userAccount.data;
 
-import com.arrnaux.userservice.model.SNUser;
+import com.arrnaux.userservice.userAccount.model.SNUser;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

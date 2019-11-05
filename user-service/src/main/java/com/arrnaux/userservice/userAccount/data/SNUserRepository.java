@@ -1,6 +1,6 @@
-package com.arrnaux.userservice.data;
+package com.arrnaux.userservice.userAccount.data;
 
-import com.arrnaux.userservice.model.SNUser;
+import com.arrnaux.userservice.userAccount.model.SNUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

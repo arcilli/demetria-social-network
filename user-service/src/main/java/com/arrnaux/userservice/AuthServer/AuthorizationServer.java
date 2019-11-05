@@ -1,7 +1,7 @@
 package com.arrnaux.userservice.AuthServer;
 
-import com.arrnaux.userservice.model.Token;
-import com.arrnaux.userservice.model.TokenAuthority;
+import com.arrnaux.userservice.userAccount.model.Token;
+import com.arrnaux.userservice.userAccount.model.TokenAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

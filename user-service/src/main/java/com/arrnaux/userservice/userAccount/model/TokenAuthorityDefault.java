@@ -1,4 +1,4 @@
-package com.arrnaux.userservice.model;
+package com.arrnaux.userservice.userAccount.model;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -10,7 +10,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.Map;
 
 @Component

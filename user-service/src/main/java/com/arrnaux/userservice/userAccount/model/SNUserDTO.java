@@ -1,7 +1,6 @@
-package com.arrnaux.userservice.model;
+package com.arrnaux.userservice.userAccount.model;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
