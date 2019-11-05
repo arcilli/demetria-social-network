@@ -10,6 +10,5 @@ public interface SNPostDAO {
     List<SNPost> getUserPosts(SNUser snUser);
 
     // return the id of just created post
-//    long createPost(SNPost snPost);
-
+    boolean insertPost(SNPost snPost);
 }

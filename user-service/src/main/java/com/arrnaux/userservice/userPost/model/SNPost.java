@@ -13,8 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Document
 
-//@Document(collection = "post")
 public class SNPost {
     @Id
     protected long id;

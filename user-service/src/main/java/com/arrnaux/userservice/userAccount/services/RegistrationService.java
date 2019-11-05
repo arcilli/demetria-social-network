@@ -1,8 +1,5 @@
 package com.arrnaux.userservice.userAccount.services;
 
-//import com.arrnaux.userservice.userAccount.data.NextSequenceService;
-
-//import com.arrnaux.userservice.userAccount.data.NextSequenceService;
 import com.arrnaux.userservice.userAccount.data.SNUserDAO;
 import com.arrnaux.userservice.userAccount.model.SNUser;
 import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
@@ -22,9 +19,6 @@ public class RegistrationService {
     @Autowired
     private SNUserDAO snUserDAO;
 
-//    @Autowired
-//    private NextSequenceService nextSequenceService;
-
     // TODO: this should redirect to login page
     @RequestMapping(value = "", method = RequestMethod.POST)
     public boolean registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) throws Exception {
@@ -37,8 +31,7 @@ public class RegistrationService {
             log.error("User with same email already exists", e);
             throw e;
         } else {
-            SNUser userToBeSaved = new SNUser(snUserRegistrationDTO);
-//            userToBeSaved.setId(nextSequenceService.getNextSequence("user"));
+//            SNUser userToBeSaved = new SNUser(snUserRegistrationDTO);
             snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
             log.info("Registerd user with info: " + snUserRegistrationDTO);
             return true;

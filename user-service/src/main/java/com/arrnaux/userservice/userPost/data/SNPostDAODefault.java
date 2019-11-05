@@ -4,10 +4,13 @@ import com.arrnaux.userservice.userAccount.model.SNUser;
 import com.arrnaux.userservice.userPost.model.SNPost;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Log4j
+@Repository
+
 public class SNPostDAODefault implements SNPostDAO {
 
     @Autowired
@@ -20,12 +23,9 @@ public class SNPostDAODefault implements SNPostDAO {
         return null;
     }
 
-//    @Override
-//    public long createPost(SNPost snPost) {
-//        log.info("Creating post: " + snPost);
-//        snPostRepository.insertSnPost(snPost);
-//        // TODO: get created post id & return it
-//        // TODO: else, throw an error
-//        return -1;
-//    }
+    @Override
+    public boolean insertPost(SNPost snPost) {
+        snPostRepository.save(snPost);
+        return false;
+    }
 }

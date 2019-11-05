@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
@@ -20,7 +19,6 @@ public class SNUser extends SNUserLoginDTO {
     // TODO: find a solution for autoincrement user id
     @Id
     protected long id;
-    private int seq;
     protected String firstName;
     protected String lastName;
     @Autowired

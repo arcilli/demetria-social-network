@@ -1,9 +1,6 @@
 package com.arrnaux.userservice.userAccount.data;
 
 import com.arrnaux.userservice.userAccount.model.SNUser;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

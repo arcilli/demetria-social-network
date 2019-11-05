@@ -1,14 +1,17 @@
-package com.arrnaux.userservice.userAccount.data;
+package com.arrnaux.userservice.userAccount.data.impl;
 
+import com.arrnaux.userservice.userAccount.data.SNUserDAO;
+import com.arrnaux.userservice.userAccount.data.SNUserRepository;
 import com.arrnaux.userservice.userAccount.model.SNUser;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Component
 @NoArgsConstructor
+@Repository
+
 public class SNUserDAODefault implements SNUserDAO {
 
     @Autowired
@@ -44,6 +47,8 @@ public class SNUserDAODefault implements SNUserDAO {
     @Override
     // TODO: add a case for false, when an error occurs
     public boolean saveSNUser(SNUser snUser) {
+//        System.out.println(sequenceDAO.getNextSequenceId(COLLECTION_NAME));
+//        snUser.setId(sequenceDAO.getNextSequenceId(COLLECTION_NAME).toString());
         snUserRepository.save(snUser);
         return true;
     }
