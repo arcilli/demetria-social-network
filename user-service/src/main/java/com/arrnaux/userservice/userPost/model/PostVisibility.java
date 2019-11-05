@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true)
 public enum PostVisibility {
     PRIVATE,

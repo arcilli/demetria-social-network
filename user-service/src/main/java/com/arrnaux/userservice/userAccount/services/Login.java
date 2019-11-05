@@ -20,7 +20,7 @@ public class Login {
     private TokenAuthority tokenAuthority;
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public Token speak(@RequestBody SNUserLoginDTO userDTO) {
+    public Token userLogin(@RequestBody SNUserLoginDTO userDTO) {
         log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
         SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {

@@ -19,7 +19,7 @@ public class SNUserDAODefault implements SNUserDAO {
         Optional<SNUser> user = snUserRepository.findById(id);
         // Throw an error
         // Log this, no user is found
-        return user.get();
+        return user.orElse(null);
     }
 
     @Override
@@ -32,20 +32,13 @@ public class SNUserDAODefault implements SNUserDAO {
         // Log this if no user is found
         Optional<SNUser> snUser = snUserRepository.findByEmail(email);
 
-        // TODO: use lamda?
-        if (snUser.isPresent()) {
-            return snUser.get();
-        }
-        return null;
+        return snUser.orElse(null);
     }
 
     @Override
     public SNUser findUserByEmailAndPassword(String email, String password) {
         Optional<SNUser> snUser = snUserRepository.findByEmailAndPassword(email, password);
-        if (snUser.isPresent()) {
-            return snUser.get();
-        }
-        return null;
+        return snUser.orElse(null);
     }
 
     @Override
