@@ -3,6 +3,7 @@ package com.arrnaux.userservice.userAccount.services;
 import com.arrnaux.userservice.userAccount.data.SNUserDAO;
 import com.arrnaux.userservice.userAccount.model.SNUser;
 import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
+import com.netflix.discovery.converters.Auto;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

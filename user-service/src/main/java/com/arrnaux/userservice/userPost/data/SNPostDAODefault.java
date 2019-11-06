@@ -1,5 +1,6 @@
 package com.arrnaux.userservice.userPost.data;
 
+import com.arrnaux.userservice.userAccount.data.SequenceDAO;
 import com.arrnaux.userservice.userAccount.model.SNUser;
 import com.arrnaux.userservice.userPost.model.SNPost;
 import lombok.extern.log4j.Log4j;
@@ -13,8 +14,11 @@ import java.util.List;
 
 public class SNPostDAODefault implements SNPostDAO {
 
+    private static final String SNPostCollectionName = "sNPost";
     @Autowired
     private SNPostRepository snPostRepository;
+    @Autowired
+    private SequenceDAO sequenceDAO;
 
     @Override
     public List<SNPost> getUserPosts(SNUser snUser) {
@@ -25,6 +29,7 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     public boolean insertPost(SNPost snPost) {
+        snPost.setId(sequenceDAO.getNextSequenceId(SNPostCollectionName));
         snPostRepository.save(snPost);
         return false;
     }
