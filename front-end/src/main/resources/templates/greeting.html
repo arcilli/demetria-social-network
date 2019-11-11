@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Getting started.</title>
+</head>
+<body>
+<h1>Form</h1>
+<!--// th:action="@{/greeting} directs the form to POST to /greeting endpoint-->
+<!--th:object=${greeting} declares the model object to use for collecting from form data-->
+<form action="#" th:action="@{/greeting}" th:object="${greeting}" method="post">
+    <p>Id: <input type="text" th:field="*{id}"/></p>
+    <p>Message: <input type="text" th:field="*{content}"/></p>
+    <p>
+        <input type="submit" value="Submit"/>
+        <input type="reset" value="Reset"/>
+    </p>
+</form>
+</body>
+</html>
