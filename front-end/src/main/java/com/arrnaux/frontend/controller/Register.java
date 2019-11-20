@@ -28,9 +28,7 @@ public class Register {
     // this should make a call for user-register service
     @PostMapping("/signup")
     public String processSignupRequest(@ModelAttribute SNUserRegistrationDTO user) {
-        // do something here
         // TODO: decide on a type of response that need to be sent/receive
-
 
         //this below works & returns a SNUSer object
         //SNUser snUser = restTemplate.postForObject("http://user-service/register", user, SNUserRegistrationDTO.class);
@@ -42,6 +40,7 @@ public class Register {
 
 
         // should populate the model with the user that is registered / logged in?!?
+
         return "home";
     }
 }

@@ -5,11 +5,12 @@ import com.arrnaux.userservice.userAccount.model.SNUser;
 import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @Log4j
 @RestController
@@ -21,9 +22,9 @@ public class RegistrationService {
 
     // TODO: this should redirect to login page
     // TODO: this should return some info to be store in front end: user information, session id etc
-    // TODO/: this should return a ResponseEntity (maybe with status Created)
+    // TODO: this should not return a full-user object
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/json")
-    public SNUser registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) throws Exception {
+    public ResponseEntity registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) throws Exception {
         log.info("Attempt to register an user with info: " + snUserRegistrationDTO);
         // TODO: add a check for not-null user properties
         SNUser user = snUserDAO.findUserByEmail(snUserRegistrationDTO.getEmail());
@@ -32,17 +33,13 @@ public class RegistrationService {
 //            Exception e = new Exception("User with same email already exists");
 //            log.error("User with same email already exists", e);
 //            throw e;
-            return null;
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         } else {
-//            SNUser userToBeSaved = new SNUser(snUserRegistrationDTO);
             SNUser savedUser = snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
             log.info("Registerd user with info: " + savedUser);
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("registeredUser", savedUser);
-//            return modelAndView;
-//            ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.CREATED);
-            return savedUser;
-//            return responseEntity;
+
+            // populate this with extra information if necessary.
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
     }
 
