@@ -2,14 +2,18 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Title</title>
 </head>
 <body>
-<form action="#" method="post" th:action="http://user-service/login/form" th:object="${SNUserLoginDTO}">
+<!--th:object will be the object that will be populated with data when the form is submitted-->
+<form action="#" method="post" th:action="@{/signup}" th:object="${user}">
     <label for="loginFormEmail">Email: </label>
     <input id="loginFormEmail" th:field="*{email}" type="email"/>
     <label for="loginFormPassword">Password</label>
     <input id="loginFormPassword" th:field="*{password}" type="password"/>
+    <lavel for="firstName">First name:</lavel>
+    <input id="firstName" th:field="*{firstName}" type="text"/>
+    <input id="submitButton" type="submit"/>
 </form>
 </body>
 </html>

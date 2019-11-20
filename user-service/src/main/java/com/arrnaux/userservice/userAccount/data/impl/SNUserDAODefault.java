@@ -53,7 +53,7 @@ public class SNUserDAODefault implements SNUserDAO {
     @Override
     // TODO: add a case for false, when an error occurs
     public boolean saveSNUser(SNUser snUser) {
-        snUser.setId(sequenceDAO.getNextSequenceId(SNUserCollectionName));
+       // snUser.setId(sequenceDAO.getNextSequenceId(SNUserCollectionName));
         snUserRepository.save(snUser);
         return true;
     }

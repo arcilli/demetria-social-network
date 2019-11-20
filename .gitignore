@@ -1,5 +1,7 @@
 # Gabi
 logs/
+*/.mvn/*
+!.mvn/*
 
 HELP.md
 target/

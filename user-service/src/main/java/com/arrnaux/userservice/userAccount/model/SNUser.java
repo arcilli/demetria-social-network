@@ -1,12 +1,11 @@
 package com.arrnaux.userservice.userAccount.model;
 
-import com.arrnaux.userservice.userPost.data.SNPostDAO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
@@ -14,15 +13,17 @@ import org.springframework.data.annotation.Id;
 @ToString(callSuper = true)
 // TODO: add fields validation
 
-//@Document(collection = "user")
+@Document(collection = "user")
 public class SNUser extends SNUserLoginDTO {
     // TODO: find a solution for autoincrement user id
     @Id
     protected long id;
     protected String firstName;
     protected String lastName;
-    @Autowired
-    SNPostDAO snPostDAO;
+
+    // Don't know if this is used somewhere
+    // @Autowired
+    //SNPostDAO snPostDAO;
 
     public SNUser(long id, String firstName, String lastName, String email, String password) {
         super(email, password);
