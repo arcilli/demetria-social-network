@@ -29,7 +29,7 @@ public class PostService {
     @RequestMapping(value = "", method = RequestMethod.POST)
     // TODO: need to bring here a token for user/another method for authorize the actual request
     // returns the id of the post
-    public long sharePost(@RequestBody SNPost snPost) {
+    public String sharePost(@RequestBody SNPost snPost) {
         snPostDAO.insertPost(snPost);
         return snPost.getId();
     }

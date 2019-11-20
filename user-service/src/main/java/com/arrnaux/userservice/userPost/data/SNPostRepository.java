@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface SNPostRepository extends MongoRepository<SNPost, String> {
 
-    List<SNPost> findByOwnerId(long ownerId);
+    List<SNPost> findByOwnerId(String ownerId);
 
 }

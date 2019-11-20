@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SNUser extends SNUserLoginDTO {
     // TODO: find a solution for autoincrement user id
     @Id
-    protected long id;
+    protected String id;
     protected String firstName;
     protected String lastName;
 
@@ -25,7 +25,7 @@ public class SNUser extends SNUserLoginDTO {
     // @Autowired
     //SNPostDAO snPostDAO;
 
-    public SNUser(long id, String firstName, String lastName, String email, String password) {
+    public SNUser(String id, String firstName, String lastName, String email, String password) {
         super(email, password);
         this.id = id;
         this.firstName = firstName;

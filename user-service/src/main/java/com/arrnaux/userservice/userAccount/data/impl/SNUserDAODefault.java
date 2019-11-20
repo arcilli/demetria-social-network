@@ -2,7 +2,6 @@ package com.arrnaux.userservice.userAccount.data.impl;
 
 import com.arrnaux.userservice.userAccount.data.SNUserDAO;
 import com.arrnaux.userservice.userAccount.data.SNUserRepository;
-import com.arrnaux.userservice.userAccount.data.SequenceDAO;
 import com.arrnaux.userservice.userAccount.model.SNUser;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,11 @@ import java.util.Optional;
 
 public class SNUserDAODefault implements SNUserDAO {
 
-    private static final String SNUserCollectionName = "sNUser";
-
     @Autowired
     private SNUserRepository snUserRepository;
 
-    @Autowired
-    private SequenceDAO sequenceDAO;
-
     @Override
-    public SNUser getUser(long id) {
+    public SNUser getUser(String id) {
         Optional<SNUser> user = snUserRepository.findById(id);
         // Throw an error
         // Log this, no user is found
@@ -52,9 +46,8 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Override
     // TODO: add a case for false, when an error occurs
-    public boolean saveSNUser(SNUser snUser) {
-       // snUser.setId(sequenceDAO.getNextSequenceId(SNUserCollectionName));
+    public SNUser saveSNUser(SNUser snUser) {
         snUserRepository.save(snUser);
-        return true;
+        return snUserRepository.findByEmail(snUser.getEmail()).orElse(null);
     }
 }
