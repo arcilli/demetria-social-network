@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +20,11 @@ public class SNUser extends SNUserLoginDTO {
     // TODO: find a solution for autoincrement user id
     @Id
     protected String id;
+
+    @NotEmpty
     protected String firstName;
+
+    @NotEmpty
     protected String lastName;
 
     // Don't know if this is used somewhere
