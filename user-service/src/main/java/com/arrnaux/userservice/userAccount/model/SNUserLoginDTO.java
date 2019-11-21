@@ -2,6 +2,8 @@ package com.arrnaux.userservice.userAccount.model;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -9,6 +11,10 @@ import lombok.*;
 @ToString
 // TODO: ADD validations
 public class SNUserLoginDTO {
+
+    @NotNull
     private String email;
+
+    @NotNull
     private String password;
 }

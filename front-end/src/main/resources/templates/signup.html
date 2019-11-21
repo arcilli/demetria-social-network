@@ -5,19 +5,32 @@
     <title>Sign up</title>
 </head>
 <body>
+<!--display this only if user has not successfully registered, else display a button that redirects on login-->
 <!--th:object will be the object that will be populated with data when the form is submitted-->
-<form action="#" method="post" th:action="@{/signup}" th:object="${user}">
-    <label for="email">Email: </label>
-    <input id="email" th:field="*{email}" type="email"/>
-    <label for="password">Password</label>
-    <input id="password" th:field="*{password}" type="password"/>
-    <label for="passwordMatch">Retype password</label>
-    <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/>
-    <label for="firstName">First name:</label>
-    <input id="firstName" th:field="*{firstName}" type="text"/>
-    <label for="lastName">First name:</label>
-    <input id="lastName" th:field="*{lastName}" type="text"/>
-    <input id="submitButton" type="submit" value="Register"/>
-</form>
+<div th:if="${userCreated == true}">
+    <span>The account has been created.</span>
+    <a href="/login">
+        <button>Login</button>
+    </a>
+</div>
+<div id="signupForm" th:if="${userCreated == null}">
+    <h1>Register to Demetria!</h1>
+    <div>
+        <form action="#" method="post" th:action="@{/signup}" th:object="${user}">
+            <label for="email">Email: </label>
+            <input id="email" th:field="*{email}" type="email"/>
+            <span th:if="${emailAlreadyExists != null}">An account associated with this email is already created.</span><br/>
+            <label for="password">Password</label>
+            <input id="password" th:field="*{password}" type="password"/><br/>
+            <label for="passwordMatch">Retype password</label>
+            <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/><br/>
+            <label for="firstName">First name:</label>
+            <input id="firstName" th:field="*{firstName}" type="text"/><br/>
+            <label for="lastName">First name:</label>
+            <input id="lastName" th:field="*{lastName}" type="text"/><br/>
+            <input id="submitButton" type="submit" value="Register"/>
+        </form>
+    </div>
+</div>
 </body>
 </html>

@@ -11,10 +11,10 @@ public class Home {
 
     //TODO: decide on some arguments that the functions needs to receive
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String showHome(Model model){
+    public String showHome(Model model) {
 
         // TODO: this should be populated after login with a SNUserDTO & a sessionid
-        SNUserDTO snUserDTO=null;
+        SNUserDTO snUserDTO = null;
         model.addAttribute("numeUser", "Gicu de la spalatorie");
         return "home";
     }

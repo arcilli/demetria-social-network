@@ -5,12 +5,14 @@ import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
@@ -27,7 +29,7 @@ public class Register {
 
     // this should make a call for user-register service
     @PostMapping("/signup")
-    public String processSignupRequest(@ModelAttribute SNUserRegistrationDTO user) {
+    public String processSignupRequest(@ModelAttribute SNUserRegistrationDTO user, Model model) {
         // TODO: decide on a type of response that need to be sent/receive
 
         //this below works & returns a SNUSer object
@@ -36,11 +38,20 @@ public class Register {
 
         // This seems also to work
         HttpEntity<SNUserRegistrationDTO> httpEntity = new HttpEntity<>(user);
-        ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/register", HttpMethod.POST, httpEntity, SNUser.class);
+        try {
+            ResponseEntity<SNUser> responseEntity =
+                    restTemplate.exchange("http://user-service/register", HttpMethod.POST, httpEntity, SNUser.class);
+            if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
+                model.addAttribute("userCreated", true);
+            }
+        } catch (HttpClientErrorException e) {
+            // should populate the model with the user that is registered / logged in?!?
 
+            // the data should be persisted
+            model.addAttribute("user", user);
+            model.addAttribute("emailAlreadyExists", true);
+        }
 
-        // should populate the model with the user that is registered / logged in?!?
-
-        return "home";
+        return "signup";
     }
 }

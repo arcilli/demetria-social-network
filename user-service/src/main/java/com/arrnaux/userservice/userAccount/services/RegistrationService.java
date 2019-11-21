@@ -20,9 +20,7 @@ public class RegistrationService {
     @Autowired
     private SNUserDAO snUserDAO;
 
-    // TODO: this should redirect to login page
     // TODO: this should return some info to be store in front end: user information, session id etc
-    // TODO: this should not return a full-user object
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) throws Exception {
         log.info("Attempt to register an user with info: " + snUserRegistrationDTO);
@@ -37,7 +35,6 @@ public class RegistrationService {
         } else {
             SNUser savedUser = snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
             log.info("Registerd user with info: " + savedUser);
-
             // populate this with extra information if necessary.
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
