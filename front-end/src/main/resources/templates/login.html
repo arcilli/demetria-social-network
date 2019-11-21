@@ -5,12 +5,15 @@
     <title>Login</title>
 </head>
 <body>
-<form action="#" method="post" th:action="@{/login}" th:object="${userLoginDTO}">
-    <label for="loginFormEmail">Email: </label>
-    <input id="loginFormEmail" th:field="*{email}" type="email"/>
-    <label for="loginFormPassword">Password</label>
-    <input id="loginFormPassword" th:field="*{password}" type="password"/>
-    <input type="submit" value="Log in"/>
-</form>
+<div th:if="${userLoginDTO != null}">
+    <form action="#" method="post" th:action="@{/login}" th:object="${userLoginDTO}">
+        <label for="loginFormEmail">Email: </label>
+        <input id="loginFormEmail" th:field="*{email}" type="email"/><br/>
+        <label for="loginFormPassword">Password</label>
+        <input id="loginFormPassword" th:field="*{password}" type="password"/><br/>
+        <input type="submit" value="Log in"/>
+        <span th:if="${badCredentials != null}">Bad credentials</span>
+    </form>
+</div>
 </body>
 </html>
