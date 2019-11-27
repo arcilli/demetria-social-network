@@ -8,4 +8,4 @@ rm -rf /data/db
 mkdir -p /data/db
 mongod &
 cd /usr/local/user-service/
-java -jar SNUser-service-0.0.1-SNAPSHOT.jar
+java -jar user-service-0.0.1-SNAPSHOT.jar

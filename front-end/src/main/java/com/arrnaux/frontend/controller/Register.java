@@ -1,7 +1,7 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.userservice.userAccount.model.SNUser;
-import com.arrnaux.userservice.userAccount.model.SNUserRegistrationDTO;
+import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.userAccount.model.SNUserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
