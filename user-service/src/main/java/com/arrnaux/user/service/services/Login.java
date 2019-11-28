@@ -25,14 +25,17 @@ public class Login {
 
     // TODO: start a session when a user has logged in
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public ResponseEntity userLogin(@RequestBody SNUserLoginDTO userDTO) {
+    public ResponseEntity<SNUser> userLogin(@RequestBody SNUserLoginDTO userDTO) {
         //log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
         SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             log.info("User " + userDTO.getEmail() + " has logged in.");
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            snUser.setPassword("");
+            return new ResponseEntity<SNUser>(snUser, HttpStatus.ACCEPTED);
         }
         log.info("Login attempt failed for  with email: " + userDTO.getEmail());
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // snUser is null
+        return new ResponseEntity<SNUser>(snUser, HttpStatus.FORBIDDEN);
     }
 }
