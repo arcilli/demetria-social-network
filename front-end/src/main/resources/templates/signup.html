@@ -13,24 +13,8 @@
         <button>Login</button>
     </a>
 </div>
-<div id="signupForm" th:if="${userCreated == null}">
-    <h1>Register to Demetria!</h1>
-    <div>
-        <form action="#" method="post" th:action="@{/signup}" th:object="${user}">
-            <label for="email">Email: </label>
-            <input id="email" th:field="*{email}" type="email"/>
-            <span th:if="${emailAlreadyExists != null}">An account associated with this email is already created.</span><br/>
-            <label for="password">Password</label>
-            <input id="password" th:field="*{password}" type="password"/><br/>
-            <label for="passwordMatch">Retype password</label>
-            <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/><br/>
-            <label for="firstName">First name:</label>
-            <input id="firstName" th:field="*{firstName}" type="text"/><br/>
-            <label for="lastName">First name:</label>
-            <input id="lastName" th:field="*{lastName}" type="text"/><br/>
-            <input id="submitButton" type="submit" value="Register"/>
-        </form>
-    </div>
+<div th:replace="fragments/forms :: registerFragment">
+
 </div>
 </body>
 </html>

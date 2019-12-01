@@ -40,7 +40,7 @@ public class Login {
 
                     // TODO: assure that the loggedUser has no info about password
                     session.setAttribute("user", loggedUser);
-                    return "redirect:home";
+                    return "redirect:/";
                     // send the session
                 }
             } catch (HttpClientErrorException e) {
@@ -53,7 +53,7 @@ public class Login {
         } else {
             // should never getting here
             // a user that is already logged-in should never make a post to this
-            return "redirect:home";
+            return "redirect:/";
         }
         return "";
     }

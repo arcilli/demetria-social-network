@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div th:fragment="loginFragment">
+    <div th:if="${userLoginDTO != null}">
+        <form action="login" method="post" th:action="@{/login}" th:object="${userLoginDTO}">
+            <label for="loginFormEmail">Email: </label>
+            <input id="loginFormEmail" th:field="*{email}" type="email"/><br/>
+            <label for="loginFormPassword">Password</label>
+            <input id="loginFormPassword" th:field="*{password}" type="password"/><br/>
+            <input type="submit" value="Log in"/>
+            <span th:if="${badCredentials != null}">Bad credentials</span>
+        </form>
+    </div>
+</div>
+
+<div th:fragment="registerFragment">
+    <div id="signupForm" th:if="${userCreated == null}">
+        <h1>Register to Demetria!</h1>
+        <div>
+            <form action="signup" method="post" th:action="@{signup}" th:object="${user}">
+                <label for="email">Email: </label>
+                <input id="email" th:field="*{email}" type="email"/>
+                <span th:if="${emailAlreadyExists != null}">An account associated with this email is already created.</span><br/>
+                <label for="password">Password</label>
+                <input id="password" th:field="*{password}" type="password"/><br/>
+                <label for="passwordMatch">Retype password</label>
+                <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/><br/>
+                <label for="firstName">First name:</label>
+                <input id="firstName" th:field="*{firstName}" type="text"/><br/>
+                <label for="lastName">First name:</label>
+                <input id="lastName" th:field="*{lastName}" type="text"/><br/>
+                <input id="submitButton" type="submit" value="Register"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
