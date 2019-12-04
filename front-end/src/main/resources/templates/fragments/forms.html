@@ -37,5 +37,52 @@
         </div>
     </div>
 </div>
+
+<div th:fragment="userInfo">
+    <form action="#" method="post" th:if="${session.user != null}" th:action="@{profile}" th:object="${modifiedUser}">
+        <label for="lastName">Last name:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" th:value="${session.user.lastName}"/><br/>
+        <label for="firstName">First name:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" th:value="${session.user.firstName}"/><br/>
+        <!--        TODO: add an action for changing a password-->
+        <button type="button" onclick="">Change password</button>
+        <br/>
+        <button type="submit">Save</button>
+    </form>
+    <span id="informationModified" th:if="${informationUpdated == true}">Saved.</span>
+</div>
+
+<div th:fragment="changePass">
+    <form>
+        <input type="password" id="oldPassword"/>
+        <input type="password" id="newPassword"/>
+        <input type="password" id="newPasswordMatch"/>
+    </form>
+</div>
+
+<div th:fragment="createAPost">
+    <form action="#" method="post" th:action="createAPost" th:object="${post}">
+        <textarea rows="10" cols="30" th:field="*{content}"></textarea><br/>
+        <label for="visibility">Visibility</label>
+        <!--        <select id="visibility" name="visibility">-->
+        <!--            <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility}.values()}"-->
+        <!--                    th:value="${visibilityOpt}" th:text="${visibilityOpt}"></option>-->
+        <!--        </select>-->
+        <select name="visibilityOption" id="visibility" th:field="*{visibility}">
+            <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}"
+                    th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+        </select>
+        <button type="submit">Post</button>
+        <br/>
+    </form>
+</div>
+
+<div th:fragment="userPosts">
+<!--    A part of user posts-->
+    <div>A post</div>
+    <div>A single post</div>
+    <div>A 3rd post</div>
+    <button>More</button>
+</div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,8 +8,12 @@
 Hello there, little one! :) You are loggedIN.<br/>
 <h1>This page will contain posts from my friends.</h1>
 <div class="body-header"></div>
-<div class="maisn-content">
+<div class="main-content">
+    <div th:replace="fragments/forms :: createAPost"></div>
     here will get timeline
+
+<!--    Divs created with a for in thymleaf-->
+
     <div>
         post
     </div>

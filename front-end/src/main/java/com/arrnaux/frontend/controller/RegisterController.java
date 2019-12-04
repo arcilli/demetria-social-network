@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
-public class Register {
+public class RegisterController {
 
     @Autowired
     RestTemplate restTemplate;

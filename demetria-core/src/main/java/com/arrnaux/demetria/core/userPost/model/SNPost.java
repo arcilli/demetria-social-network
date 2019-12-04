@@ -22,12 +22,14 @@ public class SNPost {
     @Id
     protected String id;
 
-    protected long ownerId;
+    protected String ownerId;
 
     protected String content;
 
     protected PostVisibility visibility;
 
+    // TODO: maybe need to store a list of associated comments?!?
+    // TODO: maybe need to store only id-s for associated comments&votes
     protected List<Vote> votes;
 
     protected Date creationDate;

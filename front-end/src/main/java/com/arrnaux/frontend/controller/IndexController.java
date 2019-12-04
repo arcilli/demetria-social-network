@@ -2,6 +2,7 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUserLoginDTO;
 import com.arrnaux.demetria.core.userAccount.model.SNUserRegistrationDTO;
+import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,6 +38,7 @@ public class IndexController {
             modelAndView.addObject("userLoginDTO", new SNUserLoginDTO());
             modelAndView.setViewName("home/homeNotSignedIn");
         } else {
+            modelAndView.addObject("post", new SNPost());
             modelAndView.setViewName("home/homeSignedIn");
         }
         return modelAndView;

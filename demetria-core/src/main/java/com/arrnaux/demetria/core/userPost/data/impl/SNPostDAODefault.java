@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Log4j
@@ -26,8 +27,10 @@ public class SNPostDAODefault implements SNPostDAO {
     }
 
     @Override
-    public boolean insertPost(SNPost snPost) {
-        snPostRepository.save(snPost);
-        return false;
+    public SNPost savePost(SNPost snPost) {
+        Date now = new Date();
+        snPost.setCreationDate(now);
+        SNPost savedPost = snPostRepository.save(snPost);
+        return savedPost;
     }
 }
