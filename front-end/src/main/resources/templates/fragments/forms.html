@@ -77,12 +77,15 @@
     </form>
 </div>
 
-<div th:fragment="userPosts">
-<!--    A part of user posts-->
-    <div>A post</div>
-    <div>A single post</div>
-    <div>A 3rd post</div>
-    <button>More</button>
+<div th:fragment="userPosts" th:object="${userPosts}">
+    <!--    A part of user posts-->
+    <div class="userPost" th:each="post : ${userPosts}" th:id="${post.id}">
+        <div th:text="${post.content}">
+            <!--            TODO: display the number of positive votes and negative one-->
+            <!--            TODO: display a list of comments-->
+        </div>
+    </div>
+    <button>More posts</button>
 </div>
 </body>
 </html>

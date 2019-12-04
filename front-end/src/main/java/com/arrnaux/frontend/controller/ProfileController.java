@@ -1,6 +1,8 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
+import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -15,12 +17,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ProfileController {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    SNPostDAO snPostDAO;
 
     // see what information should an user
     @GetMapping(value = "profile")
@@ -30,6 +36,10 @@ public class ProfileController {
         if (loggedUser != null) {
             // user's info will be retrieved from session
 //            modelAndView.addObject("modifiedUser", loggedUser);
+
+            // TODO: should load only a chunck from user posts
+            List<SNPost> userPosts = snPostDAO.getUserPosts(loggedUser);
+            modelAndView.addObject("userPosts", userPosts);
             modelAndView.setViewName("profile");
         } else {
             modelAndView.setViewName("redirect:/");

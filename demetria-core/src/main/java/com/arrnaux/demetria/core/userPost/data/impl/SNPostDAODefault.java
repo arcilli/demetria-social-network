@@ -21,9 +21,8 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     public List<SNPost> getUserPosts(SNUser snUser) {
-//        log.info("Retrieve posts for user: " + snUser);
-//        return snPostRepository.findByOwnerId(snUser.getId());
-        return null;
+        log.info("Retrieve posts for user: " + snUser);
+        return snPostRepository.findByOwnerId(snUser.getId());
     }
 
     @Override
