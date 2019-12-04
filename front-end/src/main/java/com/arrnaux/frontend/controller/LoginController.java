@@ -19,29 +19,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-//@Log4j
-public class Login {
+public class LoginController {
 
     @Autowired
     RestTemplate restTemplate;
 
+    // TODO: maybe refactoring this, declare a ModelAndView inside the function
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String loginUser(@ModelAttribute SNUserLoginDTO userLoginDTO, Model model, HttpServletRequest request) {
         HttpEntity<SNUserLoginDTO> httpEntity = new HttpEntity<>(userLoginDTO);
         HttpSession session = request.getSession();
-
-        // the user not already logged in
         if (null == session.getAttribute("user")) {
             try {
                 ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/login/form",
                         HttpMethod.POST, httpEntity, SNUser.class);
                 if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
                     SNUser loggedUser = responseEntity.getBody();
-
-                    // TODO: assure that the loggedUser has no info about password
+                    // TODO: ensure that the loggedUser has no info about password
                     session.setAttribute("user", loggedUser);
                     return "redirect:/";
-                    // send the session
                 }
             } catch (HttpClientErrorException e) {
                 model.addAttribute("badCredentials", true);
@@ -52,7 +48,7 @@ public class Login {
             }
         } else {
             // should never getting here
-            // a user that is already logged-in should never make a post to this
+            // a user that is already logged-in should never make a POST request to this
             return "redirect:/";
         }
         return "";
@@ -60,17 +56,17 @@ public class Login {
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String displayLoginForm(Model model, HttpServletRequest httpServletRequest) {
-        // TODO: check the session, if user is already present, then redirect to homeO);
+        // Check the session
+        // If the session has already an attribute on "user"redirect to home);
         HttpSession session = httpServletRequest.getSession();
 
         // the user not already logged in
         if (null == session.getAttribute("user")) {
-            //else, displayLogin form
+            // display login form
             model.addAttribute("userLoginDTO", new SNUserLoginDTO());
             return "login";
         } else {
-            // the user is already logged-in, redirect to home
-            return "redirect:home";
+            return "redirect:/";
         }
     }
 }

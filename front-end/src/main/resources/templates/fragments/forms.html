@@ -38,25 +38,29 @@
     </div>
 </div>
 
-<div th:fragment="userInfo">
+<div th:fragment="userSettings">
     <form action="#" method="post" th:if="${session.user != null}" th:action="@{profile}" th:object="${modifiedUser}">
         <label for="lastName">Last name:</label>
-        <input type="text" id="lastName" th:field="*{lastName}" th:value="${session.user.lastName}"/><br/>
+        <input type="text" id="lastName" th:field="*{lastName}" th:value="${lastName}"/><br/>
         <label for="firstName">First name:</label>
-        <input type="text" id="firstName" th:field="*{firstName}" th:value="${session.user.firstName}"/><br/>
+        <input type="text" id="firstName" th:field="*{firstName}" th:value="${firstName}"/><br/>
         <!--        TODO: add an action for changing a password-->
         <button type="button" onclick="">Change password</button>
         <br/>
         <button type="submit">Save</button>
     </form>
-    <span id="informationModified" th:if="${informationUpdated == true}">Saved.</span>
+    <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
+    <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
 </div>
 
 <div th:fragment="changePass">
-    <form>
-        <input type="password" id="oldPassword"/>
-        <input type="password" id="newPassword"/>
-        <input type="password" id="newPasswordMatch"/>
+    <form action="#" th:action="@{/settings/changePassword}">
+        <label for="oldPassword">Old password</label>
+        <input type="password" id="oldPassword" required="required" th:field="${oldPassword}"/><br/>
+        <label for="newPassword">New password</label>
+        <input type="password" id="newPassword" required="required" th:field="${newPassword}"/><br/>
+        <label for="newPasswordMatch">Confirm new password</label>
+        <input type="password" id="newPasswordMatch" required="required" th:field="${newPasswordMatch}"/>
     </form>
 </div>
 

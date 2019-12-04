@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +37,7 @@ public class ProfileController {
 //            modelAndView.addObject("modifiedUser", loggedUser);
 
             // TODO: should load only a chunck from user posts
+            // TODO: the connection with DBs shoul be only on user service
             List<SNPost> userPosts = snPostDAO.getUserPosts(loggedUser);
             modelAndView.addObject("userPosts", userPosts);
             modelAndView.setViewName("profile");

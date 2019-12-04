@@ -30,13 +30,6 @@ public class RegisterController {
     // this should make a call for user-register service
     @PostMapping("/signup")
     public String processSignupRequest(@ModelAttribute SNUserRegistrationDTO user, Model model) {
-        // TODO: decide on a type of response that need to be sent/receive
-
-        //this below works & returns a SNUSer object
-        //SNUser snUser = restTemplate.postForObject("http://user-service/register", user, SNUserRegistrationDTO.class);
-//        ResponseEntity<String> entity = restTemplate.getForEntity("http://user-service/register", String.class);
-
-        // This seems also to work
         HttpEntity<SNUserRegistrationDTO> httpEntity = new HttpEntity<>(user);
         try {
             ResponseEntity<SNUser> responseEntity =
@@ -45,13 +38,9 @@ public class RegisterController {
                 model.addAttribute("userCreated", true);
             }
         } catch (HttpClientErrorException e) {
-            // should populate the model with the user that is registered / logged in?!?
-
-            // the data should be persisted
             model.addAttribute("user", user);
             model.addAttribute("emailAlreadyExists", true);
         }
-
         return "signup";
     }
 }

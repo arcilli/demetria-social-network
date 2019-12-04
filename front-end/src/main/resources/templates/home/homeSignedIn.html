@@ -2,26 +2,34 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Demetria</title>
 </head>
 <body>
 Hello there, little one! :) You are loggedIN.<br/>
+<div>
+    <a href="/settings/profile">
+        <button>Settings</button>
+    </a>
+    <a href="/logout">
+        <button>Logout</button>
+    </a>
+</div>
 <h1>This page will contain posts from my friends.</h1>
 <div class="body-header"></div>
 <div class="main-content">
     <div th:replace="fragments/forms :: createAPost"></div>
     here will get timeline
 
-<!--    Divs created with a for in thymleaf-->
+    <!--    Divs created with a for in thymleaf-->
 
     <div>
-        post
+        post from friend1
     </div>
     <div>
-        post
+        post from friend2
     </div>
     <div>
-        post
+        post from another friend
     </div>
 </div>
 <div class="body-footer"></div>

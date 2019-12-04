@@ -14,10 +14,10 @@ public class Logout {
     public ModelAndView logout(HttpServletRequest request) {
         // if the user is logged-in
         ModelAndView modelAndView = new ModelAndView();
-        if (request.getSession().getAttribute("email") != null) {
+        if (request.getSession().getAttribute("user") != null) {
             request.getSession().invalidate();
         }
-        modelAndView.setViewName("redirect:");
+        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 }

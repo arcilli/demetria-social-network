@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Log4j
-public class Profile {
+@RequestMapping("settings")
+public class SettingsService {
 
     @Autowired
     private SNUserDAO snUserDAO;
@@ -20,6 +22,7 @@ public class Profile {
     @PostMapping("profile")
     public ResponseEntity<SNUser> changeUserDetails(@RequestBody SNUser snUser) {
         // Do some validation
+        //
         SNUser modifiedUser = snUserDAO.saveSNUser(snUser);
         log.info("Attempt to edit user details for: " + modifiedUser.getEmail());
         return new ResponseEntity<SNUser>(snUser, HttpStatus.OK);

@@ -35,7 +35,7 @@ public class PostService {
             SNPost savedPost = snPostDAO.savePost(snPost);
 
             return savedPost.getId();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
