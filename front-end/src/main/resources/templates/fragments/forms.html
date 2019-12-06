@@ -53,8 +53,9 @@
     <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
 </div>
 
+<!--TODO: populate with an object or find a solution-->
 <div th:fragment="changePass">
-    <form action="#" th:action="@{/settings/changePassword}">
+    <form action="#" th:action="@{/settings/changePassword}" th:object="${}">
         <label for="oldPassword">Old password</label>
         <input type="password" id="oldPassword" required="required" th:field="${oldPassword}"/><br/>
         <label for="newPassword">New password</label>
