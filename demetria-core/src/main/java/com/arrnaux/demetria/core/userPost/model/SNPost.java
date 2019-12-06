@@ -28,9 +28,9 @@ public class SNPost {
 
     protected PostVisibility visibility;
 
-    // TODO: maybe need to store a list of associated comments?!?
-    // TODO: maybe need to store only id-s for associated comments&votes
-    protected List<Vote> votes;
+    protected List<Vote> voteList;
+
+    protected List<Comment> commentList;
 
     protected Date creationDate;
 }

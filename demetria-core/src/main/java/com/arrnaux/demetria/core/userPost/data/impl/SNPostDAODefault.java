@@ -7,6 +7,8 @@ import com.arrnaux.demetria.core.userPost.data.SNPostRepository;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -31,5 +33,14 @@ public class SNPostDAODefault implements SNPostDAO {
         snPost.setCreationDate(now);
         SNPost savedPost = snPostRepository.save(snPost);
         return savedPost;
+    }
+
+    @Override
+    public List<SNPost> getUserPostsDateDesc(SNUser snUser, Sort sort) {
+        return snPostRepository.findByOwnerIdAndSort(snUser.getId(), orderByDateDesc());
+    }
+
+    private Sort orderByDateDesc() {
+        return Sort.by(Sort.Direction.ASC, "creationDate");
     }
 }
