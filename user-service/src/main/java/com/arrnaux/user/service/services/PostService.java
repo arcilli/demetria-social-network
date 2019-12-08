@@ -39,4 +39,14 @@ public class PostService {
         }
         return null;
     }
+
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    public boolean deletePost(@RequestBody String postId){
+        try{
+            return snPostDAO.removePost(postId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

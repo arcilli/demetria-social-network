@@ -84,13 +84,28 @@
 
 <div th:fragment="userPosts" th:object="${userPosts}">
     <!--    A part of user posts-->
-    <div class="userPost" th:each="post : ${userPosts}" th:id="${post.id}">
-        <div th:text="${post.content}">
-            <!--            TODO: display the number of positive votes and negative one-->
-            <!--            TODO: display a list of comments-->
+    <article class="userPost" th:each="post : ${userPosts}" th:id="${post.id}">
+        <!--            TODO: replace this with a link to user username-->
+        <div class="postHeader flex-container">
+            <div class="postOwner">
+                <a th:href="@{/profile}" th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+            </div>
+            <div class="postCreationDate" th:text="${#dates.format(post.creationDate, 'dd MMM yyyy')}"></div>
         </div>
-    </div>
+        <div class="postContent" th:text="${post.content}"></div>
+        <!--            TODO: display the number of positive votes and negative one-->
+        <!--            TODO: display a list of comments-->
+        <div>
+<!--            <button type="button" class="btn btn-outline-primary btn-sm editPostButton" th:id="${post.id}">Edit post-->
+<!--            </button>-->
+            <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
+                post
+            </button>
+        </div>
+    </article>
     <button>More posts</button>
 </div>
 </body>
+ce
+
 </html>

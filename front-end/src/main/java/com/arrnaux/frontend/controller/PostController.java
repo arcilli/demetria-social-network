@@ -41,4 +41,23 @@ public class PostController {
         modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
+
+    @DeleteMapping("deletePost")
+    public ModelAndView processPostDelete(HttpServletRequest request, @RequestBody String postId) {
+        ModelAndView modelAndView = new ModelAndView();
+        SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
+        if (currentUser != null) {
+            try {
+                HttpEntity<String> httpEntity = new HttpEntity<>(postId);
+                String url = "http://user-service/postService/" + postId;
+                ResponseEntity<Boolean> responseEntity = restTemplate.exchange(url,
+                        HttpMethod.DELETE, null, Boolean.class);
+                System.out.println(responseEntity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        modelAndView.setViewName("redirect:/");
+        return modelAndView;
+    }
 }

@@ -37,7 +37,8 @@ public class SNPostDAODefault implements SNPostDAO {
         return snPostRepository.findByOwnerIdOrderByCreationDateDesc(snUser.getId());
     }
 
-    private Sort orderByDateDesc() {
-        return Sort.by(Sort.Direction.ASC, "creationDate");
+    @Override
+    public boolean removePost(String postId) {
+        return snPostRepository.removeSNPostById(postId);
     }
 }
