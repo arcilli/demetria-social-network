@@ -37,8 +37,8 @@ public class ProfileController {
 //            modelAndView.addObject("modifiedUser", loggedUser);
 
             // TODO: should load only a chunck from user posts
-            // TODO: the connection with DBs shoul be only on user service
-            List<SNPost> userPosts = snPostDAO.getUserPosts(loggedUser);
+            // TODO: the connection with DBs should be only on user service
+            List<SNPost> userPosts = snPostDAO.getUserPostsDateDesc(loggedUser);
             modelAndView.addObject("userPosts", userPosts);
             modelAndView.setViewName("profile");
         } else {
