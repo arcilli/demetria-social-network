@@ -31,7 +31,6 @@ public class PostService {
     // returns the id of the post
     public String savePost(@RequestBody SNPost snPost) {
         try {
-            // get date;
             SNPost savedPost = snPostDAO.savePost(snPost);
 
             return savedPost.getId();

@@ -53,7 +53,6 @@ public class ProfileController {
 //        SNUser modifiedUser = (SNUser) model.getAttribute("modifiedUser");
         HttpEntity<SNUser> httpEntity = new HttpEntity<>(modifiedUser);
 
-
 //        SNUser modifiedUser = (SNUser) request.getSession().getAttribute("modifiedUser");
         System.out.println(modifiedUser);
         // call something from back-end

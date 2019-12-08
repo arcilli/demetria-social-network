@@ -12,7 +12,7 @@ public enum PostVisibility {
 
     private final String displayValue;
 
-    private PostVisibility(String displayValue) {
+    PostVisibility(String displayValue) {
         this.displayValue = displayValue;
     }
 

@@ -1,0 +1,3 @@
+var changePost = function (postId) {
+
+}

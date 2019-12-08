@@ -1,6 +1,7 @@
 package com.arrnaux.demetria.core.userPost.model;
 
 
+import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.data.annotation.Id;
@@ -22,7 +23,7 @@ public class SNPost {
     @Id
     protected String id;
 
-    protected String ownerId;
+    protected SNUser owner;
 
     protected String content;
 

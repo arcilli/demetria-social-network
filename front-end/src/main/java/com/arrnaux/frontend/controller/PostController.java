@@ -7,8 +7,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,21 +21,13 @@ public class PostController {
 
     @Autowired
     RestTemplate restTemplate;
-//
-//    @GetMapping("createAPost")
-//    public ModelAndView showForm(HttpServletRequest request) {
-//        ModelAndView modelAndView = new ModelAndView();
-////        modelAndView.addObject("post", new SNPost());
-////        modelAndView.setViewName("#");
-//        return modelAndView;
-//    }
 
     @PostMapping("createAPost")
     public ModelAndView processPost(HttpServletRequest request, @ModelAttribute SNPost post) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
-            post.setOwnerId(currentUser.getId());
+            post.setOwner(currentUser);
             // make the request
             HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
             try {

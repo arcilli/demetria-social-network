@@ -12,5 +12,7 @@ public interface SNPostRepository extends MongoRepository<SNPost, String> {
 
     SNPost save(SNPost snPost);
 
-    List<SNPost> findByOwnerIdAndSort(String ownerID, Sort sort);
+    List<SNPost> findByOwnerIdOrderByCreationDateDesc(String ownerID);
+
+    boolean removeSNPostById(String postId);
 }

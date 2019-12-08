@@ -1,0 +1,9 @@
+#body-header, main-content, body-footer {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#userPost, #postOwner, #postCreationDate {
+    display: flex;
+    flex-wrap: wrap;
+}
