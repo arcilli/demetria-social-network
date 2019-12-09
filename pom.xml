@@ -22,6 +22,7 @@
     <modules>
         <module>demetria-core</module>
         <module>user-service</module>
+        <module>front-end</module>
     </modules>
 
     <dependencies>

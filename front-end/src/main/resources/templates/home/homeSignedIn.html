@@ -1,32 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<head th:replace="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
     <title>Demetria</title>
 </head>
 <body>
-Hello there, little one! :) You are loggedIN.<br/>
-
-<!--TODO: replace with some templating action-->
-<div>
-    <a href="/profile">
-        <button>My profile</button>
-    </a>
-    <a href="/settings/profile">
-        <button>Settings</button>
-    </a>
-    <a href="/logout">
-        <button>Logout</button>
-    </a>
-</div>
+<nav th:replace="fragments/header :: top-menu"></nav>
+Hello there, little one! :) You are logged-in.<br/>
 <h1>This page will contain posts from my friends.</h1>
 <div class="body-header"></div>
 <div class="main-content">
     <div th:replace="fragments/forms :: createAPost"></div>
-    here will get timeline
-
-    <!--    Divs created with a for in thymleaf-->
-
+    <b>Timeline from friends</b>
     <div>
         post from friend1
     </div>

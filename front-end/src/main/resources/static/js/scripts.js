@@ -1,15 +1,13 @@
 $(function () {
-// jQuery shoul be loaded by bootstrap
+// jQuery is alreadyloaded by bootstrap
     $(".editPostButton").on("click", function () {
-        // make a request for
-        console.log("Smth");
+        // make a request for change the current post
     });
 
     $(".deletePostButton").on("click", function () {
-        var parents = $(this).parents().map(function () {
+        $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
                 var arr = {id: this.id};
-                // make the ajax request
                 $.ajax({
                     url: "/deletePost",
                     type: 'DELETE',
@@ -21,7 +19,7 @@ $(function () {
                         }
                     },
                     error: function () {
-                        alert("Something wrong");
+                        alert("Something went wrong");
                     }
                 });
             }

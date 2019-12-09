@@ -5,17 +5,34 @@
 <body>
 <div th:fragment="loginFragment">
     <div th:if="${userLoginDTO != null}">
-        <form action="login" method="post" th:action="@{/login}" th:object="${userLoginDTO}">
-            <label for="loginFormEmail">Email: </label>
-            <input id="loginFormEmail" th:field="*{email}" type="email"/><br/>
-            <label for="loginFormPassword">Password</label>
-            <input id="loginFormPassword" th:field="*{password}" type="password"/><br/>
-            <input type="submit" value="Log in"/>
-            <span th:if="${badCredentials != null}">Bad credentials</span>
+        <!--        <form action="login" method="post" th:action="@{/login}" th:object="${userLoginDTO}">-->
+        <!--            <label for="loginFormEmail">Email: </label>-->
+        <!--            <input id="loginFormEmail" type="email"/><br/>-->
+        <!--            <label for="loginFormPassword">Password</label>-->
+        <!--            <input id="loginFormPassword" type="password"/><br/>-->
+        <!--            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>-->
+
+        <!--        </form>-->
+        <h1>Login</h1>
+        <form th:action="@{/login}" method="post" th:object="${userLoginDTO}" id="loginForm">
+            <div class="form-group">
+                <label for="loginFormEmail">Email address</label>
+                <input type="email" class="form-control" id="loginFormEmail" th:field="*{email}"
+                       aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="loginFormPassword">Password</label>
+                <input type="password" class="form-control" id="loginFormPassword" th:field="*{password}"
+                       placeholder="Password">
+            </div>
+            <div class="form-group" id="badCredemtials" th:if="${badCredentials != null}">Bad credentials</div>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
 
+<!--TODO: add in register-->
+<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 <div th:fragment="registerFragment">
     <div id="signupForm" th:if="${userCreated == null}">
         <h1>Register to Demetria!</h1>
@@ -32,7 +49,7 @@
                 <input id="firstName" th:field="*{firstName}" type="text"/><br/>
                 <label for="lastName">First name:</label>
                 <input id="lastName" th:field="*{lastName}" type="text"/><br/>
-                <input id="submitButton" type="submit" value="Register"/>
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
             </form>
         </div>
     </div>
@@ -45,9 +62,9 @@
         <label for="firstName">First name:</label>
         <input type="text" id="firstName" th:field="*{firstName}" th:value="${firstName}"/><br/>
         <!--        TODO: add an action for changing a password-->
-        <button type="button" onclick="">Change password</button>
+        <!--        <button type="button" onclick="">Change password</button>-->
         <br/>
-        <button type="submit">Save</button>
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
     </form>
     <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
     <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
@@ -77,7 +94,7 @@
             <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}"
                     th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
         </select>
-        <button type="submit">Post</button>
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
         <br/>
     </form>
 </div>
@@ -96,16 +113,14 @@
         <!--            TODO: display the number of positive votes and negative one-->
         <!--            TODO: display a list of comments-->
         <div>
-<!--            <button type="button" class="btn btn-outline-primary btn-sm editPostButton" th:id="${post.id}">Edit post-->
-<!--            </button>-->
+            <!--            <button type="button" class="btn btn-outline-primary btn-sm editPostButton" th:id="${post.id}">Edit post-->
+            <!--            </button>-->
             <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
                 post
             </button>
         </div>
     </article>
-    <button>More posts</button>
+    <!--    <button>More posts</button>-->
 </div>
 </body>
-ce
-
 </html>
