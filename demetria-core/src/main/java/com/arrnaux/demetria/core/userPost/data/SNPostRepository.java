@@ -14,5 +14,5 @@ public interface SNPostRepository extends MongoRepository<SNPost, String> {
 
     List<SNPost> findByOwnerIdOrderByCreationDateDesc(String ownerID);
 
-    boolean removeSNPostById(String postId);
+    List<SNPost> deleteSNPostById(String postId);
 }

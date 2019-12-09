@@ -15,5 +15,5 @@ public interface SNPostDAO {
     // return the id of just created post
     SNPost savePost(SNPost snPost);
 
-    boolean removePost(String postId);
+    Long removePost(String postId);
 }

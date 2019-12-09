@@ -5,18 +5,15 @@ import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 public class PostController {
 
     @Autowired
@@ -42,22 +39,20 @@ public class PostController {
         return modelAndView;
     }
 
-    @DeleteMapping("deletePost")
-    public ModelAndView processPostDelete(HttpServletRequest request, @RequestBody String postId) {
-        ModelAndView modelAndView = new ModelAndView();
+    @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
+    public ResponseEntity processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
-                HttpEntity<String> httpEntity = new HttpEntity<>(postId);
-                String url = "http://user-service/postService/" + postId;
+                HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
+                String url = "http://user-service/postService/";
                 ResponseEntity<Boolean> responseEntity = restTemplate.exchange(url,
-                        HttpMethod.DELETE, null, Boolean.class);
-                System.out.println(responseEntity);
+                        HttpMethod.DELETE, httpEntity, Boolean.class);
+                return responseEntity;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        modelAndView.setViewName("redirect:/");
-        return modelAndView;
+        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 }

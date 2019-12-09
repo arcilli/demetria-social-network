@@ -38,7 +38,8 @@ public class SNPostDAODefault implements SNPostDAO {
     }
 
     @Override
-    public boolean removePost(String postId) {
-        return snPostRepository.removeSNPostById(postId);
+    public Long removePost(String postId) {
+        List<SNPost> postsToBeDeleted = snPostRepository.deleteSNPostById(postId);
+        return new Long(postsToBeDeleted.size());
     }
 }
