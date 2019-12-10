@@ -10,8 +10,8 @@ Demetria is a social network based on a microservice architecture.
 - [ ] Integrate OpenGraph with post service
 - [ ] Create friendship relation
 - [ ] Implement votes and comments on posts
-- [ ] Implement & design search service
-
+- [ ] Implement & design search service - on users (and/or content)
+- [ ] Implement & design Hadoop cluster/service - opinion analysis
 
 # General architecure
 
@@ -50,20 +50,28 @@ Mainly, too many to enumerate. Some of them are in issues section, others (with 
 ### Screenshots
 ----
 **Homepage** - for not logged-in/non-registered users
+<p align="center">
 <img src="https://i.imgur.com/o3bqyTil.png" alt="Homepage version 1"
-style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+style="width: 35%";/>
+</p>
 
 **Timeline** - homepage for logged-in users. It will contain posts from friends.
+<p align="center">
 <img src="https://i.imgur.com/r4ZL6jJ.png" alt="Timeline"
-style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+style="width: 50%;"/>
+</p>
 
 **User posts** - timeline restricted to user posts
+<p align="center">
 <img src = "https://i.imgur.com/w2QNj0ql.png" alt="Timeline"
-style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+style="padding-bottom:10px;"/>
+</p>
 
 **User settings** - contains settings for an account
+<p align="center">
 <img src="https://imgur.com/iHOCsDel.png" alt="Timeline"
-style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+style="width: 50%; padding-bottom:10px;"/>
+</p>
 
 #### License
 ----
