@@ -21,11 +21,11 @@ Demetria is a social network based on a microservice architecture.
 
 Some of the (open source) technologies that has been used:
 
-* [Docker] - HTML enhanced for web apps!
-* [Spring Boot] - awesome web-based text editor
-* [Spring Data] - Markdown parser done right. Fast and easy to extend.
+* [Docker] - deployment
+* [Spring Boot] - IoC/general framework
+* [Spring Data] - data access
 * [Thymleaf] - server-side Java template engine
-* [Netlix Eureka] - for service registration & service discovery
+* [Netlix Eureka] - service registration & service discovery
 * [Bootstrap] - responsive design
 * [jQuery] - JS library, used especially for ajax(async) requests
 * [REST] - communicate over microservices
