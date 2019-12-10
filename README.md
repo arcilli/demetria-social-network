@@ -26,13 +26,16 @@ $ docker-compose up .
 ```
 **TODO: setup docker-compose file**
 ### Docker
-**to be completed**
+**to be populated**
 ### Todos
 Mainly, too many to enumerate. Some of them are in issues section, others (with more general character) here:
  - Create Dockerfile for microservices
  - Setup docker-compose file
  - Test (from time to time) Docker deployment
  - Write (MORE) Tests
+ 
+### Screenshots
+**to be populated**
 
 License
 ----
