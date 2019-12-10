@@ -21,7 +21,9 @@ Some of the (open source) technologies that has been used:
 ### Installation
 Demetria requires a minimum setup for Docker Compose.
 Once Docker-Compose is installed:
-
+```sh
+$ docker-compose up .
+```
 **TODO: setup docker-compose file**
 ### Docker
 **to be completed**
