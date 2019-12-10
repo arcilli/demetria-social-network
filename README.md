@@ -1,8 +1,20 @@
 # Demetria social network
 
-Demetria is a social network based on a microservice architecture. 
+Demetria is a social network based on a microservice architecture.
+
+# Current status (on major functionalities)
+
+- [x] CRUD operations (Create account, Read(display) posts, Update user information, Delete a post)
+- [ ] Separate user service & post service
+- [ ] Register OpenGraph service with eureka
+- [ ] Integrate OpenGraph with post service
+- [ ] Create friendship relation
+- [ ] Implement votes and comments on posts
+- [ ] Implement & design search service
+
 
 # General architecure
+
 ![servicesDiagram](models/servicesDiagram.svg)
 
 ### Tech stack
@@ -28,19 +40,34 @@ $ docker-compose up .
 ### Docker
 **to be populated**
 ### Todos
+----
 Mainly, too many to enumerate. Some of them are in issues section, others (with more general character) here:
  - Create Dockerfile for microservices
  - Setup docker-compose file
  - Test (from time to time) Docker deployment
  - Write (MORE) Tests
- 
-### Screenshots
-**to be populated**
 
-License
+### Screenshots
+----
+**Homepage** - for not logged-in/non-registered users
+<img src="https://i.imgur.com/o3bqyTil.png" alt="Homepage version 1"
+style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+
+**Timeline** - homepage for logged-in users. It will contain posts from friends.
+<img src="https://i.imgur.com/r4ZL6jJ.png" alt="Timeline"
+style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+
+**User posts** - timeline restricted to user posts
+<img src = "https://i.imgur.com/w2QNj0ql.png" alt="Timeline"
+style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+
+**User settings** - contains settings for an account
+<img src="https://imgur.com/iHOCsDel.png" alt="Timeline"
+style="display: block; margin-left: auto; margin-right: auto;width: 50%;"/>
+
+#### License
 ----
 MIT
-
 
 **Free Software, Hell Yeah!**
 
