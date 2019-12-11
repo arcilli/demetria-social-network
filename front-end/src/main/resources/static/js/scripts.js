@@ -4,6 +4,7 @@ $(function () {
         // make a request for change the current post
     });
 
+    // ajax request for deleting a post
     $(".deletePostButton").on("click", function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
@@ -26,23 +27,23 @@ $(function () {
         });
     });
 
-    // modify the request to use ajax
+    // ajax request for adding a comment
     $(".addCommentButton").on("click", function () {
         let form = -2;
-        let postId = -1;
         $(this).parents().map(function () {
-            if (this.tagName == "ARTICLE") {
-                postId = this.id;
-            } else if (this.tagName == "FORM") {
+            if (this.tagName == "FORM") {
                 form = this;
             }
         });
-        // form.submit(function (e) {
-        //     form.preventDefault();
-        //     // add necessarry posts
-        //     form.submit();
-        // });
+        console.log(form);
+        form.submit(function (e) {
+            e.preventDefault();
+            console.log("Fain, misto");
+            //     //     form.submit();
+            e.submit();
+        });
     });
+
 
     // To be tested
     var getIdForPost = function (elementId) {

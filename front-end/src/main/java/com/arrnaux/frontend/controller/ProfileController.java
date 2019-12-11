@@ -22,6 +22,7 @@ import java.util.List;
 @Controller
 public class ProfileController {
 
+    // Use the restTemplate declared in main Class
     @Autowired
     RestTemplate restTemplate;
 
@@ -37,7 +38,7 @@ public class ProfileController {
             // user's info will be retrieved from session
 //            modelAndView.addObject("modifiedUser", loggedUser);
 
-            // TODO: should load only a chunck from user posts
+            // TODO: should load only a chunk from user posts
             // TODO: the connection with DBs should be only on user service
             List<SNPost> userPosts = snPostDAO.getUserPostsDateDesc(loggedUser);
             modelAndView.addObject("userPosts", userPosts);

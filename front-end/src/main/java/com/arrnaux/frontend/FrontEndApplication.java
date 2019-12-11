@@ -18,7 +18,9 @@ public class FrontEndApplication {
 
     @Bean
     @LoadBalanced
+    // TODO: use this restTemplate, instead of autowire a new one every time
     public RestTemplate getRestTemplate() {
+
         return new RestTemplate();
     }
 }

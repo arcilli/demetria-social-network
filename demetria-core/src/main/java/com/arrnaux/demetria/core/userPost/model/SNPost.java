@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,10 @@ public class SNPost {
 
     protected Date creationDate;
 
-    public boolean appendComment(Comment comment){
+    public boolean appendComment(Comment comment) {
+        if (commentList == null) {
+            commentList = new ArrayList<>();
+        }
         return commentList.add(comment);
     }
 }
