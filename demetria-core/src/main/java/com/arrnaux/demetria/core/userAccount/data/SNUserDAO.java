@@ -2,15 +2,19 @@ package com.arrnaux.demetria.core.userAccount.data;
 
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import org.springframework.lang.Nullable;
 
 public interface SNUserDAO {
 
-    // gets an SNUser for a specific id
+    @Nullable
     SNUser getUser(String id);
 
+    @Nullable
     SNUser findUserByEmail(String email);
 
+    @Nullable
     SNUser findUserByEmailAndPassword(String email, String password);
 
+    @Nullable
     SNUser saveSNUser(SNUser snUser);
 }

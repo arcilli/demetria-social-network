@@ -21,6 +21,7 @@ public class SNUser extends SNUserLoginDTO {
 
     protected String lastName;
 
+    // TODO: Add an unique constraint for this field
     protected String userName;
 
     public SNUser(SNUserRegistrationDTO snUserRegistrationDTO) {

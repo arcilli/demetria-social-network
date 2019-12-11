@@ -5,6 +5,7 @@ import com.arrnaux.demetria.core.userAccount.data.SNUserRepository;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class SNUserDAODefault implements SNUserDAO {
     @Autowired
     private SNUserRepository snUserRepository;
 
+    @Nullable
     @Override
     public SNUser getUser(String id) {
         Optional<SNUser> user = snUserRepository.findById(id);
@@ -25,6 +27,7 @@ public class SNUserDAODefault implements SNUserDAO {
         return user.orElse(null);
     }
 
+    @Nullable
     @Override
     // throws IllegalArgumentException when email is null
     public SNUser findUserByEmail(String email) throws IllegalArgumentException {
@@ -38,12 +41,14 @@ public class SNUserDAODefault implements SNUserDAO {
         return snUser.orElse(null);
     }
 
+    @Nullable
     @Override
     public SNUser findUserByEmailAndPassword(String email, String password) {
         Optional<SNUser> snUser = snUserRepository.findByEmailAndPassword(email, password);
         return snUser.orElse(null);
     }
 
+    @Nullable
     @Override
     // TODO: add a case for false, when an error occurs
     public SNUser saveSNUser(SNUser snUser) {

@@ -2,7 +2,6 @@ package com.arrnaux.demetria.core.userPost.model;
 
 import lombok.*;
 import lombok.extern.log4j.Log4j;
-import org.springframework.data.annotation.Id;
 
 @Log4j
 @Getter
@@ -11,7 +10,6 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class Vote {
-    @Id
     protected long id;
 
     protected long postId;

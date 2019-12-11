@@ -192,7 +192,7 @@
 
 <form th:fragment="createComment(postId)" th:action="@{/createComment}" method="post" th:object="${newComment}">
     <input type="text" th:field="*{content}"/>
-    <!--    TODO: this is a work-around-->
+    <!--    TODO: this is a work-around, see how can pass a SNPost object and a comment one-->
     <input type="hidden" name="id" th:value="${postId}"/>
     <button type="button" class="btn btn-outline-success btn-sm addCommentButton">Add comment
     </button>

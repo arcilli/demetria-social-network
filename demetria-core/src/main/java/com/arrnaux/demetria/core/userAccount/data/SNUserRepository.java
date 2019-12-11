@@ -11,7 +11,8 @@ public interface SNUserRepository extends MongoRepository<SNUser, String> {
 
     List<SNUser> findByLastName(String lastName);
 
-    Optional<SNUser> findById(long id);
+    // TODO: inspect this method on some null/nullable cases
+    Optional<SNUser> findById(String id);
 
     Optional<SNUser> findByEmail(String email);
 
