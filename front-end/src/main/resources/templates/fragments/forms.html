@@ -6,42 +6,119 @@
 <div th:fragment="loginFragment">
     <div th:if="${userLoginDTO != null}">
         <h1>Login</h1>
-        <form th:action="@{/login}" method="post" th:object="${userLoginDTO}" id="loginForm">
+        <form id="loginForm" th:action="@{/login}" method="post"
+              th:object="${userLoginDTO}">
             <div class="form-group">
                 <label for="loginFormEmail">Email address</label>
                 <input type="email" class="form-control" id="loginFormEmail" th:field="*{email}"
-                       aria-describedby="emailHelp" placeholder="Enter email">
+                       aria-describedby="emailHelp" placeholder="Enter email" required>
             </div>
             <div class="form-group">
                 <label for="loginFormPassword">Password</label>
                 <input type="password" class="form-control" id="loginFormPassword" th:field="*{password}"
                        placeholder="Password">
             </div>
-            <div class="form-group" id="badCredemtials" th:if="${badCredentials != null}">Bad credentials</div>
+            <!--                        TODO: set a style for this-->
+            <div class="form-group" id="badCredentials" th:if="${badCredentials != null}">Bad credentials</div>
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>
         </form>
     </div>
 </div>
 
-<!--TODO: add in register-->
-<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 <div th:fragment="registerFragment">
     <div id="signupForm" th:if="${userCreated == null}">
         <h1>Register to Demetria!</h1>
         <div>
-            <form action="signup" method="post" th:action="@{signup}" th:object="${user}">
-                <label for="email">Email: </label>
-                <input id="email" th:field="*{email}" type="email"/>
-                <span th:if="${emailAlreadyExists != null}">An account associated with this email is already created.</span><br/>
-                <label for="password">Password</label>
-                <input id="password" th:field="*{password}" type="password"/><br/>
-                <label for="passwordMatch">Retype password</label>
-                <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/><br/>
-                <label for="firstName">First name:</label>
-                <input id="firstName" th:field="*{firstName}" type="text"/><br/>
-                <label for="lastName">First name:</label>
-                <input id="lastName" th:field="*{lastName}" type="text"/><br/>
+            <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${user}"
+                  oninput='passwordMatchRegistrationForm
+                  .setCustomValidity(passwordMatchRegistrationForm.value != passwordRegistrationForm.value ?
+                   "Passwords do not match." : "")'>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="firstNameRegistrationForm">First name</label>
+                        <input type="text" class="form-control" id="firstNameRegistrationForm" placeholder="First name"
+                               th:field="*{firstName}" required minlength="2">
+                        <div class="invalid-feedback">
+                            Please enter valid values.
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="lastNameRegistrationForm">Last name</label>
+                        <input type="text" class="form-control" id="lastNameRegistrationForm" placeholder="Last name"
+                               th:field="*{lastName}" required minlength="2">
+                        <div class="invalid-feedback">
+                            Please enter valid values.
+                        </div>
+                    </div>
+                    <!--                    TODO: Uncomment this only after implement unique usernames-->
+                    <!--                    <div class="col-md-4 mb-3">-->
+                    <!--                        <label for="userNameRegistrationForm">Username</label>-->
+                    <!--                        <div class="input-group">-->
+                    <!--                            <div class="input-group-prepend">-->
+                    <!--                                <span class="input-group-text" id="inputGroupPrepend">@</span>-->
+                    <!--                            </div>-->
+                    <!--                            <input type="text" class="form-control" id="userNameRegistrationForm" placeholder="Username"-->
+                    <!--                                   aria-describedby="inputGroupPrepend" th:field="*{userName}" required>-->
+                    <!--                            <div class="invalid-feedback">-->
+                    <!--                                Please choose a username.-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="emailRegistrationForm">Email</label>
+                        <input type="email" class="form-control" id="emailRegistrationForm" placeholder="Email"
+                               th:field="*{email}"
+                               pattern="[^@]+@[^\.]+\..+"
+                               required>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            else.
+                        </small>
+                        <div class="invalid-feedback">
+                            Please enter a valid email.
+                        </div>
+                        <!--                        TODO: set a style for this-->
+                        <div class="email-already-exists" th:if="${emailAlreadyExists != null}">An
+                            account associated with this email is already created.
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="passwordRegistrationForm">Password</label>
+                        <input type="password" class="form-control"
+                               id="passwordRegistrationForm" placeholder="Password"
+                               th:field="*{password}" required minlength="8">
+                        <div class="invalid-feedback">
+                            Please enter a password that is at least 8 characters long.
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="passwordMatchRegistrationForm">Retype password</label>
+                        <input type="password" class="form-control"
+                               id="passwordMatchRegistrationForm"
+                               placeholder="Retype password"
+                               th:field="*{passwordMatch}" required>
+                    </div>
+                </div>
                 <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
+
+                <!--                <label for="email">Email: </label>-->
+                <!--                <input id="email" th:field="*{email}" type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"-->
+                <!--                required title="Please enter a "/>-->
+                <!--                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.-->
+                <!--                </small>-->
+                <!--                <label for="password">Password</label>-->
+                <!--                <input id="password" th:field="*{password}" type="password" pattern=".{6}" required title="6 characters minimum"/><br/>-->
+                <!--                <label for="passwordMatch">Retype password</label>-->
+                <!--                <input id="passwordMatch" th:field="*{passwordMatch}" type="password"/><br/>-->
+                <!--                <label for="firstName">First name:</label>-->
+                <!--                <input id="firstName" th:field="*{firstName}" type="text"/><br/>-->
+                <!--                <label for="lastName">First name:</label>-->
+                <!--                <input id="lastName" th:field="*{lastName}" type="text"/><br/>-->
+
+                <!--                Uncomment this only after ensure that an unique constraint is satisfied for userName -->
+                <!--                <label for="userName">UserName:</label>-->
+                <!--                <input id="userName" th:field="*{userName}" type="text"/><br/>-->
             </form>
         </div>
     </div>
