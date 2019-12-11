@@ -2,8 +2,10 @@ package com.arrnaux.demetria.core.userPost.data.impl;
 
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.userPost.data.SNPostCustomRepository;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.data.SNPostRepository;
+import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Log4j
 @Repository
-public class SNPostDAODefault implements SNPostDAO {
+public class SNPostDAODefault implements SNPostDAO, SNPostCustomRepository {
 
     @Autowired
     private SNPostRepository snPostRepository;
@@ -41,5 +43,12 @@ public class SNPostDAODefault implements SNPostDAO {
     public Long removePost(String postId) {
         List<SNPost> postsToBeDeleted = snPostRepository.deleteSNPostById(postId);
         return new Long(postsToBeDeleted.size());
+    }
+
+
+    @Override
+    public String saveCommentForPost(SNPost snPost, Comment comment) {
+//        Query query = new Query(Criteria.where(""));
+        return null;
     }
 }

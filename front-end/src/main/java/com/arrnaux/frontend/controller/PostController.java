@@ -46,13 +46,13 @@ public class PostController {
             try {
                 HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
                 String url = "http://user-service/postService/";
-                ResponseEntity<Boolean> responseEntity = restTemplate.exchange(url,
+                return restTemplate.exchange(url,
                         HttpMethod.DELETE, httpEntity, Boolean.class);
-                return responseEntity;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
+
 }

@@ -32,7 +32,6 @@ public class PostService {
     public String savePost(@RequestBody SNPost snPost) {
         try {
             SNPost savedPost = snPostDAO.savePost(snPost);
-
             return savedPost.getId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,5 +51,20 @@ public class PostService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // snPost arg will conain a single comment
+    @RequestMapping(value="createComment", method = RequestMethod.POST)
+    public String appendCommentToExistingList(@RequestBody SNPost snPost){
+        try{
+            if (snPost.getCommentList().size() == 1) {
+                snPostDAO.savePost(snPost);
+
+//                String newCommentId = snPosDAO.saveP
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

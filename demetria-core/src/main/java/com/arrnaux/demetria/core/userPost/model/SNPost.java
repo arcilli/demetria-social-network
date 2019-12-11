@@ -34,4 +34,8 @@ public class SNPost {
     protected List<Comment> commentList;
 
     protected Date creationDate;
+
+    public boolean appendComment(Comment comment){
+        return commentList.add(comment);
+    }
 }

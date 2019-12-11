@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection="comment")
+@Document(collection = "comment")
 public class Comment {
 
     @Id

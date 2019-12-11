@@ -2,6 +2,7 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
+import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -40,6 +41,7 @@ public class ProfileController {
             // TODO: the connection with DBs should be only on user service
             List<SNPost> userPosts = snPostDAO.getUserPostsDateDesc(loggedUser);
             modelAndView.addObject("userPosts", userPosts);
+            modelAndView.addObject("newComment", new Comment());
             modelAndView.setViewName("profile");
         } else {
             modelAndView.setViewName("redirect:/");
@@ -50,12 +52,7 @@ public class ProfileController {
     @PostMapping(value = "profile")
     public ModelAndView saveProfileChanges(HttpServletRequest request, @ModelAttribute SNUser modifiedUser) {
         ModelAndView modelAndView = new ModelAndView();
-//        SNUser modifiedUser = (SNUser) model.getAttribute("modifiedUser");
         HttpEntity<SNUser> httpEntity = new HttpEntity<>(modifiedUser);
-
-//        SNUser modifiedUser = (SNUser) request.getSession().getAttribute("modifiedUser");
-        System.out.println(modifiedUser);
-        // call something from back-end
         try {
             ResponseEntity<SNUser> responseEntity =
                     restTemplate.exchange("http://user-service/post", HttpMethod.POST, httpEntity, SNUser.class);

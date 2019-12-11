@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<head><title>This page should not be public</title>
 </head>
 <body>
 <div th:fragment="loginFragment">
     <div th:if="${userLoginDTO != null}">
-        <!--        <form action="login" method="post" th:action="@{/login}" th:object="${userLoginDTO}">-->
-        <!--            <label for="loginFormEmail">Email: </label>-->
-        <!--            <input id="loginFormEmail" type="email"/><br/>-->
-        <!--            <label for="loginFormPassword">Password</label>-->
-        <!--            <input id="loginFormPassword" type="password"/><br/>-->
-        <!--            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>-->
-
-        <!--        </form>-->
         <h1>Login</h1>
         <form th:action="@{/login}" method="post" th:object="${userLoginDTO}" id="loginForm">
             <div class="form-group">
@@ -26,7 +18,7 @@
                        placeholder="Password">
             </div>
             <div class="form-group" id="badCredemtials" th:if="${badCredentials != null}">Bad credentials</div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>
         </form>
     </div>
 </div>
@@ -86,10 +78,6 @@
     <form action="#" method="post" th:action="createAPost" th:object="${post}">
         <textarea rows="10" cols="30" th:field="*{content}"></textarea><br/>
         <label for="visibility">Visibility</label>
-        <!--        <select id="visibility" name="visibility">-->
-        <!--            <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility}.values()}"-->
-        <!--                    th:value="${visibilityOpt}" th:text="${visibilityOpt}"></option>-->
-        <!--        </select>-->
         <select name="visibilityOption" id="visibility" th:field="*{visibility}">
             <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}"
                     th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
@@ -113,6 +101,7 @@
         <!--            TODO: display the number of positive votes and negative one-->
         <!--            TODO: display a list of comments-->
         <div>
+            <form th:replace="fragments/forms :: createComment"></form>
             <!--            <button type="button" class="btn btn-outline-primary btn-sm editPostButton" th:id="${post.id}">Edit post-->
             <!--            </button>-->
             <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
@@ -120,7 +109,15 @@
             </button>
         </div>
     </article>
+    <!--    Implement paginating display for this-->
     <!--    <button>More posts</button>-->
 </div>
+
+<!--<form th:fragment="createComment" th:action="@{/postComment}" th:object="${newComment}">-->
+<form th:fragment="createComment" th:action="@{/createComment}" method="post">
+    <input name="newComment" type="text" th:field="${newComment.content}" placeholder="Add comment"/>
+    <button type="button" class="btn btn-outline-success btn-sm addCommentButton">Add comment
+    </button>
+</form>
 </body>
 </html>
