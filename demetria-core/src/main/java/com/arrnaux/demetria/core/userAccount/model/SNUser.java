@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,8 +19,10 @@ public class SNUser extends SNUserLoginDTO {
     @Id
     protected String id;
 
+    @NotNull
     protected String firstName;
 
+    @NotNull
     protected String lastName;
 
     // TODO: Add an unique constraint for this field
@@ -30,17 +34,8 @@ public class SNUser extends SNUserLoginDTO {
         this.lastName = snUserRegistrationDTO.getLastName();
     }
 
-    public SNUser modifyPartialFieldsFromObject(SNUser user) {
-        if (user.getId() != null) this.setId(user.getId());
-
-        if (user.getEmail() != null) this.setEmail(user.getEmail());
-
-        if (user.getPassword() != null) this.setPassword(user.getPassword());
-
-        if (user.getFirstName() != null) this.setFirstName(user.getFirstName());
-
-        if (user.getLastName() != null) this.setLastName(user.getLastName());
-
-        return this;
+    public void updateObjectWithNotNullValues(SNUser modifiedUser) {
+        if (null != modifiedUser.getLastName()) this.setLastName(modifiedUser.getLastName());
+        if (null != modifiedUser.getFirstName()) this.setFirstName(modifiedUser.getFirstName());
     }
 }

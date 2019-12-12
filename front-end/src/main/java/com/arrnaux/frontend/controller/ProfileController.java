@@ -34,8 +34,6 @@ public class ProfileController {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (loggedUser != null) {
             // TODO: should load only a chunk from user posts
-            // TODO: the connection with DBs should be only on user service
-//            List<SNPost> userPosts = snPostDAO.getUserPostsDateDesc(loggedUser);
             String targetURL = "http://user-service/postService/posts/user";
             ResponseEntity<List<SNPost>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
                     new HttpEntity<String>(loggedUser.getId()), new ParameterizedTypeReference<List<SNPost>>() {

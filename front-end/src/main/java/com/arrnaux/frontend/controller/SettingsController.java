@@ -23,10 +23,11 @@ public class SettingsController {
 
     // TODO: declare modelAndView in function, not as an argument
     @RequestMapping(value = "profile", method = RequestMethod.GET)
-    public ModelAndView dispalyUserInformation(HttpServletRequest request, ModelAndView modelAndView) {
+    public ModelAndView displayUserInformation(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
-            // the modifiedUser is initialized (populated) with loggedUser (info)
+            // the modifiedUser is initialized with loggedUser
             modelAndView.addObject("modifiedUser", loggedUser);
             modelAndView.setViewName("settings/profile");
         } else {
@@ -40,25 +41,21 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
-
-            // TODO: replace this method with something more simple
-            loggedUser.modifyPartialFieldsFromObject(modifiedUser);
+            // TODO: ensure that the password field is empty
+            loggedUser.updateObjectWithNotNullValues(modifiedUser);
             try {
                 ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/settings/profile",
                         HttpMethod.POST, new HttpEntity<>(loggedUser), SNUser.class);
                 // Invalidate current attribute from session since user settings was changed.
-                // TODO: ensure that the password field is empty
-
                 request.getSession().removeAttribute("user");
                 request.getSession().setAttribute("user", loggedUser);
                 modelAndView.addObject("settingsUpdated", true);
                 modelAndView.addObject("modifiedUser", loggedUser);
-                modelAndView.setViewName("settings/profile");
             } catch (Exception e) {
                 e.printStackTrace();
                 modelAndView.addObject("settingsUpdated", false);
-                modelAndView.setViewName("settings/profile");
             }
+            modelAndView.setViewName("settings/profile");
         } else {
             modelAndView.setViewName("redirect:/");
         }

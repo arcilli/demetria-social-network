@@ -106,7 +106,7 @@ public class PostService {
         return null;
     }
 
-    // return a list of an users's post, sorted descending by date
+    // return a list of an users's post, sorted descending by date or null
     @Nullable
     @RequestMapping(value= "posts/user", method = RequestMethod.POST)
     public List getUserPostsDescending (@RequestBody String userId){

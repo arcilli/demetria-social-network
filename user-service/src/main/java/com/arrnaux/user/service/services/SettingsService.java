@@ -21,11 +21,21 @@ public class SettingsService {
 
     @PostMapping("profile")
     public ResponseEntity<SNUser> changeUserDetails(@RequestBody SNUser snUser) {
-        // Do some validation
+        // method invocation may produce NPE
+        // TODO: use Objects.requireNonNull
+        log.info("Attempt to edit user details for: " + snUser.getEmail());
 
-        // TODO: This is not working properly.
-        SNUser modifiedUser = snUserDAO.saveSNUser(snUser);
-        log.info("Attempt to edit user details for: " + modifiedUser.getEmail());
-        return new ResponseEntity<SNUser>(snUser, HttpStatus.OK);
+        // initialize password with the stored value, since others layers don't have access at it
+        if (null != snUserDAO.findUserByEmail(snUser.getEmail())) {
+            // method invocation may produce NPE
+            // TODO: use Objects.requireNonNull
+            String hashedPassword = snUserDAO.findUserByEmail(snUser.getEmail()).getPassword();
+            if (null != hashedPassword) {
+                snUser.setPassword(hashedPassword);
+                SNUser modifiedUser = snUserDAO.saveSNUser(snUser);
+                return new ResponseEntity<SNUser>(modifiedUser, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<SNUser>((SNUser) null, HttpStatus.FORBIDDEN);
     }
 }

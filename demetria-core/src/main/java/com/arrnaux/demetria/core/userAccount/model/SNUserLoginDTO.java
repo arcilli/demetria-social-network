@@ -2,6 +2,8 @@ package com.arrnaux.demetria.core.userAccount.model;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,7 +12,9 @@ import lombok.*;
 
 public class SNUserLoginDTO {
 
+    @NotNull
     private String email;
-
+    
+    @NotNull
     private String password;
 }

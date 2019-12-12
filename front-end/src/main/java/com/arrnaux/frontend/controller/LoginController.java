@@ -3,6 +3,7 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userAccount.model.SNUserLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     @Autowired
+    @LoadBalanced
     RestTemplate restTemplate;
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
