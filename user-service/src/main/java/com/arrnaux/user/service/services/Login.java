@@ -16,24 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "login")
 @Log4j
 public class Login {
+
     @Autowired
     private SNUserDAO snUserDAO;
 
-    // not sure that this is used for something any mroe
-//    @Autowired
-//    private TokenAuthority tokenAuthority;
-
-    // TODO: start a session when a user has logged in
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public ResponseEntity<SNUser> userLogin(@RequestBody SNUserLoginDTO userDTO) {
-        //log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
-        SNUser snUser = snUserDAO.findUserByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
+        log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
+        SNUser snUser = snUserDAO.findUserByEmailAndPlainPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             log.info("User " + userDTO.getEmail() + " has logged in.");
+            // clear the password before sending to next service
             snUser.setPassword("");
             return new ResponseEntity<SNUser>(snUser, HttpStatus.ACCEPTED);
         }
-        log.info("Login attempt failed for  with email: " + userDTO.getEmail());
+        log.info("Login attempt failed for with email: " + userDTO.getEmail());
 
         // snUser is null
         return new ResponseEntity<SNUser>(snUser, HttpStatus.FORBIDDEN);

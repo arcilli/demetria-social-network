@@ -2,6 +2,7 @@ package com.arrnaux.demetria.core.userAccount.data.impl;
 
 import com.arrnaux.demetria.core.userAccount.data.SNUserDAO;
 import com.arrnaux.demetria.core.userAccount.data.SNUserRepository;
+import com.arrnaux.demetria.core.userAccount.model.PasswordUtils;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,12 @@ public class SNUserDAODefault implements SNUserDAO {
     public SNUser saveSNUser(SNUser snUser) {
         snUserRepository.save(snUser);
         return snUserRepository.findByEmail(snUser.getEmail()).orElse(null);
+    }
+
+    @Nullable
+    @Override
+    public SNUser findUserByEmailAndPlainPassword(String email, String plainPassword) {
+        Optional<String> hashedPassword = PasswordUtils.hashPassword(plainPassword, null);
+        return hashedPassword.map(s -> findUserByEmailAndPassword(email, s)).orElse(null);
     }
 }

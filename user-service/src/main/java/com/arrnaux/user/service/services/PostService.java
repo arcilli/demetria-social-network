@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,13 +31,10 @@ public class PostService {
     @Autowired
     private SNPostDAO snPostDAO;
 
-//    // Don't use this, make a request to SNUser service instead of doing this.
-//    @Autowired
-//    private SNUserDAO snUserDAO;
-
+    // TODO: need to bring here a token for user/another method to authorize the actual request
+    // returns the id of the post or null
+    @Nullable
     @RequestMapping(value = "", method = RequestMethod.POST)
-    // TODO: need to bring here a token for user/another method for authorize the actual request
-    // returns the id of the post
     public String savePost(@RequestBody SNPost snPost) {
         try {
             snPost.setCreationDate(new Date());
@@ -52,7 +50,7 @@ public class PostService {
     public Boolean deletePost(@RequestBody SNPost post) {
         try {
             int nrOfDeletedPosts = snPostDAO.removePost(post.getId());
-            // the delete ended with success
+            // delete operation ended with success
             if (nrOfDeletedPosts == 1) {
                 return true;
             }
@@ -62,8 +60,8 @@ public class PostService {
         return false;
     }
 
-    // snPost arg will conain a single comment
-    // returns comm
+    // snPost arg will contain a single comment
+    // returns the id of the last comment or null
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public String appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         try {
@@ -73,7 +71,11 @@ public class PostService {
                 // TODO: maybe retrieve only the list of comments
                 SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
 
-                if (persistedPost.getCommentList() == null) {
+                if (persistedPost == null) {
+                    throw new Exception("The post does not exist.");
+                }
+
+                if (null == persistedPost.getCommentList()) {
                     persistedPost.setCommentList(new ArrayList<>());
                 }
 
@@ -82,7 +84,6 @@ public class PostService {
                 receivedComment.setId(persistedPost.getId() + "-" + commentNumber);
 
                 persistedPost.appendComment(postWithReceivedComment.getCommentList().get(0));
-                // TODO: creation date is updated every time at update
                 persistedPost = snPostDAO.savePost(persistedPost);
                 return persistedPost.getCommentList().get(persistedPost.getCommentList().size() - 1).getId();
             }

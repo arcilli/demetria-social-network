@@ -17,4 +17,7 @@ public interface SNUserDAO {
 
     @Nullable
     SNUser saveSNUser(SNUser snUser);
+
+    @Nullable
+    SNUser findUserByEmailAndPlainPassword(String email, String plainPassword);
 }

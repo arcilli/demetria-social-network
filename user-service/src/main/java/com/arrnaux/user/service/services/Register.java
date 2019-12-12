@@ -1,6 +1,7 @@
 package com.arrnaux.user.service.services;
 
 import com.arrnaux.demetria.core.userAccount.data.SNUserDAO;
+import com.arrnaux.demetria.core.userAccount.model.PasswordUtils;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userAccount.model.SNUserRegistrationDTO;
 import lombok.extern.log4j.Log4j;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @Log4j
 @RestController
 @RequestMapping("/register")
@@ -20,45 +23,32 @@ public class Register {
     @Autowired
     private SNUserDAO snUserDAO;
 
-    // TODO: this should return some info to be store in front end: user information, session id etc
+    // TODO: decide on a method to work with errors
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) throws Exception {
+    public ResponseEntity registerUser(@RequestBody SNUserRegistrationDTO snUserRegistrationDTO) {
         log.info("Attempt to register an user with info: " + snUserRegistrationDTO);
-        // TODO: add a check for not-null user properties
-        SNUser user = snUserDAO.findUserByEmail(snUserRegistrationDTO.getEmail());
-        if (user != null) {
-            // throw an exception - an user with same email already exists
-//            Exception e = new Exception("User with same email already exists");
-//            log.error("User with same email already exists", e);
-//            throw e;
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } else {
-            SNUser savedUser = snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
-            log.info("Registerd user with info: " + savedUser);
-            // populate this with extra information if necessary.
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-    }
+        // TODO: throw an error
+        if (!snUserRegistrationDTO.registrationFormIncomplete()) {
+            SNUser user = snUserDAO.findUserByEmail(snUserRegistrationDTO.getEmail());
+            if (null != user) {
+                log.error("An user with same email already exists");
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else {
 
-//    @RequestMapping(value = "", method = RequestMethod.GET)
-//    public String register() {
-////        snUserRepository.deleteAll();
-//
-////        snUserRepository.save(new SNUser(3, "Mihai", "Geroge"));
-//        snUserRepository.save(new SNUser(
-//                9,
-//                "Nicu",
-//                "Boca",
-//                "pass",
-//                "mail.boca.nicolae@gmail.com"
-//        ));
-//        System.out.println("Customers found with findAll():");
-//        StringBuilder s = new StringBuilder();
-//        System.out.println("-------------------------------");
-//        for (SNUser user : snUserRepository.findAll()) {
-//            System.out.println(user);
-//            s.append((user.toString()));
-//        }
-//        return s.toString();
-//    }
+                // throw an error for this case
+                if (!snUserRegistrationDTO.passwordIsMatched()) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+
+                Optional<String> hashedPassword = PasswordUtils.hashPassword(snUserRegistrationDTO.getPassword(), null);
+                if (hashedPassword.isPresent()) {
+                    snUserRegistrationDTO.setPassword(hashedPassword.get());
+                    SNUser savedUser = snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
+                    log.info("Registered user with info: " + savedUser);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }
