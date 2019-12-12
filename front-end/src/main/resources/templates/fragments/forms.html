@@ -158,14 +158,6 @@
     <!--    <button>More posts</button>-->
 </div>
 
-<form th:fragment="createComment(postId)" th:action="@{/createComment}" method="post" th:object="${newComment}">
-    <input type="text" th:field="*{content}" placeholder="Add comment"/>
-    <!--    TODO: this is a work-around, see how can pass a SNPost object and a comment one-->
-    <input type="hidden" name="id" th:value="${postId}"/>
-    <button type="button" class="btn btn-outline-success btn-sm addCommentButton">Add comment
-    </button>
-</form>
-
 <div th:fragment="displayPost(post)">
     <!--            TODO: add this with a link to user username-->
     <div class="postHeader flex-container">
@@ -192,6 +184,14 @@
         </button>
     </div>
 </div>
+
+<form th:fragment="createComment(postId)" th:action="@{/createComment}" method="post" th:object="${newComment}">
+    <input type="text" th:field="*{content}" placeholder="Add comment"/>
+    <!--    TODO: this is a work-around, see how can pass a SNPost object and a comment one-->
+    <input type="hidden" name="id" th:value="${postId}"/>
+    <button type="button" class="btn btn-outline-success btn-sm addCommentButton">Add comment
+    </button>
+</form>
 
 <div th:fragment="deleteAccountButton">
     <button id="deleteAccountButton" type="button" class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal"

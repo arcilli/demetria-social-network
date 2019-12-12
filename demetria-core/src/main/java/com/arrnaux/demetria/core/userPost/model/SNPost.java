@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ public class SNPost {
 
     protected String content;
 
+    @NotNull
     protected PostVisibility visibility;
 
     protected List<Vote> voteList;

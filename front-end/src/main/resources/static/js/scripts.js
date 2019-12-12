@@ -68,13 +68,13 @@ $(function () {
             type: 'DELETE',
             contentType: 'application/json',
             // an error needs to be treated as a success case (since a redirect header is returned)
-            error: function (result) {
+            error: function () {
                 window.location.replace("/");
             }
         });
     });
 
-    // To be tested.
+// To be tested.
     var getIdForPost = function (elementId) {
         $(elementId).parents().map(function () {
             if (this.tagName == "ARTICLE") {

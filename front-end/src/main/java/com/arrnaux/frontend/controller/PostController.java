@@ -60,21 +60,46 @@ public class PostController {
     // only logged users can comment
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
     public ModelAndView displayPost(HttpServletRequest request, @PathVariable String postId) {
-        // if user is logged in
+        ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        if (loggedUser != null) {
-            String requestURL = "http://user-service/postService/posts/" + postId;
-            ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
-                    SNPost.class);
-            if (responseEntity.getBody() != null) {
-                SNPost snPost = (SNPost) responseEntity.getBody();
-                ModelAndView modelAndView = new ModelAndView();
-                modelAndView.addObject("post", snPost);
-                modelAndView.addObject("newComment", new Comment());
-                modelAndView.setViewName("singlePost");
-                return modelAndView;
+        String requestURL = "http://user-service/postService/posts/" + postId;
+        ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
+                SNPost.class);
+        SNPost snPost = (SNPost) responseEntity.getBody();
+        if (null != snPost) {
+            switch (snPost.getVisibility()) {
+                case PUBLIC:
+                    if (null != loggedUser) {
+                        if (responseEntity.getBody() != null) {
+                            modelAndView.addObject("post", snPost);
+                            modelAndView.addObject("newComment", new Comment());
+                            modelAndView.addObject("authorized", true);
+                            modelAndView.setViewName("singlePost");
+                            return modelAndView;
+                        }
+                    } else {
+                        // TODO:
+                        // a visitator can see the content, but can't comment
+                        modelAndView.addObject("post", snPost);
+//                        modelAndView.addObject("displayAddCommentForm", false);
+                        modelAndView.addObject("authorized", true);
+                        modelAndView.setViewName("singlePost");
+                        return modelAndView;
+                    }
+                case PRIVATE:
+                    if (null != loggedUser) {
+                        if (loggedUser.getId().equals(snPost.getOwner().getId())) {
+                            modelAndView.addObject("post", snPost);
+                            modelAndView.addObject("newComment", new Comment());
+                            modelAndView.addObject("authorized", true);
+                            modelAndView.setViewName("singlePost");
+                            return modelAndView;
+                        }
+                    }
             }
         }
-        return new ModelAndView("redirect:/");
+        modelAndView.addObject("authorized", false);
+        modelAndView.setViewName("singlePost");
+        return modelAndView;
     }
 }
