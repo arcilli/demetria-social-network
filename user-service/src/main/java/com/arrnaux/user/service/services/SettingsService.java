@@ -22,7 +22,8 @@ public class SettingsService {
     @PostMapping("profile")
     public ResponseEntity<SNUser> changeUserDetails(@RequestBody SNUser snUser) {
         // Do some validation
-        //
+
+        // TODO: This is not working properly.
         SNUser modifiedUser = snUserDAO.saveSNUser(snUser);
         log.info("Attempt to edit user details for: " + modifiedUser.getEmail());
         return new ResponseEntity<SNUser>(snUser, HttpStatus.OK);

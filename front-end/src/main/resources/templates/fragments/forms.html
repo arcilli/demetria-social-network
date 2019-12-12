@@ -117,6 +117,9 @@
         <br/>
         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
     </form>
+
+    <!--    TODO: add a confirmation message-->
+    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" id="deleteAccountButton">Delete account</button>
     <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
     <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
 </div>

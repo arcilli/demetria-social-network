@@ -15,7 +15,7 @@ public interface SNPostDAO {
     List<SNPost> getUserPosts(SNUser snUser);
 
     //
-    List<SNPost> getUserPostsDateDesc(SNUser snUser);
+    List<SNPost> getUserPostsDateDesc(String id);
 
     SNPost savePost(SNPost snPost);
 

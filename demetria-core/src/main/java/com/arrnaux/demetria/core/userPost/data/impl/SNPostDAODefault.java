@@ -35,8 +35,8 @@ public class SNPostDAODefault implements SNPostDAO {
     }
 
     @Override
-    public List<SNPost> getUserPostsDateDesc(SNUser snUser) {
-        return snPostRepository.findByOwnerIdOrderByCreationDateDesc(snUser.getId());
+    public List<SNPost> getUserPostsDateDesc(String id) {
+        return snPostRepository.findByOwnerIdOrderByCreationDateDesc(id);
     }
 
     @Override

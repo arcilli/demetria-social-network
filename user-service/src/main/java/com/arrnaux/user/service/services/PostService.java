@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -90,7 +91,7 @@ public class PostService {
         return null;
     }
 
-    //     return a post
+    // return a post or null
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
     public SNPost servePostRequest(@PathVariable String postId) {
@@ -101,6 +102,21 @@ public class PostService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    // return a list of an users's post, sorted descending by date
+    @Nullable
+    @RequestMapping(value= "posts/user", method = RequestMethod.POST)
+    public List getUserPostsDescending (@RequestBody String userId){
+        try{
+            List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
+            if (null != posts){
+                return posts;
+            }
+        } catch (Exception e){
+            log.severe(e.toString());
         }
         return null;
     }
