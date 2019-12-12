@@ -69,19 +69,16 @@ public class PostController {
         if (null != snPost) {
             switch (snPost.getVisibility()) {
                 case PUBLIC:
+                    modelAndView.addObject("authorized", true);
+                    modelAndView.addObject("post", snPost);
                     if (null != loggedUser) {
-                        if (responseEntity.getBody() != null) {
-                            modelAndView.addObject("post", snPost);
-                            modelAndView.addObject("newComment", new Comment());
-                            modelAndView.addObject("authorized", true);
-                            modelAndView.setViewName("singlePost");
-                            return modelAndView;
-                        }
+                        modelAndView.addObject("newComment", new Comment());
+                        modelAndView.setViewName("singlePost");
+                        return modelAndView;
                     } else {
                         // TODO:
-                        // a visitator can see the content, but can't comment
+                        // a guest can see the content, but can't comment
                         modelAndView.addObject("post", snPost);
-//                        modelAndView.addObject("displayAddCommentForm", false);
                         modelAndView.addObject("authorized", true);
                         modelAndView.setViewName("singlePost");
                         return modelAndView;
@@ -96,6 +93,7 @@ public class PostController {
                             return modelAndView;
                         }
                     }
+                    //TODO: treat ONLY_FRIENDS
             }
         }
         modelAndView.addObject("authorized", false);
