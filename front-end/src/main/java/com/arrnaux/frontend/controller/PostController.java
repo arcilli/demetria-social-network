@@ -44,7 +44,7 @@ public class PostController {
     @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
     public ResponseEntity processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getId().equals(post.getOwner().getId())) {
             try {
                 HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
                 String url = "http://user-service/postService/";
