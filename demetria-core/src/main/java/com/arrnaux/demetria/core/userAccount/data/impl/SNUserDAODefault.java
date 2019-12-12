@@ -63,4 +63,15 @@ public class SNUserDAODefault implements SNUserDAO {
         Optional<String> hashedPassword = PasswordUtils.hashPassword(plainPassword, null);
         return hashedPassword.map(s -> findUserByEmailAndPassword(email, s)).orElse(null);
     }
+
+    @Override
+    public Boolean removeUserAccount(String email) {
+        try {
+            snUserRepository.removeSNUserByEmail(email);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

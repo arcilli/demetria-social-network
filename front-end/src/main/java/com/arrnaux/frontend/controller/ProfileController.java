@@ -5,6 +5,7 @@ import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -21,8 +22,8 @@ import java.util.List;
 @Controller
 public class ProfileController {
 
-    // Use the restTemplate declared in main Class
     @Autowired
+    @LoadBalanced
     RestTemplate restTemplate;
 
     @Autowired
@@ -44,6 +45,26 @@ public class ProfileController {
             modelAndView.setViewName("profile");
         } else {
             modelAndView.setViewName("redirect:/");
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "deleteAccount", method = RequestMethod.DELETE)
+    public ModelAndView deleteAccount(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
+        if (loggedUser != null) {
+            String targetURL = "http://user-service/settings/deleteAccount";
+            ResponseEntity<Boolean> responseEntity = restTemplate.exchange(targetURL, HttpMethod.DELETE,
+                    new HttpEntity<>(loggedUser), Boolean.class);
+            if (null != responseEntity.getBody() && responseEntity.getBody()) {
+                // account has been deleted
+                request.getSession().invalidate();
+                modelAndView.setViewName("redirect:/");
+            }
+        } else {
+            modelAndView.addObject("deleteAccountError", true);
+            modelAndView.setViewName("deleteAccount");
         }
         return modelAndView;
     }

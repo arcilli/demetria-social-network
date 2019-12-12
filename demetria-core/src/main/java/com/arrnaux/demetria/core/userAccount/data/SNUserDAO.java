@@ -20,4 +20,6 @@ public interface SNUserDAO {
 
     @Nullable
     SNUser findUserByEmailAndPlainPassword(String email, String plainPassword);
+
+    Boolean removeUserAccount(String email);
 }

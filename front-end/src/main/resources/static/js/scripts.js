@@ -18,7 +18,6 @@
 })();
 
 $(function () {
-// jQuery is alreadyloaded by bootstrap
     $(".editPostButton").on("click", function () {
         // make a request for change the current post
     });
@@ -63,8 +62,19 @@ $(function () {
         });
     });
 
+    $("#confirmAccountDeleteButton").on("click", function () {
+        $.ajax({
+            url: "/deleteAccount",
+            type: 'DELETE',
+            contentType: 'application/json',
+            // an error needs to be treated as a success case (since a redirect header is returned)
+            error: function (result) {
+                window.location.replace("/");
+            }
+        });
+    });
 
-    // To be tested
+    // To be tested.
     var getIdForPost = function (elementId) {
         $(elementId).parents().map(function () {
             if (this.tagName == "ARTICLE") {

@@ -26,7 +26,7 @@ public class RegisterController {
 
     @GetMapping("/signup")
     public String displaySignupForm(Model model) {
-        model.addAttribute("user", new SNUserRegistrationDTO());
+        model.addAttribute("newUser", new SNUserRegistrationDTO());
         return "signup";
     }
 
@@ -41,7 +41,7 @@ public class RegisterController {
                 modelAndView.addObject("userCreated", true);
             }
         } catch (HttpClientErrorException e) {
-            modelAndView.addObject("user", user);
+            modelAndView.addObject("newUser", user);
             modelAndView.addObject("emailAlreadyExists", true);
         }
         modelAndView.setViewName("signup");
