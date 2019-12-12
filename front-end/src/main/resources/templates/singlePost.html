@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/header :: headerIncludes">
+    <meta charset="UTF-8">
+    <title th:text="${post.content}"></title>
+</head>
+<body>
+<div th:replace="fragments/forms :: displayPost(${post})"></div>
+</body>
+</html>

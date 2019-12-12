@@ -10,10 +10,7 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,6 +83,21 @@ public class PostService {
                 persistedPost.appendComment(postWithReceivedComment.getCommentList().get(0));
                 persistedPost = snPostDAO.savePost(persistedPost);
                 return persistedPost.getCommentList().get(persistedPost.getCommentList().size() - 1).getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //     return a post
+    @Nullable
+    @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
+    public SNPost servePostRequest(@PathVariable String postId) {
+        try {
+            SNPost snPost = snPostDAO.getPostById(postId);
+            if (null != snPost) {
+                return snPost;
             }
         } catch (Exception e) {
             e.printStackTrace();

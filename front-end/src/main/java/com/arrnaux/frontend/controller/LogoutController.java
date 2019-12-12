@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class Logout {
+public class LogoutController {
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) {

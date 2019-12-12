@@ -1,6 +1,7 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -39,6 +40,7 @@ public class PostController {
         return modelAndView;
     }
 
+    // TODO: add a validation (current user should be the owner of the post)
     @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
     public ResponseEntity processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
@@ -55,4 +57,24 @@ public class PostController {
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 
+    // only logged users can comment
+    @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
+    public ModelAndView displayPost(HttpServletRequest request, @PathVariable String postId) {
+        // if user is logged in
+        SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
+        if (loggedUser != null) {
+            String requestURL = "http://user-service/postService/posts/" + postId;
+            ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
+                    SNPost.class);
+            if (responseEntity.getBody() != null) {
+                SNPost snPost = (SNPost) responseEntity.getBody();
+                ModelAndView modelAndView = new ModelAndView();
+                modelAndView.addObject("post", snPost);
+                modelAndView.addObject("newComment", new Comment());
+                modelAndView.setViewName("singlePost");
+                return modelAndView;
+            }
+        }
+        return new ModelAndView("redirect:/");
+    }
 }
