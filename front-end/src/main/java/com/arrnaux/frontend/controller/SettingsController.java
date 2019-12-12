@@ -21,10 +21,12 @@ public class SettingsController {
     @Autowired
     RestTemplate restTemplate;
 
+    // TODO: declare modelAndView in function, not as an argument
     @RequestMapping(value = "profile", method = RequestMethod.GET)
     public ModelAndView dispalyUserInformation(HttpServletRequest request, ModelAndView modelAndView) {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        if (loggedUser != null) {
+        if (null != loggedUser) {
+            // the modifiedUser is initialized (populated) with loggedUser (info)
             modelAndView.addObject("modifiedUser", loggedUser);
             modelAndView.setViewName("settings/profile");
         } else {
@@ -37,13 +39,16 @@ public class SettingsController {
     public ModelAndView processUserInformationUpdate(HttpServletRequest request, @ModelAttribute SNUser modifiedUser) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        if (loggedUser != null) {
+        if (null != loggedUser) {
+
+            // TODO: replace this method with something more simple
             loggedUser.modifyPartialFieldsFromObject(modifiedUser);
-            HttpEntity<SNUser> httpEntity = new HttpEntity<>(loggedUser);
             try {
                 ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/settings/profile",
-                        HttpMethod.POST, httpEntity, SNUser.class);
+                        HttpMethod.POST, new HttpEntity<>(loggedUser), SNUser.class);
                 // Invalidate current attribute from session since user settings was changed.
+                // TODO: ensure that the password field is empty
+
                 request.getSession().removeAttribute("user");
                 request.getSession().setAttribute("user", loggedUser);
                 modelAndView.addObject("settingsUpdated", true);
@@ -60,7 +65,8 @@ public class SettingsController {
         return modelAndView;
     }
 
-    // TODO: to be implemented
+    // TODO: maybe receive only 2 objects (a SNUser - corresponding to oldPass) and a newUser (like the registration form
+    // - with newPass and newPassMatch
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
     public ModelAndView changePassword(HttpServletRequest request, @ModelAttribute String oldPassword,
                                        @ModelAttribute String newPassword, @ModelAttribute String newPasswordMatch) {

@@ -37,7 +37,7 @@ public class SNPost {
     protected Date creationDate;
 
     public boolean appendComment(Comment comment) {
-        if (commentList == null) {
+        if (null == commentList) {
             commentList = new ArrayList<>();
         }
         return commentList.add(comment);

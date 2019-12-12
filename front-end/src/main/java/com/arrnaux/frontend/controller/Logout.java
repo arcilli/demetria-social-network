@@ -12,7 +12,6 @@ public class Logout {
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) {
-        // if the user is logged-in
         ModelAndView modelAndView = new ModelAndView();
         if (request.getSession().getAttribute("user") != null) {
             request.getSession().invalidate();

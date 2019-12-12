@@ -51,7 +51,7 @@ public class PostService {
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     public Boolean deletePost(@RequestBody SNPost post) {
         try {
-            Long nrOfDeletedPosts = snPostDAO.removePost(post.getId());
+            int nrOfDeletedPosts = snPostDAO.removePost(post.getId());
             // the delete ended with success
             if (nrOfDeletedPosts == 1) {
                 return true;

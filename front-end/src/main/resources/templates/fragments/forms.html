@@ -6,8 +6,7 @@
 <div th:fragment="loginFragment">
     <div th:if="${userLoginDTO != null}">
         <h1>Login</h1>
-        <form id="loginForm" th:action="@{/login}" method="post"
-              th:object="${userLoginDTO}">
+        <form id="loginForm" th:action="@{/login}" method="post" th:object="${userLoginDTO}">
             <div class="form-group">
                 <label for="loginFormEmail">Email address</label>
                 <input type="email" class="form-control" id="loginFormEmail" th:field="*{email}"
@@ -29,7 +28,7 @@
     <div id="signupForm" th:if="${userCreated == null}">
         <h1>Register to Demetria!</h1>
         <div>
-            <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${user}"
+            <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${newUser}"
                   oninput='passwordMatchRegistrationForm
                   .setCustomValidity(passwordMatchRegistrationForm.value != passwordRegistrationForm.value ?
                    "Passwords do not match." : "")'>

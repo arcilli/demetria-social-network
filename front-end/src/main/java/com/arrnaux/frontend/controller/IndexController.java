@@ -18,10 +18,10 @@ public class IndexController {
         if (httpServletRequest.getSession().getAttribute("user") == null) {
             // the user is not logged
             modelAndView.addObject("userLoginDTO", new SNUserLoginDTO());
-            modelAndView.addObject("user", new SNUserRegistrationDTO());
+            modelAndView.addObject("newUser", new SNUserRegistrationDTO());
             modelAndView.setViewName("home/homeNotSignedIn");
         } else {
-            // TODO: renane attribute to "newPost"
+            // TODO: rename attribute to "newPost"
             modelAndView.addObject("post", new SNPost());
             modelAndView.setViewName("home/homeSignedIn");
         }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class RegisterController {
@@ -27,20 +28,21 @@ public class RegisterController {
         return "signup";
     }
 
-    // this should make a call for user-register service
     @PostMapping("/signup")
-    public String processSignupRequest(@ModelAttribute SNUserRegistrationDTO user, Model model) {
+    public ModelAndView processSignupRequest(@ModelAttribute SNUserRegistrationDTO user) {
+        ModelAndView modelAndView = new ModelAndView();
         HttpEntity<SNUserRegistrationDTO> httpEntity = new HttpEntity<>(user);
         try {
             ResponseEntity<SNUser> responseEntity =
                     restTemplate.exchange("http://user-service/register", HttpMethod.POST, httpEntity, SNUser.class);
             if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
-                model.addAttribute("userCreated", true);
+                modelAndView.addObject("userCreated", true);
             }
         } catch (HttpClientErrorException e) {
-            model.addAttribute("user", user);
-            model.addAttribute("emailAlreadyExists", true);
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("emailAlreadyExists", true);
         }
-        return "signup";
+        modelAndView.setViewName("signup");
+        return modelAndView;
     }
 }
