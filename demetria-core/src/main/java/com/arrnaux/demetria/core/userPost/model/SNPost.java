@@ -44,4 +44,11 @@ public class SNPost {
         }
         return commentList.add(comment);
     }
+
+    public boolean appendVote(Vote vote) {
+        if (null == voteList) {
+            voteList = new ArrayList<>();
+        }
+        return voteList.add(vote);
+    }
 }

@@ -173,27 +173,29 @@
         </div>
     </div>
     <div class="postContent" th:text="${post.content}"></div>
-    <div class="postComments" th:each="comment : ${post.commentList}">
-        <div th:text="${comment.owner.firstName}+' '+${comment.owner.lastName}+ ': '+${comment.content}"></div>
-    </div>
-    <!--            TODO: display the number of positive votes and negative one-->
-    <div>
-        <form th:replace="fragments/forms :: createComment(${post.id})"></form>
-        <td th:if="${session.user.id == post.owner.id}">
-            <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
-                post
-            </button>
-        </td>
+    <div class="postComments">
+        <div class="postComment " th:each="comment : ${post.commentList}">
+            <div th:text="${comment.owner.firstName}+' '+${comment.owner.lastName}+ ': '+${comment.content}"></div>
+        </div>
+        <!--            TODO: display the number of positive votes and negative one-->
+        <div>
+            <form th:replace="fragments/forms :: createComment(${post.id})"></form>
+            <td th:if="${session.user != null and session.user.id == post.owner.id}">
+                <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
+                    post
+                </button>
+            </td>
+        </div>
     </div>
 </div>
 
 <!--TODO: Dont use newComment, use another object for control this-->
 <td th:fragment=createComment(postId) th:if="${newComment != null}">
-    <form th:action="@{/createComment}" method="post" th:object="${newComment}">
+    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
         <input type="text" th:field="*{content}" placeholder="Add comment"/>
         <!--    TODO: this is a work-around, see how can pass a SNPost object and a comment one-->
         <input type="hidden" name="id" th:value="${postId}"/>
-        <button type="button" class="btn btn-outline-success btn-sm addCommentButton">Add comment
+        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
         </button>
     </form>
 </td>
@@ -212,7 +214,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="confirmAccountDeleteButton">Confirm delete</button>
+                    <button type="button" class="btn btn-primary" id="confirmAccountDeleteButton">Confirm delete
+                    </button>
                 </div>
             </div>
         </div>

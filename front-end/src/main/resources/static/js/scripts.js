@@ -46,20 +46,28 @@ $(function () {
     });
 
     // ajax request for adding a comment
-    $(".addCommentButton").on("click", function () {
-        let form = -2;
+    $(".addCommentButton").on("click", function (event) {
+        event.preventDefault();
+
+        let formId = -2;
         $(this).parents().map(function () {
             if (this.tagName == "FORM") {
-                form = this;
+                formId = this.id.value;
             }
         });
-        console.log(form);
-        form.submit(function (e) {
-            e.preventDefault();
-            console.log("Fain, misto");
-            //     //     form.submit();
-            e.submit();
-        });
+
+        formId = formId + "CommForm";
+        let form = $("#" + formId);
+        $.ajax({
+            url: form[0].action,
+            type: 'post',
+            data: form.serialize(),
+            success: function (result) {
+                // TODO: clear content
+                location.reload();
+                // TODO: inject the comment before the form
+            }
+        })
     });
 
     $("#confirmAccountDeleteButton").on("click", function () {
@@ -82,4 +90,5 @@ $(function () {
             }
         });
     }
-});
+})
+;

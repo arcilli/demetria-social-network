@@ -18,7 +18,5 @@ public interface SNUserRepository extends MongoRepository<SNUser, String> {
 
     Optional<SNUser> findByEmailAndPassword(String email, String password);
 
-    List<SNPost> deleteSNPostById(String postId);
-
     void removeSNUserByEmail(String email);
 }
