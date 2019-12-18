@@ -40,12 +40,19 @@ public class Register {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
 
+                // user with same username
+                SNUser userByUsername = snUserDAO.findUserByUsername(snUserRegistrationDTO.getUserName());
+                if (null != userByUsername) {
+                    // an user with same username exists
+                    return new ResponseEntity<>(false, HttpStatus.IM_USED);
+                }
+
                 Optional<String> hashedPassword = PasswordUtils.hashPassword(snUserRegistrationDTO.getPassword(), null);
                 if (hashedPassword.isPresent()) {
                     snUserRegistrationDTO.setPassword(hashedPassword.get());
                     SNUser savedUser = snUserDAO.saveSNUser(new SNUser(snUserRegistrationDTO));
                     log.info("Registered user with info: " + savedUser);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
+                    return new ResponseEntity<>(true, HttpStatus.CREATED);
                 }
             }
         }

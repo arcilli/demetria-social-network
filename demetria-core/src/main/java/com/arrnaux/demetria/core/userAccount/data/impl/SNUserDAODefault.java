@@ -74,4 +74,10 @@ public class SNUserDAODefault implements SNUserDAO {
         }
         return false;
     }
+
+    @Override
+    public SNUser findUserByUsername(String username) {
+        Optional<SNUser> snUser = snUserRepository.findByUserName(username);
+        return snUser.orElse(null);
+    }
 }

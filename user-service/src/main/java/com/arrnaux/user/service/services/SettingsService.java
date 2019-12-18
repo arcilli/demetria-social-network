@@ -36,7 +36,7 @@ public class SettingsService {
         return new ResponseEntity<>((SNUser) null, HttpStatus.FORBIDDEN);
     }
 
-    // TODO: mark userPosts as private
+    // TODO: mark userPosts as private && mark to not be re-assigned at register with same email
     @RequestMapping(value = "deleteAccount", method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteUserAccount(@RequestBody SNUser snUser) {
         log.info("Attempt to delete user: " + snUser.getEmail());

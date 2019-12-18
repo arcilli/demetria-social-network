@@ -25,13 +25,14 @@ public class SNUser extends SNUserLoginDTO {
     @NotNull
     protected String lastName;
 
-    // TODO: Add an unique constraint for this field
+    @NotNull
     protected String userName;
 
     public SNUser(SNUserRegistrationDTO snUserRegistrationDTO) {
         super(snUserRegistrationDTO.getEmail(), snUserRegistrationDTO.getPassword());
         this.firstName = snUserRegistrationDTO.getFirstName();
         this.lastName = snUserRegistrationDTO.getLastName();
+        this.userName = snUserRegistrationDTO.getUserName();
     }
 
     public void updateObjectWithNotNullValues(SNUser modifiedUser) {
