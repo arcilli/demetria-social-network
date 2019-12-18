@@ -4,6 +4,7 @@ package com.arrnaux.demetria.core.userPost.data.impl;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.data.SNPostRepository;
+import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,9 @@ public class SNPostDAODefault implements SNPostDAO {
         return postsToBeDeleted.size();
     }
 
+    @Override
+    public List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility) {
+        List<SNPost> postList = snPostRepository.findByOwnerUserNameAndVisibilityOrderByCreationDate(userName, postVisibility);
+        return postList;
+    }
 }

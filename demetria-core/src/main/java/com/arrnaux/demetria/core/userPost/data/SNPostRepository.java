@@ -1,7 +1,7 @@
 package com.arrnaux.demetria.core.userPost.data;
 
+import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -15,6 +15,7 @@ public interface SNPostRepository extends MongoRepository<SNPost, String> {
 
     List<SNPost> findByOwnerIdOrderByCreationDateDesc(String ownerID);
 
-    List<SNPost> deleteSNPostById(String postId);
+    List<SNPost> findByOwnerUserNameAndVisibilityOrderByCreationDate(String ownerUserName, PostVisibility postVisibility);
 
+    List<SNPost> deleteSNPostById(String postId);
 }

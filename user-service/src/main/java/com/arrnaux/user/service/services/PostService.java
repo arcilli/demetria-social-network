@@ -2,6 +2,7 @@ package com.arrnaux.user.service.services;
 
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
+import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class PostService {
         return null;
     }
 
+    // delete a post by id
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     public Boolean deletePost(@RequestBody SNPost post) {
         try {
@@ -91,6 +93,18 @@ public class PostService {
         return null;
     }
 
+    // return a list of an users's post, sorted descending by date or null
+    @Nullable
+    @RequestMapping(value = "posts/user", method = RequestMethod.POST)
+    public List getUserPostsDescending(@RequestBody String userId) {
+        try {
+            return snPostDAO.getUserPostsDateDesc(userId);
+        } catch (Exception e) {
+            log.severe(e.toString());
+        }
+        return null;
+    }
+
     // return a post or null
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
@@ -106,16 +120,12 @@ public class PostService {
         return null;
     }
 
-    // return a list of an users's post, sorted descending by date or null
     @Nullable
-    @RequestMapping(value= "posts/user", method = RequestMethod.POST)
-    public List getUserPostsDescending (@RequestBody String userId){
-        try{
-            List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
-            if (null != posts){
-                return posts;
-            }
-        } catch (Exception e){
+    @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
+    public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
+        try {
+            return snPostDAO.getUserPostsDescending(userName, postVisibility);
+        } catch (Exception e) {
             log.severe(e.toString());
         }
         return null;

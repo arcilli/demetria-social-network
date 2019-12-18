@@ -1,6 +1,7 @@
 package com.arrnaux.demetria.core.userPost.data;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.springframework.lang.Nullable;
 
@@ -16,6 +17,8 @@ public interface SNPostDAO {
 
     //
     List<SNPost> getUserPostsDateDesc(String id);
+
+    List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility);
 
     SNPost savePost(SNPost snPost);
 

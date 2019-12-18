@@ -152,6 +152,7 @@
     </form>
 </div>
 
+<!--TODO: add a flex container for this-->
 <div th:fragment="userPosts" th:object="${userPosts}">
     <article class="userPost" th:each="post : ${userPosts}" th:id="${post.id}">
         <div th:replace="fragments/forms :: displayPost(${post})">
@@ -165,7 +166,8 @@
     <!--            TODO: add this with a link to user username-->
     <div class="postHeader flex-container">
         <div class="postOwner">
-            <a th:href="@{/profile}" th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+            <a th:href="@{'/profiles/' + ${post.owner.userName}}"
+               th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
         </div>
         <!--        TODO: better display time from the post (hours, day, m, years)-->
         <div class="postCreationDate">
