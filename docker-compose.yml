@@ -6,11 +6,11 @@ services:
     image: arcilli/demetria-eureka-server:0.0.1-SNAPSHOT
     ports:
       - '8761:8761'
-#  hello-world:
-#    build: hello-world/
-#    ports:
-#      - '8080:8080'
   user-service:
     image: arcilli/demetria-user-service:0.0.1-SNAPSHOT
     ports:
       - '8080:8080'
+  front-end:
+    image: arcilli/demetria-front-end:0.0.1-SNAPSHOT
+    ports:
+      - '8081:8081'
