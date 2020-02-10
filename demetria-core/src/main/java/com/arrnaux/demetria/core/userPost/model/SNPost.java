@@ -1,6 +1,5 @@
 package com.arrnaux.demetria.core.userPost.model;
 
-
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
@@ -18,9 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
-
 @Document(collection = "post")
-
 public class SNPost {
     @Id
     protected String id;
