@@ -134,20 +134,20 @@ public class PostService {
 
     // return post ranking (as votes average)
     @RequestMapping(value = "/posts/vote/{postId}", method = RequestMethod.POST)
-    public float voteAPost(@PathVariable("postId") String postId, Vote vote) {
+    public Float voteAPost(@PathVariable("postId") String postId, @RequestBody Vote vote) {
         try {
             SNPost storedPost = snPostDAO.getPostById(postId);
-            if (null != storedPost && storedPost.getVoteList().size() == 0) {
+            if (null != storedPost) {
                 storedPost.appendVote(vote);
                 // this is actually an update
                 snPostDAO.savePost(storedPost);
                 // return an updated value for post rank
-                return 0;
+                return Float.valueOf(0);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return Float.valueOf(-1);
     }
 }

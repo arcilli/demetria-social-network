@@ -65,7 +65,6 @@ $(function () {
             success: function (result) {
                 // TODO: clear content
                 location.reload();
-                // TODO: inject the comment before the form
             }
         })
     });
@@ -112,9 +111,6 @@ $(function () {
         // for each star, if it is <= this, color it.
         articleId = "#" + articleId;
         let currentPosts = $(articleId);
-        // sent the request with th
-        console.log(currentPosts.find(".stars")[0]);
-        console.log(currentPosts.find(".stars")[0].children);
         let nodeItems = currentPosts.find(".stars")[0].children
         for (let i = 0; i < nodeItems.length; ++i) {
             if (nodeItems[i].innerText <= this.innerText) {
@@ -123,6 +119,19 @@ $(function () {
                 nodeItems[i].classList.remove("active");
             }
         }
+        articleId = articleId.substr(1);
+        let targetUrl = "/votePost/" + articleId + "/" + this.innerText;
+        $.ajax({
+            url: targetUrl,
+            type: 'GET',
+            success: function (result) {
+                // location.reload();
+                console.log(result);
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        })
     });
 });
 //
