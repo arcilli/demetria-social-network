@@ -10,11 +10,9 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class Vote {
-    protected long id;
-
     protected long postId;
 
-    protected long ownerId;
+    protected String ownerId;
 
-    protected VoteValue value;
+    protected long value;
 }

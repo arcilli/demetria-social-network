@@ -34,7 +34,6 @@ public class Register {
                 log.error("An user with same email already exists");
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             } else {
-
                 // throw an error for this case
                 if (!snUserRegistrationDTO.passwordIsMatched()) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

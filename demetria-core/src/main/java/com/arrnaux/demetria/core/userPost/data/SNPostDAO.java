@@ -25,4 +25,5 @@ public interface SNPostDAO {
     // returns the number of posts that will be deleted?
     int removePost(String postId);
 
+    float getPostRank (String postId);
 }

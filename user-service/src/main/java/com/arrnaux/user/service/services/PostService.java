@@ -4,6 +4,7 @@ import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
+import com.arrnaux.demetria.core.userPost.model.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,6 @@ import java.util.List;
 @Setter
 @Log
 @RestController
-
 @RequestMapping(value = "postService")
 public class PostService {
 
@@ -62,6 +62,7 @@ public class PostService {
 
     // snPost arg will contain a single comment
     // returns the id of the last comment or null
+    // TODO: this should be replaced with Mongo logic directly
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public String appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         try {
@@ -129,5 +130,24 @@ public class PostService {
             log.severe(e.toString());
         }
         return null;
+    }
+
+    // return post ranking (as votes average)
+    @RequestMapping(value = "/posts/vote/{postId}", method = RequestMethod.POST)
+    public float voteAPost(@PathVariable("postId") String postId, Vote vote) {
+        try {
+            SNPost storedPost = snPostDAO.getPostById(postId);
+            if (null != storedPost && storedPost.getVoteList().size() == 0) {
+                storedPost.appendVote(vote);
+                // this is actually an update
+                snPostDAO.savePost(storedPost);
+                // return an updated value for post rank
+                return 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

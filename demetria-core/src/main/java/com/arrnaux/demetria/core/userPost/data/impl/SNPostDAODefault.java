@@ -48,7 +48,13 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     public List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility) {
-        List<SNPost> postList = snPostRepository.findByOwnerUserNameAndVisibilityOrderByCreationDate(userName, postVisibility);
-        return postList;
+        return snPostRepository.findByOwnerUserNameAndVisibilityOrderByCreationDate(userName, postVisibility);
+    }
+
+    @Override
+    public float getPostRank(String postId){
+        // Compute the average of votes and return it.
+        // If the vote list is empty, return 0.
+        return -1;
     }
 }

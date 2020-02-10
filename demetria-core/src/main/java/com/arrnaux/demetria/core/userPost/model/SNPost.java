@@ -32,23 +32,25 @@ public class SNPost {
     @NotNull
     protected PostVisibility visibility;
 
-    protected List<Vote> voteList;
+    protected List<Vote> voteList = null;
 
-    protected List<Comment> commentList;
+    protected List<Comment> commentList = null;
 
     protected Date creationDate;
 
-    public boolean appendComment(Comment comment) {
+    protected float averageRank = 0;
+
+    public void appendComment(Comment comment) {
         if (null == commentList) {
             commentList = new ArrayList<>();
         }
-        return commentList.add(comment);
+        commentList.add(comment);
     }
 
-    public boolean appendVote(Vote vote) {
+    public void appendVote(Vote vote) {
         if (null == voteList) {
             voteList = new ArrayList<>();
         }
-        return voteList.add(vote);
+        voteList.add(vote);
     }
 }
