@@ -123,7 +123,7 @@ $(function () {
         let targetUrl = "/votePost/" + articleId + "/" + this.innerText;
         $.ajax({
             url: targetUrl,
-            type: 'GET',
+            type: 'POST',
             success: function (result) {
                 // location.reload();
                 console.log(result);

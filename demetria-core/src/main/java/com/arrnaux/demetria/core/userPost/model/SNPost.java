@@ -35,7 +35,7 @@ public class SNPost {
 
     protected Date creationDate;
 
-    protected float averageRank = 0;
+    protected Double averageRank = 0.0;
 
     public void appendComment(Comment comment) {
         if (null == commentList) {
@@ -49,5 +49,11 @@ public class SNPost {
             voteList = new ArrayList<>();
         }
         voteList.add(vote);
+    }
+
+    public void computeAverageRank() {
+        this.averageRank = this.voteList.stream().
+                mapToDouble(Vote::getValue)
+                .average().orElse(-1);
     }
 }

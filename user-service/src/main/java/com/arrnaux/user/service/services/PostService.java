@@ -132,22 +132,27 @@ public class PostService {
         return null;
     }
 
-    // return post ranking (as votes average)
-    @RequestMapping(value = "/posts/vote/{postId}", method = RequestMethod.POST)
-    public Float voteAPost(@PathVariable("postId") String postId, @RequestBody Vote vote) {
+    /**
+     * @param currentVote is the vote given by the user
+     * @return the average vote score after considering the current vote
+     * Takes the current vote and replace it in votes list corresponding to the post if the user has already voted for
+     * the post. Otherwise, append the vote to the vote list.
+     */
+    @RequestMapping(value = "/posts/vote/", method = RequestMethod.POST)
+    public Double voteAPost(@RequestBody Vote currentVote) {
         try {
-            SNPost storedPost = snPostDAO.getPostById(postId);
-            if (null != storedPost) {
-                storedPost.appendVote(vote);
-                // this is actually an update
-                snPostDAO.savePost(storedPost);
-                // return an updated value for post rank
-                return Float.valueOf(0);
+            SNPost originalPost = snPostDAO.removeVote(currentVote);
+            if (null != originalPost) {
+                originalPost.appendVote(currentVote);
+                // This is actually an update.
+                originalPost.computeAverageRank();
+                // Return an updated value for post rank.
+                snPostDAO.savePost(originalPost);
+                return originalPost.getAverageRank();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Float.valueOf(-1);
+        return (double) -1;
     }
 }
