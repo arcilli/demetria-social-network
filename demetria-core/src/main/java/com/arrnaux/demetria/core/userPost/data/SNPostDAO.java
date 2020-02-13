@@ -32,6 +32,4 @@ public interface SNPostDAO {
      */
     @Nullable
     SNPost removeVote(Vote vote);
-
-    double getPostRank(SNPost post);
 }

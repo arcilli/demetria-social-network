@@ -76,13 +76,4 @@ public class SNPostDAODefault implements SNPostDAO {
         return post;
     }
 
-    @Override
-    public double getPostRank(SNPost post) {
-        // TODO: replace this with a DB-side logic
-        SNPost actualPost = getPostById(post.getId());
-        if (null != actualPost) {
-
-        }
-        return -1;
-    }
 }
