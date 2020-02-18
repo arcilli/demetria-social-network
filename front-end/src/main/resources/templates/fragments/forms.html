@@ -176,12 +176,10 @@
                 <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM yyyy')}+': '">
                 </td>
             </a>
+            <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span>
         </div>
     </div>
-    <div class="postContent" th:text="${post.content}">
-    </div>
-    <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span>
-        <!--    Post rank here-->
+    <div class="postContent" th:text="${post.content}"></div>
     <span th:replace="fragments/posts :: rateStarts"></span>
     </span>
     <div class="postComments">

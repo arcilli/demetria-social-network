@@ -35,9 +35,9 @@
     color: #9e9e9e;
 }
 
-span {
-    font-size: 0; /* trick to remove inline-element's margin */
-}
+/*span {*/
+/*    font-size: 0; !* trick to remove inline-element's margin *!*/
+/*}*/
 
 .stars a:hover ~ a:after {
     color: #9e9e9e !important;
