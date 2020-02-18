@@ -57,4 +57,12 @@ public class Register {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+//    @RequestMapping(value = "usernameAvailability", method = RequestMethod.GET)
+//    public ResponseEntity usernameIsAvailable(@RequestBody String username) {
+//        if (null == snUserDAO.findUserByUsername(username)) {
+//            return new ResponseEntity<>(true, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+//    }
 }

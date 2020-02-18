@@ -16,7 +16,6 @@ public interface SNPostDAO {
     // returns a list of the posts associated with an user
     List<SNPost> getUserPosts(SNUser snUser);
 
-    //
     List<SNPost> getUserPostsDateDesc(String id);
 
     List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility);

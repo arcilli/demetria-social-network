@@ -75,5 +75,4 @@ public class SNPostDAODefault implements SNPostDAO {
         }
         return post;
     }
-
 }

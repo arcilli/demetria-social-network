@@ -43,10 +43,20 @@ public class RegisterController {
                 }
             }
         } catch (HttpClientErrorException e) {
+            System.out.println(e.toString());
             modelAndView.addObject("newUser", user);
             modelAndView.addObject("emailAlreadyExists", true);
         }
         modelAndView.setViewName("signup");
         return modelAndView;
     }
+//    // TODO: an ajax request should be made at this
+//    @RequestMapping(value = "/usernameAvailability/", method = RequestMethod.POST)
+//    public boolean checkUsernameAvailability(@RequestBody String username) {
+//        // make a request to BE
+//        HttpEntity<String> httpEntity = new HttpEntity<>(username);
+//        ResponseEntity<Boolean> responseEntity = restTemplate.exchange("http://user-service/register/usernameAvailability",
+//                HttpMethod.GET, httpEntity, Boolean.class);
+//        return responseEntity.getStatusCode() == HttpStatus.OK && responseEntity.getBody().equals(true);
+//    }
 }
