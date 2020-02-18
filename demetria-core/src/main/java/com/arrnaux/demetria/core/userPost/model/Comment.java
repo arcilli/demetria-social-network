@@ -1,10 +1,10 @@
 package com.arrnaux.demetria.core.userPost.model;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ public class Comment {
 
     private String id;
 
-    private SNUser owner;
+    private ObjectId owner;
 
     private String content;
 

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @Log4j
 @RequestMapping("settings")
@@ -26,7 +28,7 @@ public class SettingsService {
         if (null != snUserDAO.findUserByEmail(snUser.getEmail())) {
             // method invocation may produce NPE
             // TODO: use Objects.requireNonNull
-            String hashedPassword = snUserDAO.findUserByEmail(snUser.getEmail()).getPassword();
+            String hashedPassword = Objects.requireNonNull(snUserDAO.findUserByEmail(snUser.getEmail())).getPassword();
             if (null != hashedPassword) {
                 snUser.setPassword(hashedPassword);
                 SNUser modifiedUser = snUserDAO.saveSNUser(snUser);
@@ -36,7 +38,6 @@ public class SettingsService {
         return new ResponseEntity<>((SNUser) null, HttpStatus.FORBIDDEN);
     }
 
-    // TODO: mark userPosts as private && mark to not be re-assigned at register with same email
     @RequestMapping(value = "deleteAccount", method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteUserAccount(@RequestBody SNUser snUser) {
         log.info("Attempt to delete user: " + snUser.getEmail());

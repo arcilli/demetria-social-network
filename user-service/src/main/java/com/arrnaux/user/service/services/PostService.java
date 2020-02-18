@@ -1,5 +1,7 @@
 package com.arrnaux.user.service.services;
 
+import com.arrnaux.demetria.core.userAccount.data.SNUserDAO;
+import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +33,19 @@ public class PostService {
     @Autowired
     private SNPostDAO snPostDAO;
 
-    // TODO: need to bring here a token for user/another method to authorize the actual request
-    // returns the id of the post or null
+    @Autowired
+    private SNUserDAO snUserDAO;
+
+    /**
+     *
+     * @param snPost
+     * @return the id of the post or null
+     *
+     * TODO: need to bring here a token for user/another method to authorize the actual request.
+     */
     @Nullable
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String savePost(@RequestBody SNPost snPost) {
+    public ObjectId savePost(@RequestBody SNPost snPost) {
         try {
             snPost.setCreationDate(new Date());
             SNPost savedPost = snPostDAO.savePost(snPost);
@@ -60,9 +71,14 @@ public class PostService {
         return false;
     }
 
-    // snPost arg will contain a single comment
-    // returns the id of the last comment or null
-    // TODO: this should be replaced with Mongo logic directly
+    /**
+     *
+     * @param postWithReceivedComment contain a single comment
+     * @return the id of the last comment or null
+     *
+     * TODO: this should be replaced with Mongo logic directly.
+     */
+    @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public String appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         try {
@@ -72,7 +88,7 @@ public class PostService {
                 // TODO: maybe retrieve only the list of comments
                 SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
 
-                if (persistedPost == null) {
+                if (null == persistedPost) {
                     throw new Exception("The post does not exist.");
                 }
 
@@ -94,22 +110,32 @@ public class PostService {
         return null;
     }
 
-    // return a list of an users's post, sorted descending by date or null
+    /**
+     *
+     * @param userId
+     * @return a list of an users's post, sorted descending by date or null
+     */
     @Nullable
     @RequestMapping(value = "posts/user", method = RequestMethod.POST)
-    public List getUserPostsDescending(@RequestBody String userId) {
+    public SNPostDAO getUserPostsDescending(@RequestBody String userId) {
         try {
-            return snPostDAO.getUserPostsDateDesc(userId);
+            // Retrieve user information.
+            SNUser snUser = snUserDAO.getUser(userId);
+            List<SNPost> posts = snPostDAO.getUserPostsDateDesc(new ObjectId(userId));
         } catch (Exception e) {
             log.severe(e.toString());
         }
         return null;
     }
 
-    // return a post or null
+    /**
+     *
+     * @param postId
+     * @return a post or null
+     */
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
-    public SNPost servePostRequest(@PathVariable String postId) {
+    public SNPost servePostRequest(@PathVariable ObjectId postId) {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {

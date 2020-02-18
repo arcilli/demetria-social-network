@@ -26,13 +26,13 @@ public class Login {
         SNUser snUser = snUserDAO.findUserByEmailAndPlainPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             log.info("User " + userDTO.getEmail() + " has logged in.");
-            // clear the password before sending to next service
+            // Clear the password before sending to next service.
             snUser.setPassword("");
             return new ResponseEntity<SNUser>(snUser, HttpStatus.ACCEPTED);
         }
         log.info("Login attempt failed for with email: " + userDTO.getEmail());
 
-        // snUser is null
-        return new ResponseEntity<SNUser>(snUser, HttpStatus.FORBIDDEN);
+        // snUser is null.
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 }

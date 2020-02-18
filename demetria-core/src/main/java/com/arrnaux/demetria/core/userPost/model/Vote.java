@@ -2,6 +2,7 @@ package com.arrnaux.demetria.core.userPost.model;
 
 import lombok.*;
 import lombok.extern.log4j.Log4j;
+import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -15,8 +16,10 @@ import java.util.Objects;
 public class Vote {
     @NotNull
     protected String postId;
+
     @NotNull
-    protected String ownerId;
+    protected ObjectId owner;
+
     @NotNull
     protected long value;
 
@@ -27,11 +30,11 @@ public class Vote {
         Vote vote = (Vote) o;
         return value == vote.value &&
                 postId.equals(vote.postId) &&
-                ownerId.equals(vote.ownerId);
+                owner.equals(vote.owner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postId, ownerId, value);
+        return Objects.hash(postId, owner, value);
     }
 }

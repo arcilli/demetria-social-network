@@ -107,7 +107,7 @@ public class ProfileController {
     private void populateWithUserPosts(ModelAndView modelAndView, SNUser loggedUser) {
         String targetURL = "http://user-service/postService/posts/user";
         ResponseEntity<List<SNPost>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
-                new HttpEntity<String>(loggedUser.getId()), new ParameterizedTypeReference<List<SNPost>>() {
+                new HttpEntity<>(loggedUser.getId().toString()), new ParameterizedTypeReference<List<SNPost>>() {
                 });
         List<SNPost> userPosts = responseEntity.getBody();
         modelAndView.addObject("userPosts", userPosts);

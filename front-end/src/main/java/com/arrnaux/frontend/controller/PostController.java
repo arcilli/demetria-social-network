@@ -3,7 +3,6 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,32 +16,29 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class PostController {
 
-    @Autowired
-    RestTemplate restTemplate;
+    RestTemplate restTemplate = new RestTemplate();
 
     @PostMapping("createAPost")
     public ModelAndView processPost(HttpServletRequest request, @ModelAttribute SNPost post) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
-            post.setOwner(currentUser);
-            // make the request
-            HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
+            post.setOwnerId(currentUser.getId());
             try {
                 ResponseEntity<SNPost> responseEntity = restTemplate.exchange("http://user-service/postService",
-                        HttpMethod.POST, httpEntity, SNPost.class);
+                        HttpMethod.POST, new HttpEntity<>(post), SNPost.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        // this return should not matter since it will be made with an ajax request
+        // This return should not matter since it will be made with an ajax request.
         modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 
     // TODO: add a validation (current user should be the owner of the post)
     @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
-    public ResponseEntity processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
+    public ResponseEntity<Boolean> processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
@@ -74,19 +70,16 @@ public class PostController {
                     modelAndView.addObject("post", snPost);
                     if (null != loggedUser) {
                         modelAndView.addObject("newComment", new Comment());
-                        modelAndView.setViewName("singlePost");
-                        return modelAndView;
                     } else {
-                        // TODO:
                         // a guest can see the content, but can't comment
                         modelAndView.addObject("post", snPost);
                         modelAndView.addObject("authorized", true);
-                        modelAndView.setViewName("singlePost");
-                        return modelAndView;
                     }
+                    modelAndView.setViewName("singlePost");
+                    return modelAndView;
                 case PRIVATE:
                     if (null != loggedUser) {
-                        if (loggedUser.getId().equals(snPost.getOwner().getId())) {
+                        if (loggedUser.getId().equals(snPost.getOwnerId())) {
                             modelAndView.addObject("post", snPost);
                             modelAndView.addObject("newComment", new Comment());
                             modelAndView.addObject("authorized", true);
