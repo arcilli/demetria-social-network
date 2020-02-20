@@ -117,13 +117,16 @@ public class PostService {
             List<SNPostDTO> posts = new LinkedList<>();
             // Retrieve user information.
             SNUser snUser = snUserDAO.getUser(userId);
-            // Add for every post that need to be displayed the owner.
-            for (SNPost snPost : postsWithoutOwner) {
-                SNPostDTO aPost = (SNPostDTO) snPost;
-                aPost.setOwner(snUser);
-                posts.add(aPost);
+            if (null != snUser) {
+                snUser.obfuscateUserInformation();
+                // Add for every post that need to be displayed the owner.
+                for (SNPost snPost : postsWithoutOwner) {
+                    SNPostDTO aPost = (SNPostDTO) snPost;
+                    aPost.setOwner(snUser);
+                    posts.add(aPost);
+                }
+                return posts;
             }
-            return posts;
         } catch (Exception e) {
             log.severe(e.toString());
         }
@@ -150,9 +153,20 @@ public class PostService {
 
     @Nullable
     @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
-    public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
+    public List<SNPostDTO> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
         try {
-            return snPostDAO.getUserPostsDescending(userName, postVisibility);
+            List<SNPost> postWithoutUserDetails = snPostDAO.getUserPostsDescending(userName, postVisibility);
+            List<SNPostDTO> postsWithUserInfo = new LinkedList<>();
+            SNUser snUser = snUserDAO.findUserByUsername(userName);
+            if (null != snUser) {
+                snUser.obfuscateUserInformation();
+                for (SNPost post : postWithoutUserDetails) {
+                    SNPostDTO snPostDTO = (SNPostDTO) post;
+                    snPostDTO.setOwner(snUser);
+                    postsWithUserInfo.add(snPostDTO);
+                }
+                return postsWithUserInfo;
+            }
         } catch (Exception e) {
             log.severe(e.toString());
         }
