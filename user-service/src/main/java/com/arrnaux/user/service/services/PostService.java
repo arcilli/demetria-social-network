@@ -3,10 +3,7 @@ package com.arrnaux.user.service.services;
 import com.arrnaux.demetria.core.userAccount.data.SNUserDAO;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
-import com.arrnaux.demetria.core.userPost.model.Comment;
-import com.arrnaux.demetria.core.userPost.model.PostVisibility;
-import com.arrnaux.demetria.core.userPost.model.SNPost;
-import com.arrnaux.demetria.core.userPost.model.Vote;
+import com.arrnaux.demetria.core.userPost.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -37,10 +35,8 @@ public class PostService {
     private SNUserDAO snUserDAO;
 
     /**
-     *
      * @param snPost
-     * @return the id of the post or null
-     *
+     * @return the id of the saved post or null
      * TODO: need to bring here a token for user/another method to authorize the actual request.
      */
     @Nullable
@@ -72,11 +68,10 @@ public class PostService {
     }
 
     /**
-     *
-     * @param postWithReceivedComment contain a single comment
+     * @param postWithReceivedComment contains a single comment
      * @return the id of the last comment or null
-     *
-     * TODO: this should be replaced with Mongo logic directly.
+     * <p>
+     * TODO: this should be replaced with Mongo query for aggregation.
      */
     @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
@@ -111,17 +106,24 @@ public class PostService {
     }
 
     /**
-     *
      * @param userId
      * @return a list of an users's post, sorted descending by date or null
      */
     @Nullable
     @RequestMapping(value = "posts/user", method = RequestMethod.POST)
-    public SNPostDAO getUserPostsDescending(@RequestBody String userId) {
+    public List<SNPostDTO> getUserPostsDescending(@RequestBody String userId) {
         try {
+            List<? extends SNPost> postsWithoutOwner = snPostDAO.getUserPostsDateDesc(new ObjectId(userId));
+            List<SNPostDTO> posts = new LinkedList<>();
             // Retrieve user information.
             SNUser snUser = snUserDAO.getUser(userId);
-            List<SNPost> posts = snPostDAO.getUserPostsDateDesc(new ObjectId(userId));
+            // Add for every post that need to be displayed the owner.
+            for (SNPost snPost : postsWithoutOwner) {
+                SNPostDTO aPost = (SNPostDTO) snPost;
+                aPost.setOwner(snUser);
+                posts.add(aPost);
+            }
+            return posts;
         } catch (Exception e) {
             log.severe(e.toString());
         }
@@ -129,7 +131,6 @@ public class PostService {
     }
 
     /**
-     *
      * @param postId
      * @return a post or null
      */

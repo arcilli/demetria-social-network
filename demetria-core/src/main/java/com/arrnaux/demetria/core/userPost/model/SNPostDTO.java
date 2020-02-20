@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 
 public class SNPostDTO extends SNPost {
-    protected SNUser owner;
+    private SNUser owner;
+
 }

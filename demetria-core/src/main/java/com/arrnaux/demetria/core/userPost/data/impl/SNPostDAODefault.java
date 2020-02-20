@@ -59,6 +59,7 @@ public class SNPostDAODefault implements SNPostDAO {
     @Override
     public int removePost(ObjectId postId) {
         Optional<List<SNPost>> posts = snPostRepository.deleteSNPostById(postId);
+        // Should check for a NPE?
         return posts.map(List::size).orElse(-1);
     }
 
