@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,8 +41,9 @@ public class PostService {
      */
     @Nullable
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ObjectId savePost(@RequestBody SNPost snPost) {
+    public String savePost(@RequestBody SNPost snPost) {
         try {
+            // TODO: replace with DB operation
             snPost.setCreationDate(new Date());
             SNPost savedPost = snPostDAO.savePost(snPost);
             return savedPost.getId();
@@ -113,7 +114,7 @@ public class PostService {
     @RequestMapping(value = "posts/user", method = RequestMethod.POST)
     public List<SNPostDTO> getUserPostsDescending(@RequestBody String userId) {
         try {
-            List<? extends SNPost> postsWithoutOwner = snPostDAO.getUserPostsDateDesc(new ObjectId(userId));
+            List<SNPost> postsWithoutOwner = snPostDAO.getUserPostsDateDesc(userId);
             List<SNPostDTO> posts = new LinkedList<>();
             // Retrieve user information.
             SNUser snUser = snUserDAO.getUser(userId);
@@ -121,9 +122,7 @@ public class PostService {
                 snUser.obfuscateUserInformation();
                 // Add for every post that need to be displayed the owner.
                 for (SNPost snPost : postsWithoutOwner) {
-                    SNPostDTO aPost = (SNPostDTO) snPost;
-                    aPost.setOwner(snUser);
-                    posts.add(aPost);
+                    posts.add(new SNPostDTO(snPost, snUser));
                 }
                 return posts;
             }
@@ -139,11 +138,17 @@ public class PostService {
      */
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
-    public SNPost servePostRequest(@PathVariable ObjectId postId) {
+    public SNPostDTO getPostById(@PathVariable String postId) {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
-                return snPost;
+                SNUser snUser = snUserDAO.getUser(snPost.getOwnerId());
+                if (null != snUser) {
+                    return SNPostDTO.builder().
+                            owner(snUser).
+                            post(snPost).
+                            build();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,15 +160,13 @@ public class PostService {
     @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
     public List<SNPostDTO> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
         try {
-            List<SNPost> postWithoutUserDetails = snPostDAO.getUserPostsDescending(userName, postVisibility);
-            List<SNPostDTO> postsWithUserInfo = new LinkedList<>();
             SNUser snUser = snUserDAO.findUserByUsername(userName);
             if (null != snUser) {
+                List<SNPost> postWithoutUserDetails = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
+                List<SNPostDTO> postsWithUserInfo = new LinkedList<>();
                 snUser.obfuscateUserInformation();
                 for (SNPost post : postWithoutUserDetails) {
-                    SNPostDTO snPostDTO = (SNPostDTO) post;
-                    snPostDTO.setOwner(snUser);
-                    postsWithUserInfo.add(snPostDTO);
+                    postsWithUserInfo.add(SNPostDTO.builder().post(post).owner(snUser).build());
                 }
                 return postsWithUserInfo;
             }

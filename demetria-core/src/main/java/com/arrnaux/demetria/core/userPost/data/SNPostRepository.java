@@ -12,15 +12,15 @@ import java.util.Optional;
 public interface SNPostRepository extends MongoRepository<SNPost, String> {
     Optional<SNPost> findById(ObjectId id);
 
-    Optional<List<SNPost>> findByOwnerId(ObjectId ownerId);
+    Optional<List<SNPost>> findByOwnerId(String ownerId);
 
     // TODO: check if is any problem for this
     SNPost save(SNPost snPost);
 
-    Optional<List<SNPost>> findByOwnerIdOrderByCreationDateDesc(ObjectId owner_id);
+    Optional<List<SNPost>> findByOwnerIdOrderByCreationDateDesc(String ownerId);
 
     // TODO: replace with a finding by ownerId
-    Optional<List<SNPost>> findByUsernameAndVisibilityOrderByCreationDate(String userName, @NotNull PostVisibility visibility);
+    Optional<List<SNPost>> findByOwnerIdAndVisibilityOrderByCreationDate(String owner_id, @NotNull PostVisibility visibility);
 
-    Optional<List<SNPost>> deleteSNPostById(ObjectId id);
+    Optional<List<SNPost>> deleteSNPostById(String id);
 }

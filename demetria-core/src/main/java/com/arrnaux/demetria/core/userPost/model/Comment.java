@@ -16,7 +16,7 @@ public class Comment {
 
     private String id;
 
-    private ObjectId owner;
+    private String owner;
 
     private String content;
 

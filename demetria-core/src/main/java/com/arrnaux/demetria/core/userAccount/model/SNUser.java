@@ -1,7 +1,6 @@
 package com.arrnaux.demetria.core.userAccount.model;
 
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class SNUser extends SNUserLoginDTO {
 
     @Id
-    protected ObjectId id;
+    protected String id;
 
     @NotNull
     protected String firstName;

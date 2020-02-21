@@ -2,7 +2,6 @@ package com.arrnaux.demetria.core.userPost.model;
 
 import lombok.*;
 import lombok.extern.log4j.Log4j;
-import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -15,13 +14,12 @@ import java.util.Objects;
 @ToString(callSuper = true)
 public class Vote {
     @NotNull
-    protected String postId;
+    private String postId;
+
+    private String owner;
 
     @NotNull
-    protected ObjectId owner;
-
-    @NotNull
-    protected long value;
+    private long value;
 
     @Override
     public boolean equals(Object o) {

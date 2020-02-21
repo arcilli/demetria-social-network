@@ -1,15 +1,19 @@
-package com.arrnaux.demetria.core.userPost.model;
+    package com.arrnaux.demetria.core.userPost.model;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+    import com.arrnaux.demetria.core.userAccount.model.SNUser;
+    import lombok.*;
 
-@Setter
-@Getter
-@NoArgsConstructor
+    @Setter
+    @Getter
+    @AllArgsConstructor()
+    @NoArgsConstructor()
+    @Builder
 
-public class SNPostDTO extends SNPost {
-    private SNUser owner;
+    /**
+     * Used a member instead of extending SNPost because of downcast problems.
+     */
+    public class SNPostDTO {
+        private SNPost post;
+        private SNUser owner;
 
-}
+    }

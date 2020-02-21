@@ -12,12 +12,11 @@ import java.util.List;
 public interface SNPostDAO {
 
     /**
-     *
      * @param postId
      * @return
      */
     @Nullable
-    SNPost getPostById(ObjectId postId);
+    SNPost getPostById(String postId);
 
     /**
      * @param snUser
@@ -26,33 +25,29 @@ public interface SNPostDAO {
     List<SNPost> getUserPosts(SNUser snUser);
 
     /**
-     *
      * @param id
      * @return
      */
-    List<SNPost> getUserPostsDateDesc(ObjectId id);
+    List<SNPost> getUserPostsDateDesc(String ownerId);
 
     /**
-     *
      * @param userName
      * @param postVisibility
      * @return
      */
-    List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility);
+    List<SNPost> getUserPostsDateDesc(String ownerId, PostVisibility postVisibility);
 
     /**
-     *
      * @param snPost
      * @return
      */
     SNPost savePost(SNPost snPost);
 
     /**
-     *
      * @param postId
      * @return the number of posts that will be deleted?
      */
-    int removePost(ObjectId postId);
+    int removePost(String postId);
 
     /**
      * @param vote The vote that will be removed.

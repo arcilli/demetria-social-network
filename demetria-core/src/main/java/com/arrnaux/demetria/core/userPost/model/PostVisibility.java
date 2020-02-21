@@ -1,7 +1,6 @@
 package com.arrnaux.demetria.core.userPost.model;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 //@ToString(callSuper = true)

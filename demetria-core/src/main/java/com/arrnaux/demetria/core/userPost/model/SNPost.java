@@ -2,7 +2,6 @@ package com.arrnaux.demetria.core.userPost.model;
 
 import lombok.*;
 import lombok.extern.log4j.Log4j;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,28 +13,30 @@ import java.util.List;
 @Log4j
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+
 @Getter
 @Setter
 @ToString(callSuper = true)
 @Document(collection = "post")
 public class SNPost {
     @Id
-    protected ObjectId id;
+    private String id;
 
-    protected ObjectId ownerId;
+    private String ownerId;
 
-    protected String content;
+    private String content;
 
     @NotNull
-    protected PostVisibility visibility;
+    private PostVisibility visibility;
 
-    protected List<Vote> voteList = null;
+    private List<Vote> voteList = null;
 
-    protected List<Comment> commentList = null;
+    private List<Comment> commentList = null;
 
-    protected Date creationDate;
+    private Date creationDate;
 
-    protected Double averageRank = 0.0;
+    private Double averageRank = 0.0;
 
     public void appendComment(Comment comment) {
         if (null == commentList) {
@@ -56,4 +57,6 @@ public class SNPost {
                 mapToDouble(Vote::getValue)
                 .average().orElse(-1);
     }
+
+
 }

@@ -23,7 +23,7 @@ public class CommentController {
     // SNPost post will contain only the id, with a garbage value of content
     // Comment content from newComment is the value that has to be stored.
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
-    public ResponseEntity createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
+    public ResponseEntity<Boolean> createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {

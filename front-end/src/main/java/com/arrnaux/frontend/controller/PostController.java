@@ -3,6 +3,11 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
+import com.arrnaux.demetria.core.userPost.model.SNPostDTO;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,7 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class PostController {
 
-    RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    @LoadBalanced
+    RestTemplate restTemplate;
 
     @PostMapping("createAPost")
     public ModelAndView processPost(HttpServletRequest request, @ModelAttribute SNPost post) {
@@ -25,12 +32,13 @@ public class PostController {
         if (currentUser != null) {
             post.setOwnerId(currentUser.getId());
             try {
-                ResponseEntity<SNPost> responseEntity = restTemplate.exchange("http://user-service/postService",
-                        HttpMethod.POST, new HttpEntity<>(post), SNPost.class);
+                ResponseEntity<ObjectId> responseEntity =
+                        restTemplate.exchange("http://user-service/postService", HttpMethod.POST, new HttpEntity<>(post), ObjectId.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        // TODO: should return something to FE (display an error if the processing ended with an error).
         // This return should not matter since it will be made with an ajax request.
         modelAndView.setViewName("redirect:/");
         return modelAndView;
@@ -60,11 +68,11 @@ public class PostController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         String requestURL = "http://user-service/postService/posts/" + postId;
-        ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
-                SNPost.class);
-        SNPost snPost = (SNPost) responseEntity.getBody();
+        ResponseEntity<SNPostDTO> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
+                SNPostDTO.class);
+        SNPostDTO snPost = (SNPostDTO) responseEntity.getBody();
         if (null != snPost) {
-            switch (snPost.getVisibility()) {
+            switch (snPost.getPost().getVisibility()) {
                 case PUBLIC:
                     modelAndView.addObject("authorized", true);
                     modelAndView.addObject("post", snPost);
@@ -79,7 +87,7 @@ public class PostController {
                     return modelAndView;
                 case PRIVATE:
                     if (null != loggedUser) {
-                        if (loggedUser.getId().equals(snPost.getOwnerId())) {
+                        if (loggedUser.getId().equals(snPost.getOwner().getId())) {
                             modelAndView.addObject("post", snPost);
                             modelAndView.addObject("newComment", new Comment());
                             modelAndView.addObject("authorized", true);

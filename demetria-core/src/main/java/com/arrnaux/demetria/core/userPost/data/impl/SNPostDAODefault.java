@@ -33,7 +33,7 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     @Nullable
-    public SNPost getPostById(ObjectId postId) {
+    public SNPost getPostById(String postId) {
         return snPostRepository.findById(postId).orElse(null);
     }
 
@@ -52,12 +52,12 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     @Nullable
-    public List<SNPost> getUserPostsDateDesc(ObjectId ownerId) {
+    public List<SNPost> getUserPostsDateDesc(String ownerId) {
         return snPostRepository.findByOwnerIdOrderByCreationDateDesc(ownerId).orElse(null);
     }
 
     @Override
-    public int removePost(ObjectId postId) {
+    public int removePost(String postId) {
         Optional<List<SNPost>> posts = snPostRepository.deleteSNPostById(postId);
         // Should check for a NPE?
         return posts.map(List::size).orElse(-1);
@@ -65,8 +65,8 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     @Nullable
-    public List<SNPost> getUserPostsDescending(String userName, PostVisibility postVisibility) {
-        return snPostRepository.findByUsernameAndVisibilityOrderByCreationDate(userName, postVisibility).orElse(null);
+    public List<SNPost> getUserPostsDateDesc(String ownerId, PostVisibility postVisibility) {
+        return snPostRepository.findByOwnerIdAndVisibilityOrderByCreationDate(ownerId, postVisibility).orElse(null);
     }
 
     @Override
@@ -84,4 +84,6 @@ public class SNPostDAODefault implements SNPostDAO {
         }
         return post;
     }
+
+
 }
