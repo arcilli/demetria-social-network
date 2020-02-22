@@ -3,6 +3,8 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class CommentController {
 
-    RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    @LoadBalanced
+    RestTemplate restTemplate;
 
     // TODO: this is a work-around
     // SNPost post will contain only the id, with a garbage value of content
@@ -29,9 +33,8 @@ public class CommentController {
             try {
                 newComment.setOwnerId(currentUser.getId());
                 post.appendComment(newComment);
-                HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
-                ResponseEntity<String> responseEntity = restTemplate.exchange("http://user-service/postService/createComment",
-                        HttpMethod.POST, httpEntity, String.class);
+                restTemplate.exchange("http://user-service/postService/createComment", HttpMethod.POST,
+                        new HttpEntity<>(post), String.class);
                 return new ResponseEntity<>(true, HttpStatus.CREATED);
             } catch (Exception e) {
                 e.printStackTrace();

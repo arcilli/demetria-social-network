@@ -72,7 +72,7 @@ public class PostService {
      * @param postWithReceivedComment contains a single comment
      * @return the id of the last comment or null
      * <p>
-     * TODO: this should be replaced with Mongo query for aggregation.
+     * TODO: replace with an append to comments array in Mongo. Same for now() function for date.
      */
     @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
@@ -81,7 +81,6 @@ public class PostService {
             if (postWithReceivedComment.getCommentList().size() == 1) {
                 Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
 
-                // TODO: replace with an append to comments array in Mongo
                 SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
 
                 if (null == persistedPost) {
