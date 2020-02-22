@@ -73,6 +73,7 @@ public class PostService {
      * @return the id of the last comment or null
      * <p>
      * TODO: replace with an append to comments array in Mongo. Same for now() function for date.
+     * TODO: if the user has already voted this post, replace his vote and re-compute the average
      */
     @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)

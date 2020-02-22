@@ -18,8 +18,8 @@
 })();
 
 $(function () {
+    // TODO: make a request for change the current post
     $(".editPostButton").on("click", function () {
-        // make a request for change the current post
     });
 
     // ajax request for deleting a post
@@ -62,8 +62,8 @@ $(function () {
             url: form[0].action,
             type: 'post',
             data: form.serialize(),
-            success: function (result) {
-                // TODO: clear content
+            success: function () {
+                form[0][0].value = "";
                 location.reload();
             }
         })

@@ -23,22 +23,22 @@ public class VoteController {
 
     /**
      * @param request
-     * @param postId    represents the post which was voted.
+     * @param postId represents the post which was voted.
      * @param voteValue raw value of the vote
-     * @return the average value of the post, considering the actual vote
+     * @return the average value of the post, after adding the actual vote
      */
-    //    TODO: if the user has already voted this post, replace his vote and re-compute the average
     @RequestMapping(value = "votePost/{postId}/{voteValue}", method = RequestMethod.POST)
     public @ResponseBody
-    Double voteAPost(HttpServletRequest request, @PathVariable("postId") String postId, @PathVariable("voteValue") int voteValue) {
+    Double voteAPost(HttpServletRequest request,
+                     @PathVariable("postId") String postId, @PathVariable("voteValue") int voteValue) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
                 Vote newVote = Vote.builder()
-                                        .postId(postId)
-                                        .ownerId(currentUser.getId())
-                                        .value(voteValue)
-                                        .build();
+                        .postId(postId)
+                        .ownerId(currentUser.getId())
+                        .value(voteValue)
+                        .build();
                 ResponseEntity<Double> responseEntity = restTemplate.exchange("http://user-service/postService/posts/vote/",
                         HttpMethod.POST, new HttpEntity<>(newVote), Double.class);
                 if (null != responseEntity.getBody()) {
