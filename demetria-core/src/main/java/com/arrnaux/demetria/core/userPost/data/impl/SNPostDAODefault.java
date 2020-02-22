@@ -1,8 +1,10 @@
 package com.arrnaux.demetria.core.userPost.data.impl;
 
+import com.arrnaux.demetria.core.userAccount.data.SNUserRepository;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.data.SNPostRepository;
+import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import com.arrnaux.demetria.core.userPost.model.Vote;
@@ -28,6 +30,9 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Autowired
     private SNPostRepository snPostRepository;
+
+    @Autowired
+    private SNUserRepository snUserRepository;
 
     private MongoOperations mongoOps = new MongoTemplate(MongoClients.create(), "test");
 
@@ -69,6 +74,7 @@ public class SNPostDAODefault implements SNPostDAO {
     }
 
     @Override
+    @Nullable
     public SNPost removeVote(Vote vote) {
         final Query query = new Query(new Criteria().andOperator(
                 where("_id").is(vote.getPostId())
@@ -83,6 +89,4 @@ public class SNPostDAODefault implements SNPostDAO {
         }
         return post;
     }
-
-
 }

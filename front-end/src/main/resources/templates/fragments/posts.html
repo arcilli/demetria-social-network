@@ -47,9 +47,8 @@
     <span th:replace="fragments/posts :: rateStarts"></span>
     <div class="postComments">
         <div class="postComment " th:each="comment : ${post.commentList}">
-            <!--                Uncomment this when a comment will contain information about user-->
-            <!--                <div th:text="${comment.owner.firstName}+' '+${comment.owner.lastName}+ ': '+${comment.content}"></div>-->
-            <div th:text="${comment.ownerId}+': '+${comment.content}"></div>
+            <!--            TODO: add a link to the profile of comment's owner.-->
+            <div th:text="${comment.owner.firstName}+' '+${comment.owner.lastName}+ ': '+${comment.content}"></div>
         </div>
         <div>
             <form th:replace="fragments/forms :: createComment(${post.id})"></form>

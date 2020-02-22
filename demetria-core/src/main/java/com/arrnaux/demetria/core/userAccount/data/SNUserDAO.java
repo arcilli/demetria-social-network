@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 public interface SNUserDAO {
 
     @Nullable
-    SNUser getUser(String id);
+    SNUser findById(String id);
 
     @Nullable
     SNUser findUserByEmail(String email);

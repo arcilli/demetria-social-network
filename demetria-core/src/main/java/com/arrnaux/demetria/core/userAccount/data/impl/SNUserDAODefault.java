@@ -21,9 +21,8 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Nullable
     @Override
-    public SNUser getUser(String id) {
-        Optional<SNUser> user = snUserRepository.findById(id);
-        return user.orElse(null);
+    public SNUser findById(String id) {
+        return snUserRepository.findById(id).orElse(null);
     }
 
     @Nullable
@@ -40,7 +39,6 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Nullable
     @Override
-    // TODO: add a case for false, when an error occurs
     public SNUser saveSNUser(SNUser snUser) {
         snUserRepository.save(snUser);
         return snUserRepository.findByEmail(snUser.getEmail()).orElse(null);
@@ -65,6 +63,7 @@ public class SNUserDAODefault implements SNUserDAO {
     }
 
     @Override
+    @Nullable
     public SNUser findUserByUsername(String username) {
         return snUserRepository.findByUserName(username).orElse(null);
     }

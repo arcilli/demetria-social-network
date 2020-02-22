@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -117,13 +118,14 @@ public class PostService {
             // When the query will be executed, create a join on this.
             List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
             // Retrieve user information.
-            SNUser snUser = snUserDAO.getUser(userId);
+            SNUser snUser = snUserDAO.findById(userId);
             if (null != snUser) {
+                // Add for every post the owner with obfuscated details.
                 snUser.obfuscateUserInformation();
-                // Add for every post that need to be displayed the owner.
                 // TODO: replace this with mongo joins
                 for (SNPost snPost : posts) {
                     snPost.setOwner(snUser);
+                    addOwnersToComments(snPost);
                 }
                 return posts;
             }
@@ -136,6 +138,8 @@ public class PostService {
     /**
      * @param postId
      * @return a post or null
+     *
+     * Display a post (accessed by permalink) with associated comments & votes.
      */
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
@@ -143,11 +147,12 @@ public class PostService {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
-                SNUser snUser = snUserDAO.getUser(snPost.getOwnerId());
+                SNUser snUser = snUserDAO.findById(snPost.getOwnerId());
                 if (null != snUser) {
                     snUser.obfuscateUserInformation();
-                     snPost.setOwner(snUser);
-                     return snPost;
+                    snPost.setOwner(snUser);
+                    addOwnersToComments(snPost);
+                    return snPost;
                 }
             }
         } catch (Exception e) {
@@ -197,5 +202,17 @@ public class PostService {
             e.printStackTrace();
         }
         return (double) -1;
+    }
+
+    private void addOwnersToComments(@NotNull SNPost snPost) {
+        List<Comment> comments = snPost.getCommentList();
+        if (null != comments) {
+            for (Comment comment : comments) {
+                SNUser commentOwner = snUserDAO.findById(comment.getOwnerId());
+                if (null != commentOwner) {
+                    comment.setOwner(commentOwner);
+                }
+            }
+        }
     }
 }

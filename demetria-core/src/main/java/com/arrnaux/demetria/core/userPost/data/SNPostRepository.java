@@ -1,5 +1,6 @@
 package com.arrnaux.demetria.core.userPost.data;
 
+import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import org.bson.types.ObjectId;

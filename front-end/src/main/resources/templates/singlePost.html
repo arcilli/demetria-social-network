@@ -5,9 +5,10 @@
     <title th:text="${post.content}"></title>
 </head>
 <body>
+<!--TODO: add header and nav elements-->
 <td th:if="${authorized == null || authorized == false}">Nothing here for you. :(</td>
 <td th:if="${authorized == true}">
-    <div th:replace="fragments/forms :: displayPost(${post})"></div>
+    <div th:replace="fragments/posts :: displayPost(${post})"></div>
 </td>
 </body>
 </html>
