@@ -3,11 +3,9 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
-import com.arrnaux.demetria.core.userPost.model.SNPostDTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -68,11 +66,11 @@ public class PostController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         String requestURL = "http://user-service/postService/posts/" + postId;
-        ResponseEntity<SNPostDTO> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
-                SNPostDTO.class);
-        SNPostDTO snPost = (SNPostDTO) responseEntity.getBody();
+        ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
+                SNPost.class);
+        SNPost snPost = responseEntity.getBody();
         if (null != snPost) {
-            switch (snPost.getPost().getVisibility()) {
+            switch (snPost.getVisibility()) {
                 case PUBLIC:
                     modelAndView.addObject("authorized", true);
                     modelAndView.addObject("post", snPost);

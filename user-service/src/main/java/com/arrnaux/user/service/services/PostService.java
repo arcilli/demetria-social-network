@@ -43,7 +43,7 @@ public class PostService {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String savePost(@RequestBody SNPost snPost) {
         try {
-            // TODO: replace with DB operation
+            // TODO: replace now() with DB operation
             snPost.setCreationDate(new Date());
             SNPost savedPost = snPostDAO.savePost(snPost);
             return savedPost.getId();
@@ -81,7 +81,7 @@ public class PostService {
             if (postWithReceivedComment.getCommentList().size() == 1) {
                 Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
 
-                // TODO: maybe retrieve only the list of comments
+                // TODO: replace with an append to comments array in Mongo
                 SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
 
                 if (null == persistedPost) {
@@ -112,17 +112,18 @@ public class PostService {
      */
     @Nullable
     @RequestMapping(value = "posts/user", method = RequestMethod.POST)
-    public List<SNPostDTO> getUserPostsDescending(@RequestBody String userId) {
+    public List<SNPost> getUserPostsDescending(@RequestBody String userId) {
         try {
-            List<SNPost> postsWithoutOwner = snPostDAO.getUserPostsDateDesc(userId);
-            List<SNPostDTO> posts = new LinkedList<>();
+            // When the query will be executed, create a join on this.
+            List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
             // Retrieve user information.
             SNUser snUser = snUserDAO.getUser(userId);
             if (null != snUser) {
                 snUser.obfuscateUserInformation();
                 // Add for every post that need to be displayed the owner.
-                for (SNPost snPost : postsWithoutOwner) {
-                    posts.add(new SNPostDTO(snPost, snUser));
+                // TODO: replace this with mongo joins
+                for (SNPost snPost : posts) {
+                    snPost.setOwner(snUser);
                 }
                 return posts;
             }
@@ -138,16 +139,15 @@ public class PostService {
      */
     @Nullable
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
-    public SNPostDTO getPostById(@PathVariable String postId) {
+    public SNPost getPostById(@PathVariable String postId) {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
                 SNUser snUser = snUserDAO.getUser(snPost.getOwnerId());
                 if (null != snUser) {
-                    return SNPostDTO.builder().
-                            owner(snUser).
-                            post(snPost).
-                            build();
+                    snUser.obfuscateUserInformation();
+                     snPost.setOwner(snUser);
+                     return snPost;
                 }
             }
         } catch (Exception e) {
@@ -158,17 +158,16 @@ public class PostService {
 
     @Nullable
     @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
-    public List<SNPostDTO> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
+    public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
         try {
             SNUser snUser = snUserDAO.findUserByUsername(userName);
             if (null != snUser) {
-                List<SNPost> postWithoutUserDetails = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
-                List<SNPostDTO> postsWithUserInfo = new LinkedList<>();
+                List<SNPost> posts = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
                 snUser.obfuscateUserInformation();
-                for (SNPost post : postWithoutUserDetails) {
-                    postsWithUserInfo.add(SNPostDTO.builder().post(post).owner(snUser).build());
+                for (SNPost post : posts) {
+                    post.setOwner(snUser);
                 }
-                return postsWithUserInfo;
+                return posts;
             }
         } catch (Exception e) {
             log.severe(e.toString());

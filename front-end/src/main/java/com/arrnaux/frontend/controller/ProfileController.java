@@ -5,7 +5,6 @@ import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
-import com.arrnaux.demetria.core.userPost.model.SNPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
@@ -97,7 +96,6 @@ public class ProfileController {
             ResponseEntity<List<SNPost>> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
                     new HttpEntity<PostVisibility>(PostVisibility.PUBLIC), new ParameterizedTypeReference<List<SNPost>>() {
                     });
-            System.out.println(responseEntity);
             List<SNPost> userPosts = responseEntity.getBody();
             modelAndView.addObject("userPosts", userPosts);
             modelAndView.setViewName("profile");
@@ -107,10 +105,10 @@ public class ProfileController {
 
     private void populateWithUserPosts(ModelAndView modelAndView, SNUser loggedUser) {
         String targetURL = "http://user-service/postService/posts/user";
-        ResponseEntity<List<SNPostDTO>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
-                new HttpEntity<>(loggedUser.getId()), new ParameterizedTypeReference<List<SNPostDTO>>() {
+        ResponseEntity<List<SNPost>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
+                new HttpEntity<>(loggedUser.getId()), new ParameterizedTypeReference<List<SNPost>>() {
                 });
-        List<SNPostDTO> userPosts = responseEntity.getBody();
+        List<SNPost> userPosts = responseEntity.getBody();
         if (null != userPosts) {
             modelAndView.addObject("userPosts", userPosts);
         }

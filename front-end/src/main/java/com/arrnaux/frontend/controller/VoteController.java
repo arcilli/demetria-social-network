@@ -34,11 +34,15 @@ public class VoteController {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
-                Vote newVote = new Vote(postId, currentUser.getId(), voteValue);
-                ResponseEntity<Object> responseEntity = restTemplate.exchange("http://user-service/postService/posts/vote/",
-                        HttpMethod.POST, new HttpEntity<>(newVote), Object.class);
+                Vote newVote = Vote.builder()
+                                        .postId(postId)
+                                        .ownerId(currentUser.getId())
+                                        .value(voteValue)
+                                        .build();
+                ResponseEntity<Double> responseEntity = restTemplate.exchange("http://user-service/postService/posts/vote/",
+                        HttpMethod.POST, new HttpEntity<>(newVote), Double.class);
                 if (null != responseEntity.getBody()) {
-                    return (Double) responseEntity.getBody();
+                    return responseEntity.getBody();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

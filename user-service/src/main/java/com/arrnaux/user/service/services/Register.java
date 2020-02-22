@@ -42,7 +42,7 @@ public class Register {
                 // user with same username
                 SNUser userByUsername = snUserDAO.findUserByUsername(snUserRegistrationDTO.getUserName());
                 if (null != userByUsername) {
-                    // an user with same username exists
+                    // An user with same username exists.
                     return new ResponseEntity<>(false, HttpStatus.IM_USED);
                 }
 

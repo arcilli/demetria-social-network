@@ -1,5 +1,6 @@
 package com.arrnaux.demetria.core.userPost.model;
 
+import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,10 @@ public class Comment {
 
     private String id;
 
-    private String owner;
+    private String ownerId;
+
+    // This field will is not null only when the class is used to transfer data (as a DTO).
+    private SNUser owner = null;
 
     private String content;
 

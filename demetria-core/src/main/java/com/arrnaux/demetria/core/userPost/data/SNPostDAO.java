@@ -20,27 +20,18 @@ public interface SNPostDAO {
 
     /**
      * @param snUser
-     * @return a list of the posts associated with an user
+     * @return a list of posts owned by user
      */
     List<SNPost> getUserPosts(SNUser snUser);
 
     /**
-     * @param id
+     * @param ownerId
      * @return
      */
     List<SNPost> getUserPostsDateDesc(String ownerId);
 
-    /**
-     * @param userName
-     * @param postVisibility
-     * @return
-     */
     List<SNPost> getUserPostsDateDesc(String ownerId, PostVisibility postVisibility);
 
-    /**
-     * @param snPost
-     * @return
-     */
     SNPost savePost(SNPost snPost);
 
     /**

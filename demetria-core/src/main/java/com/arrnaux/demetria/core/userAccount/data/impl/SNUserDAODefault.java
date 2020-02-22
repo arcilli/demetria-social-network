@@ -23,30 +23,19 @@ public class SNUserDAODefault implements SNUserDAO {
     @Override
     public SNUser getUser(String id) {
         Optional<SNUser> user = snUserRepository.findById(id);
-        // Throw an error
-        // Log this, no user is found
         return user.orElse(null);
     }
 
     @Nullable
     @Override
-    // throws IllegalArgumentException when email is null
     public SNUser findUserByEmail(String email) throws IllegalArgumentException {
-        if (null == email) {
-            throw new IllegalArgumentException("The email cannot be null");
-        }
-        // Throw an error
-        // Log this if no user is found
-        Optional<SNUser> snUser = snUserRepository.findByEmail(email);
-
-        return snUser.orElse(null);
+        return snUserRepository.findByEmail(email).orElse(null);
     }
 
     @Nullable
     @Override
     public SNUser findUserByEmailAndPassword(String email, String password) {
-        Optional<SNUser> snUser = snUserRepository.findByEmailAndPassword(email, password);
-        return snUser.orElse(null);
+        return snUserRepository.findByEmailAndPassword(email, password).orElse(null);
     }
 
     @Nullable
@@ -77,7 +66,6 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Override
     public SNUser findUserByUsername(String username) {
-        Optional<SNUser> snUser = snUserRepository.findByUserName(username);
-        return snUser.orElse(null);
+        return snUserRepository.findByUserName(username).orElse(null);
     }
 }

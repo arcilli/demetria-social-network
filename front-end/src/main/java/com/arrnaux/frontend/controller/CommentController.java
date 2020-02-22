@@ -27,7 +27,7 @@ public class CommentController {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
-                newComment.setOwner(currentUser.getId());
+                newComment.setOwnerId(currentUser.getId());
                 post.appendComment(newComment);
                 HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
                 ResponseEntity<String> responseEntity = restTemplate.exchange("http://user-service/postService/createComment",

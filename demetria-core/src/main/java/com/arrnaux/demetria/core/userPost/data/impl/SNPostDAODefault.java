@@ -46,7 +46,6 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     public SNPost savePost(SNPost snPost) {
-
         return snPostRepository.save(snPost);
     }
 

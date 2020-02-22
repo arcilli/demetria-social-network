@@ -1,5 +1,6 @@
 package com.arrnaux.demetria.core.userPost.model;
 
+import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
 
@@ -11,12 +12,17 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @ToString(callSuper = true)
+
 public class Vote {
     @NotNull
     private String postId;
 
-    private String owner;
+    private String ownerId;
+
+    // This field will is not null only when the class is used to transfer data (as a DTO).
+    private SNUser owner = null;
 
     @NotNull
     private long value;
