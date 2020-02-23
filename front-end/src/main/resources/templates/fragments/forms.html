@@ -152,17 +152,6 @@
     </form>
 </div>
 
-<!--TODO: Dont use newComment, use another object for control this-->
-<td th:fragment=createComment(postId) th:if="${newComment != null}">
-    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
-        <input type="text" th:field="*{content}" placeholder="Add comment"/>
-        <!--    TODO: this is a work-around, see how can pass a SNPost object and a comment one-->
-        <input type="hidden" name="id" th:value="${postId}"/>
-        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
-        </button>
-    </form>
-</td>
-
 <div th:fragment="deleteAccountButton">
     <button id="deleteAccountButton" type="button" class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal"
             data-target="#confirmDeleteAccountModal">

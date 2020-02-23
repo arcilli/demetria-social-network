@@ -17,6 +17,15 @@
     <a class="star-5" href="#">5</a>
 </span>
 
+<td th:fragment=createComment(postId) th:if="${newComment != null}">
+    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
+        <input type="text" th:field="*{content}" placeholder="Add comment"/>
+        <input type="hidden" name="id" th:value="${postId}"/>
+        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
+        </button>
+    </form>
+</td>
+
 <!--Posts owned by an user-->
 <!--TODO: add a flex container for this-->
 <div th:fragment="userPosts" th:object="${userPosts}">
@@ -48,10 +57,14 @@
     <div class="postComments">
         <div class="postComment " th:each="comment : ${post.commentList}">
             <!--            TODO: add a link to the profile of comment's owner.-->
-            <div th:text="${comment.owner.firstName}+' '+${comment.owner.lastName}+ ': '+${comment.content}"></div>
+            <div>
+                <a th:href="@{'/profiles/' + ${com  ment.owner.userName}}"
+                   th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+                <span th:text="': '+${comment.content}"></span>
+            </div>
         </div>
         <div>
-            <form th:replace="fragments/forms :: createComment(${post.id})"></form>
+            <form th:replace="fragments/posts :: createComment(${post.id})"></form>
             <td th:if="${session.user != null and session.user.id == post.ownerId}">
                 <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
                     post
@@ -60,5 +73,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

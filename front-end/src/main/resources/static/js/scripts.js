@@ -62,14 +62,20 @@ $(function () {
             url: form[0].action,
             type: 'post',
             data: form.serialize(),
-            success: function () {
-                form[0][0].value = "";
-                location.reload();
+            success: function (result) {
+                if (result.length != 0) {
+                    let name = result.owner.firstName + " " + result.owner.lastName;
+                    let profileURL = "/profiles/" + result.owner.userName;
+                    let commentContent = result.content;
+                    let element = "<a href=\"" + profileURL + "\">" + name + "</a>: " + commentContent;
+                    form.before(element);
+                    form[0][0].value = "";
+                }
             }
         })
     });
 
-// To be tested.
+    // To be tested.
     var getIdForPost = function (elementId) {
         $(elementId).parents().map(function () {
             if (this.tagName == "ARTICLE") {
@@ -108,7 +114,7 @@ $(function () {
                 articleId = this.id;
             }
         });
-        // for each star, if it is <= this, color it.
+        // For each star, if it is <= this, color it.
         articleId = "#" + articleId;
         let currentPosts = $(articleId);
         let nodeItems = currentPosts.find(".stars")[0].children
@@ -134,4 +140,3 @@ $(function () {
         })
     });
 });
-//

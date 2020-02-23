@@ -3,15 +3,18 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,23 +26,31 @@ public class CommentController {
     @LoadBalanced
     RestTemplate restTemplate;
 
-    // TODO: this is a work-around
-    // SNPost post will contain only the id, with a garbage value of content
-    // Comment content from newComment is the value that has to be stored.
+    /**
+     * @param request
+     * @param post       represents the post on which the user leaved a comment. Only the id of the content is used.
+     * @param newComment is the comment that has to be stored. Only the content from this object is used. The owner is
+     *                   set to the user that made the request.
+     * @return the newly inserted comment with obfuscated owner or null if the operation ended with an error.
+     */
+    @Nullable
+    @ResponseBody
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
+    public Comment createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
                 newComment.setOwnerId(currentUser.getId());
                 post.appendComment(newComment);
-                restTemplate.exchange("http://user-service/postService/createComment", HttpMethod.POST,
-                        new HttpEntity<>(post), String.class);
-                return new ResponseEntity<>(true, HttpStatus.CREATED);
+                ResponseEntity<Comment> responseEntity = restTemplate.exchange("http://user-service/postService/createComment",
+                        HttpMethod.POST, new HttpEntity<>(post), Comment.class);
+                if (null != responseEntity.getBody()) {
+                    return responseEntity.getBody();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        return null;
     }
 }

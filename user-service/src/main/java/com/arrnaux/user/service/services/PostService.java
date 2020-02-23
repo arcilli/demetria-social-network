@@ -70,36 +70,44 @@ public class PostService {
     }
 
     /**
-     * @param postWithReceivedComment contains a single comment
-     * @return the id of the last comment or null
-     * <p>
-     * TODO: replace with an append to comments array in Mongo. Same for now() function for date.
-     * TODO: if the user has already voted this post, replace his vote and re-compute the average
+     * @param postWithReceivedComment is a post that contains a single comment (the newly one).
+     * @return a Comment object with obfuscated owner field set.
      */
     @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
-    public String appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
+    public Comment appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         try {
             if (postWithReceivedComment.getCommentList().size() == 1) {
                 Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
 
+                // TODO: replace with an append to comments array in Mongo.
                 SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
 
                 if (null == persistedPost) {
-                    throw new Exception("The post does not exist.");
+                    // The post doesn't exist in DB.
+                    return null;
                 }
 
                 if (null == persistedPost.getCommentList()) {
                     persistedPost.setCommentList(new ArrayList<>());
                 }
 
+                // TODO: replace this with a Mongo function.
                 receivedComment.setCreationDate(new Date());
+
+                // Creates the id of the comment. It respects the pattern: "postID-commentNumber".
                 int commentNumber = persistedPost.getCommentList().size();
                 receivedComment.setId(persistedPost.getId() + "-" + commentNumber);
 
-                persistedPost.appendComment(postWithReceivedComment.getCommentList().get(0));
-                persistedPost = snPostDAO.savePost(persistedPost);
-                return persistedPost.getCommentList().get(persistedPost.getCommentList().size() - 1).getId();
+                persistedPost.appendComment(receivedComment);
+                if (null != snPostDAO.savePost(persistedPost)) {
+                    SNUser snUser = snUserDAO.findById(receivedComment.getOwnerId());
+                    if (null != snUser) {
+                        snUser.obfuscateUserInformation();
+                        receivedComment.setOwner(snUser);
+                        return receivedComment;
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,7 +146,6 @@ public class PostService {
     /**
      * @param postId
      * @return a post or null
-     *
      * Display a post (accessed by permalink) with associated comments & votes.
      */
     @Nullable
