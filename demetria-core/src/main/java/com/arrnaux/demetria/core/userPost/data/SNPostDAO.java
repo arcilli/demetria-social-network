@@ -5,7 +5,6 @@ import com.arrnaux.demetria.core.userPost.model.Comment;
 import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import com.arrnaux.demetria.core.userPost.model.Vote;
-import org.bson.types.ObjectId;
 import org.springframework.lang.Nullable;
 
 import java.util.List;

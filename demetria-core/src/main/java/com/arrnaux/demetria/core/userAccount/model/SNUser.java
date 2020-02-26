@@ -40,8 +40,9 @@ public class SNUser extends SNUserLoginDTO {
         if (null != modifiedUser.getFirstName()) this.setFirstName(modifiedUser.getFirstName());
     }
 
-    public void obfuscateUserInformation() {
+    public SNUser obfuscateUserInformation() {
         this.setPassword("");
         this.setEmail("");
+        return this;
     }
 }
