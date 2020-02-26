@@ -2,6 +2,8 @@
 logs/
 */.mvn/*
 !.mvn/*
+*.pdf
+*.log
 
 HELP.md
 target/
