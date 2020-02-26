@@ -4,6 +4,13 @@ logs/
 !.mvn/*
 *.pdf
 *.log
+*.bbl
+*.aux
+*.blg
+*.idx
+*.gz
+*.toc
+
 
 HELP.md
 target/
