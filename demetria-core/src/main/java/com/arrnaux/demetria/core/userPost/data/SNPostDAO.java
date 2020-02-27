@@ -46,4 +46,17 @@ public interface SNPostDAO {
      */
     @Nullable
     SNPost removeVote(Vote vote);
+
+    /**
+     * @param snPost
+     * @param comment
+     * @return
+     */
+    Comment addCommentToPost(Comment comment, SNPost snPost);
+
+    /**
+     * @param snPost
+     * @return
+     */
+    Integer getLastCommentIndexForPost(SNPost snPost);
 }

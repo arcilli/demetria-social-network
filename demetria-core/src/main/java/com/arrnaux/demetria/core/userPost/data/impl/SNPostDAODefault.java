@@ -9,19 +9,26 @@ import com.arrnaux.demetria.core.userPost.model.PostVisibility;
 import com.arrnaux.demetria.core.userPost.model.SNPost;
 import com.arrnaux.demetria.core.userPost.model.Vote;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j;
-import org.bson.types.ObjectId;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Log4j
@@ -88,5 +95,36 @@ public class SNPostDAODefault implements SNPostDAO {
             post.setVoteList(voteList);
         }
         return post;
+    }
+
+    @Override
+    @Nullable
+    public Comment addCommentToPost(Comment comment, SNPost snPost) {
+        comment.setCreationDate(new Date());
+        Update update = new Update().addToSet("commentList", comment);
+        Query query = new Query(where("_id").is(snPost.getId()));
+        UpdateResult result = mongoOps.updateFirst(query, update, SNPost.class);
+        if (result.wasAcknowledged()) {
+            return comment;
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getLastCommentIndexForPost(SNPost snPost) {
+        Aggregation aggregation = newAggregation(
+                match(where("_id").is(snPost.getId()).exists(true)),
+                project()
+                        .andExclude("_id")
+                        .and("commentList")
+                        .size()
+                        .as("count")
+        );
+
+        AggregationResults<Document> results = mongoOps.aggregate(aggregation, SNPost.class, Document.class);
+        if (Objects.requireNonNull(results.getUniqueMappedResult()).size() > 0) {
+            return (Integer) (Objects.requireNonNull(results.getUniqueMappedResult())).get("count");
+        }
+        return 0;
     }
 }
