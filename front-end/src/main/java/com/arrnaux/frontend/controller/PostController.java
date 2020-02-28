@@ -30,8 +30,7 @@ public class PostController {
         if (currentUser != null) {
             post.setOwnerId(currentUser.getId());
             try {
-                ResponseEntity<ObjectId> responseEntity =
-                        restTemplate.exchange("http://user-service/postService", HttpMethod.POST, new HttpEntity<>(post), ObjectId.class);
+                restTemplate.exchange("http://user-service/postService", HttpMethod.POST, new HttpEntity<>(post), String.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
