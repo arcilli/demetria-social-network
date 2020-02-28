@@ -2,8 +2,6 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userAccount.model.SNUserLoginDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -23,9 +21,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
 
-    @Autowired
-    @LoadBalanced
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    // This uses constructor injection to set the controller's final copy of restTemplate.
+    public LoginController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String displayLoginForm(Model model, HttpServletRequest httpServletRequest) {
