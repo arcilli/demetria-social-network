@@ -3,7 +3,10 @@ package com.arrnaux.user.service.services;
 import com.arrnaux.demetria.core.userAccount.data.SNUserDAO;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
-import com.arrnaux.demetria.core.userPost.model.*;
+import com.arrnaux.demetria.core.userPost.model.Comment;
+import com.arrnaux.demetria.core.userPost.model.PostVisibility;
+import com.arrnaux.demetria.core.userPost.model.SNPost;
+import com.arrnaux.demetria.core.userPost.model.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +17,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -70,47 +70,27 @@ public class PostService {
     }
 
     /**
-     * @param postWithReceivedComment is a post that contains a single comment (the newly one).
+     * @param postWithReceivedComment is a post that contains a single comment (the one submitted by user).
      * @return a Comment object with obfuscated owner field set.
      */
     @Nullable
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public Comment appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
+        Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
+        SNUser snUser = snUserDAO.findById(receivedComment.getOwnerId());
         try {
-            if (postWithReceivedComment.getCommentList().size() == 1) {
-                Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
-
-                // TODO: replace with an append to comments array in Mongo.
-                SNPost persistedPost = snPostDAO.getPostById(postWithReceivedComment.getId());
-
-                if (null == persistedPost) {
-                    // The post doesn't exist in DB.
-                    return null;
-                }
-
-                if (null == persistedPost.getCommentList()) {
-                    persistedPost.setCommentList(new ArrayList<>());
-                }
-
-                // TODO: replace this with a Mongo function.
-                receivedComment.setCreationDate(new Date());
-
-                // Creates the id of the comment. It respects the pattern: "postID-commentNumber".
-                int commentNumber = persistedPost.getCommentList().size();
-                receivedComment.setId(persistedPost.getId() + "-" + commentNumber);
-
-                persistedPost.appendComment(receivedComment);
-                if (null != snPostDAO.savePost(persistedPost)) {
-                    SNUser snUser = snUserDAO.findById(receivedComment.getOwnerId());
-                    if (null != snUser) {
-                        snUser.obfuscateUserInformation();
-                        receivedComment.setOwner(snUser);
-                        return receivedComment;
-                    }
+            if (null != snUser) {
+                // Get the last id & increment it.
+                int noComments = snPostDAO.getLastCommentIndexForPost(postWithReceivedComment);
+                receivedComment.setId(postWithReceivedComment.getId() + "-" + (++noComments));
+                Comment storedComment = snPostDAO.addCommentToPost(receivedComment, postWithReceivedComment);
+                if (null != storedComment) {
+                    storedComment.setOwner(snUser.obfuscateUserInformation());
+                    return storedComment;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.severe(e.toString());
         }
         return null;
     }

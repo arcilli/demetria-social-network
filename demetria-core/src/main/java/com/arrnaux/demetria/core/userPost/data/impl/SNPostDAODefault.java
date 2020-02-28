@@ -112,18 +112,22 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     public Integer getLastCommentIndexForPost(SNPost snPost) {
-        Aggregation aggregation = newAggregation(
-                match(where("_id").is(snPost.getId()).exists(true)),
-                project()
-                        .andExclude("_id")
-                        .and("commentList")
-                        .size()
-                        .as("count")
-        );
+        try {
+            Aggregation aggregation = newAggregation(
+                    match(where("_id").is(snPost.getId()).andOperator(Criteria.where("commentList")).exists(true)),
+                    project()
+                            .andExclude("_id")
+                            .and("commentList")
+                            .size()
+                            .as("count")
+            );
 
-        AggregationResults<Document> results = mongoOps.aggregate(aggregation, SNPost.class, Document.class);
-        if (Objects.requireNonNull(results.getUniqueMappedResult()).size() > 0) {
-            return (Integer) (Objects.requireNonNull(results.getUniqueMappedResult())).get("count");
+            AggregationResults<Document> results = mongoOps.aggregate(aggregation, SNPost.class, Document.class);
+            if (Objects.requireNonNull(results.getUniqueMappedResult()).size() > 0) {
+                return (Integer) (Objects.requireNonNull(results.getUniqueMappedResult())).get("count");
+            }
+        } catch (Exception e) {
+            log.trace(e.toString());
         }
         return 0;
     }
