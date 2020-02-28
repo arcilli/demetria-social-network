@@ -23,6 +23,7 @@
         <module>demetria-core</module>
         <module>user-service</module>
         <module>front-end</module>
+        <module>friendship-relation-service</module>
     </modules>
 
     <dependencies>
