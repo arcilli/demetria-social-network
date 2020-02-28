@@ -3,7 +3,19 @@
 <head><title>This page should not be public.</title>
 </head>
 <body>
-<nav th:fragment="top-menu" class="navbar navbar-expand-lg navbar-light bg-light">
+<!--    Display a menu nav or a nav with login/register buttons-->
+<span th:fragment="top-bar">
+    <th:block th:if="${session.user != null} and ${session.user != ''}">
+        <span th:replace="fragments/header :: top-menu-nav"></span>
+    </th:block>
+    <th:block th:if="${session.user == null} or ${session.user == ''}">
+        <span th:replace="fragments/header :: header-user-not-logged"></span>
+    </th:block>
+</span>
+
+<!--Nav menu for a logged user-->
+<nav th:if="${session.user != null} and ${session.user != ''}" th:fragment="top-menu-nav"
+     class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -46,6 +58,12 @@
             crossorigin="anonymous"></script>
     <script th:src="@{/js/scripts.js}"></script>
 </th:block>
+
+<!--A header element (instead of a nav) for a visitor that is not logged-->
+<th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
+    You are not logged in.
+    <!--    TODO: add login form-->
+    <button>Register</button>
+</th:block>
 </body>
 </html>
-

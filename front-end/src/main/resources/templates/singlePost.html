@@ -5,7 +5,7 @@
     <title th:text="${post.content}"></title>
 </head>
 <body>
-<!--TODO: add header and nav elements-->
+<td th:replace="fragments/header :: top-bar"></td>
 <td th:if="${authorized == null || authorized == false}">Nothing here for you. :(</td>
 <td th:if="${authorized == true}">
     <div th:replace="fragments/posts :: displayPost(${post})"></div>
