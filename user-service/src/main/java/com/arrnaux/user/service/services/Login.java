@@ -27,7 +27,7 @@ public class Login {
         if (snUser != null) {
             log.info("User " + userDTO.getEmail() + " has logged in.");
             // Clear the password before sending to next service.
-            snUser.setPassword("");
+            snUser.obfuscateUserInformation();
             return new ResponseEntity<SNUser>(snUser, HttpStatus.ACCEPTED);
         }
         log.info("Login attempt failed for with email: " + userDTO.getEmail());

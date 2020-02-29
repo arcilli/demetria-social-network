@@ -123,8 +123,8 @@
 
     <!--    TODO: add a confirmation message-->
     <div th:replace="fragments/forms :: deleteAccountButton"></div>
-    <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
     <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
+    <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
 </div>
 
 <!--TODO: populate with an object or find a solution-->
@@ -144,8 +144,11 @@
         <textarea rows="10" cols="30" th:field="*{content}"></textarea><br/>
         <label for="visibility">Visibility</label>
         <select name="visibilityOption" id="visibility" th:field="*{visibility}">
-            <option th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}"
-                    th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+            <th:block th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}">
+                <th:block th:if="${visibilityOpt.displayValue !=''}">
+                    <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+                </th:block>
+            </th:block>
         </select>
         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
         <br/>

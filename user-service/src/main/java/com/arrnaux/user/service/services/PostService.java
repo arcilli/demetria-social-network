@@ -113,7 +113,7 @@ public class PostService {
                 // TODO: replace this with mongo joins
                 for (SNPost snPost : posts) {
                     snPost.setOwner(snUser);
-                    addOwnersToComments(snPost);
+                    addOwnerToComment(snPost);
                 }
                 return posts;
             }
@@ -138,7 +138,7 @@ public class PostService {
                 if (null != snUser) {
                     snUser.obfuscateUserInformation();
                     snPost.setOwner(snUser);
-                    addOwnersToComments(snPost);
+                    addOwnerToComment(snPost);
                     return snPost;
                 }
             }
@@ -148,16 +148,31 @@ public class PostService {
         return null;
     }
 
+    /**
+     * @param userName
+     * @param postVisibility
+     * @return the posts owned by the user, in descending order. If postVisibility is null, return
+     * both private & public posts.
+     */
     @Nullable
     @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
     public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName, @RequestBody PostVisibility postVisibility) {
         try {
             SNUser snUser = snUserDAO.findUserByUsername(userName);
+            List<SNPost> posts;
             if (null != snUser) {
-                List<SNPost> posts = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
                 snUser.obfuscateUserInformation();
-                for (SNPost post : posts) {
-                    post.setOwner(snUser);
+                if (PostVisibility.NONE == postVisibility) {
+                    // Retrieve all the posts, no matter the postVisibility is
+                    posts = getUserPostsDescending(snUser.getId());
+                } else {
+                    posts = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
+                }
+                if (null != posts) {
+                    for (SNPost post : posts) {
+                        post.setOwner(snUser);
+                        addOwnerToComment(post);
+                    }
                 }
                 return posts;
             }
@@ -191,7 +206,7 @@ public class PostService {
         return (double) -1;
     }
 
-    private void addOwnersToComments(@NotNull SNPost snPost) {
+    private void addOwnerToComment(@NotNull SNPost snPost) {
         List<Comment> comments = snPost.getCommentList();
         if (null != comments) {
             for (Comment comment : comments) {

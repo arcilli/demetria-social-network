@@ -53,8 +53,9 @@ public class LoginController {
                         HttpMethod.POST, new HttpEntity<>(userLoginDTO), SNUser.class);
                 if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
                     SNUser loggedUser = responseEntity.getBody();
-                    // TODO: ensure that the loggedUser has no info about password
-                    session.setAttribute("user", loggedUser);
+                    if (null != loggedUser) {
+                        session.setAttribute("user", loggedUser.obfuscateUserInformation());
+                    }
                     modelAndView.setViewName("redirect:/");
                 }
             } catch (HttpClientErrorException e) {

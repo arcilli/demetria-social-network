@@ -41,7 +41,6 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
-            // TODO: ensure that the password field is empty
             loggedUser.updateObjectWithNotNullValues(modifiedUser);
             try {
                 ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/settings/profile",

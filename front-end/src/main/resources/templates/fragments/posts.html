@@ -56,7 +56,6 @@
     <span th:replace="fragments/posts :: rateStarts"></span>
     <div class="postComments">
         <div class="postComment " th:each="comment : ${post.commentList}">
-            <!--            TODO: add a link to the profile of comment's owner.-->
             <div>
                 <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
                    th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>

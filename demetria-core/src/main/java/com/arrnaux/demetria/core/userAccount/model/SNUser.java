@@ -42,7 +42,7 @@ public class SNUser extends SNUserLoginDTO {
 
     public SNUser obfuscateUserInformation() {
         this.setPassword("");
-        this.setEmail("");
+//        this.setEmail("");
         return this;
     }
 }

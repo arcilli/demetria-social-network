@@ -6,8 +6,9 @@ import lombok.Getter;
 //@ToString(callSuper = true)
 public enum PostVisibility {
     PRIVATE("Private"),
-    ONLY_FRIENDS("Only friends"),
-    PUBLIC("Public");
+    PUBLIC("Public"),
+    // The none value is used only internal, this should not be dispalyed to user.
+    NONE("");
 
     private final String displayValue;
 

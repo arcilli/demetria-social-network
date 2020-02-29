@@ -6,9 +6,10 @@
 </head>
 <body>
 
+<!--TODO: add user image-->
 <nav th:replace="fragments/header :: top-bar"></nav>
-<div th:replace="fragments/posts :: userPosts">
+<div class="profile-information" th:replace="fragments/userProfileInfo :: profileOwnerInfo">
 </div>
-
+<div th:replace="fragments/posts :: userPosts"></div>
 </body>
 </html>
