@@ -82,15 +82,16 @@ public class SNPostDAODefault implements SNPostDAO {
 
     @Override
     @Nullable
-    public SNPost removeVote(Vote vote) {
+    public SNPost removeVoteGivenByUser(String postId, String userId) {
+        // TODO: replace this with a mongo update.
         final Query query = new Query(new Criteria().andOperator(
-                where("_id").is(vote.getPostId())
+                where("_id").is(postId)
         ));
         SNPost post = mongoOps.findOne(query, SNPost.class);
         if (null != post) {
             List<Vote> voteList = post.getVoteList();
             if (null != voteList) {
-                voteList.removeIf(element -> element.getOwner().equals(vote.getOwner()));
+                voteList.removeIf(element -> element.getOwnerId().equals(userId));
             }
             post.setVoteList(voteList);
         }

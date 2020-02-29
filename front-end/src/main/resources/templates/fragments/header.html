@@ -62,7 +62,9 @@
 <!--A header element (instead of a nav) for a visitor that is not logged-->
 <th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
     You are not logged in.
-    <!--    TODO: add login form-->
+    <a href="/login">
+        <button>Login</button>
+    </a>... or
     <button>Register</button>
 </th:block>
 </body>

@@ -25,6 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 @Log
+
 @RestController
 @RequestMapping(value = "postService")
 public class PostService {
@@ -151,8 +152,8 @@ public class PostService {
     /**
      * @param userName
      * @param postVisibility
-     * @return the posts owned by the user, in descending order. If postVisibility is null, return
-     * both private & public posts.
+     * @return the posts owned by the user, in descending order.
+     * If postVisibility is PostVisibiliy.None, return both private & public posts.
      */
     @Nullable
     @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
@@ -163,7 +164,7 @@ public class PostService {
             if (null != snUser) {
                 snUser.obfuscateUserInformation();
                 if (PostVisibility.NONE == postVisibility) {
-                    // Retrieve all the posts, no matter the postVisibility is
+                    // Retrieve all the posts.
                     posts = getUserPostsDescending(snUser.getId());
                 } else {
                     posts = snPostDAO.getUserPostsDateDesc(snUser.getId(), postVisibility);
@@ -191,7 +192,7 @@ public class PostService {
     @RequestMapping(value = "/posts/vote/", method = RequestMethod.POST)
     public Double voteAPost(@RequestBody Vote currentVote) {
         try {
-            SNPost originalPost = snPostDAO.removeVote(currentVote);
+            SNPost originalPost = snPostDAO.removeVoteGivenByUser(currentVote.getPostId(), currentVote.getOwnerId());
             if (null != originalPost) {
                 originalPost.appendVote(currentVote);
                 // This is actually an update.

@@ -45,7 +45,7 @@ public interface SNPostDAO {
      * @return The post that has the vote, but after removing the vote from the votes list.
      */
     @Nullable
-    SNPost removeVote(Vote vote);
+    SNPost removeVoteGivenByUser(String postId, String userId);
 
     /**
      * @param snPost

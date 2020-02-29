@@ -107,7 +107,6 @@ $(function () {
 
     // Rating stars
     $('.stars a').on('click', function () {
-        // var postId = getFirstIdFoundAscendent(this);
         let articleId = -1;
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
@@ -131,11 +130,14 @@ $(function () {
             url: targetUrl,
             type: 'POST',
             success: function (result) {
-                // location.reload();
-                console.log(result);
+                // The result is equal to post's rank value after computing the vote.
+                // -1 is the value for an error.
+                if (-1 != result) {
+                    currentPosts.find(".postRanking")[0].innerText = "Post rank: " + result.toFixed(1);
+                }
             },
             error: function (result) {
-                console.log(result);
+                console.log("Error ar voting: " + result);
             }
         })
     });

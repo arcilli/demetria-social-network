@@ -52,8 +52,10 @@
         </div>
     </div>
     <div class="postContent" th:text="${post.content}"></div>
-    <!--TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
-    <span th:replace="fragments/posts :: rateStarts"></span>
+    <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
+    <td th:if="${session.user != null}">
+        <span th:replace="fragments/posts :: rateStarts"></span>
+    </td>
     <div class="postComments">
         <div class="postComment " th:each="comment : ${post.commentList}">
             <div>
