@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Connection {
-    OrientDB database = null;
-    ODatabaseSession session = null;
+    OrientDB database;
+    ODatabaseSession session;
 
     public void openDefaultConnection() {
         loadDBDefaultConfig();
@@ -32,15 +32,11 @@ public class Connection {
     }
 
     private void loadDBDefaultConfig() {
-        if (null == database) {
-            database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
-        }
+        database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
     }
 
     private void newSessionDefaultConfig() {
-        if (null == session) {
-            session = database.open("test", "admin", "admin");
-        }
+        session = database.open("test", "admin", "admin");
         if (null == session.getClass("Person") || null == session.getClass("follows")) {
             setupGraphTypes();
         }

@@ -17,10 +17,7 @@ public class FollowRelationService {
     // TODO: return a boolean for operation with/out success.
     public Boolean followUser(@PathVariable("targetUserName") String targetUserName,
                               @RequestBody String sourceUsername) {
-        // Create the vertices if not present.
-        // Create an edge from sourceUserName to targetUserName.
-        // create an username if not present in graph
-        // create relation between source & target
+
         OVertex sourceVertex = followRelationDAO.storePerson(new Person(sourceUsername));
         OVertex targetVertex = followRelationDAO.storePerson(new Person(targetUserName));
 
@@ -29,13 +26,13 @@ public class FollowRelationService {
     }
 
     /**
-     * @param userName1
-     * @param userName2
+     * @param source
+     * @param target
      * @return true if userName1 is following username2. Otherwise, return false.
      */
     @RequestMapping(value = "/followCheck/{user1}/{user2}")
-    public Boolean checkFollowRelation(@PathVariable("user1") String userName1,
-                                       @PathVariable("user2") String userName2) {
-        return false;
+    public Boolean checkFollowRelation(@PathVariable("user1") Person source,
+                                       @PathVariable("user2") Person target) {
+        return followRelationDAO.existsFollowingRelationBetweenPeople(source, target);
     }
 }
