@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Connection {
-    OrientDB database;
-    ODatabaseSession session;
+    OrientDB database = null;
+    ODatabaseSession session = null;
 
     public void openDefaultConnection() {
         loadDBDefaultConfig();
@@ -32,11 +32,15 @@ public class Connection {
     }
 
     private void loadDBDefaultConfig() {
-        database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
+        if (null == database) {
+            database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
+        }
     }
 
     private void newSessionDefaultConfig() {
-        session = database.open("test", "admin", "admin");
+        if (null == session) {
+            session = database.open("test", "admin", "admin");
+        }
         if (null == session.getClass("Person") || null == session.getClass("follows")) {
             setupGraphTypes();
         }
@@ -47,7 +51,10 @@ public class Connection {
         if (null == person.getProperty("userName")) {
             person.createProperty("userName", OType.STRING);
         }
-        person.createIndex("PersonUserNameIndex", OClass.INDEX_TYPE.UNIQUE, "userName");
+        // TODO: decide if using index
+//        if (!person.areIndexed(OClass.VERTEX_CLASS_NAME)) {
+//            person.createIndex("PersonUserNameIndex", OClass.INDEX_TYPE.UNIQUE, OClass.VERTEX_CLASS_NAME);
+//        }
         session.createEdgeClass("follows");
     }
 }
