@@ -65,15 +65,15 @@ public class ProfileController {
                 profileOwner = loggedUser.obfuscateUserInformation();
                 posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.NONE);
             }
-        } else {
-            // Retrieve owner user information.
-            String targetUrl = "http://user-service/users/info/" + userName;
-            ResponseEntity<SNUser> snUserResponseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
-                    null, SNUser.class);
-            profileOwner = snUserResponseEntity.getBody();
-            if (null != profileOwner) {
-                posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.PUBLIC);
-            }
+        }
+        // A logged/non-logged user, can see the public posts.
+        // Retrieve owner user information.
+        String targetUrl = "http://user-service/users/info/" + userName;
+        ResponseEntity<SNUser> snUserResponseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
+                null, SNUser.class);
+        profileOwner = snUserResponseEntity.getBody();
+        if (null != profileOwner) {
+            posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.PUBLIC);
         }
         modelAndView.addObject("profileOwner", profileOwner);
         modelAndView.addObject("userPosts", posts);

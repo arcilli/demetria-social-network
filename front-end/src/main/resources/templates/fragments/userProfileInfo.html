@@ -8,5 +8,14 @@
 <span th:fragment="profileOwnerInfo" th:object="${profileOwner}">
     <h3 th:text="${profileOwner.lastName+' '+profileOwner.FirstName}"></h3>
 </span>
+
+<th:block th:fragment="followButton">
+    <!--    If the user is already following the profileOwner, display an active button with unfollow option.-->
+    <th:block th:if="${profileOwner.userName} != ${session.user.userName}">
+        <a th:href="'/follow/user/'+${profileOwner.userName}">
+            <button class="follow-button btn btn-outline-primary my-2 my-sm-0">Follow user</button>
+        </a>
+    </th:block>
+</th:block>
 </body>
 </html>

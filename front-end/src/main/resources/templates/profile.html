@@ -8,7 +8,9 @@
 
 <!--TODO: add user image-->
 <nav th:replace="fragments/header :: top-bar"></nav>
-<div class="profile-information" th:replace="fragments/userProfileInfo :: profileOwnerInfo">
+<div class="profile-information">
+    <span th:replace="fragments/userProfileInfo :: profileOwnerInfo"></span>
+    <span th:replace="fragments/userProfileInfo :: followButton"></span>
 </div>
 <div th:replace="fragments/posts :: userPosts"></div>
 </body>
