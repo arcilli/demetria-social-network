@@ -2,6 +2,7 @@ package com.arrnaux.friendshiprelationservice.services;
 
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.model.Person;
+import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class FollowRelationService {
     @RequestMapping(value = "/followCheck/{user1}/{user2}")
     public Boolean checkFollowRelation(@PathVariable("user1") Person source,
                                        @PathVariable("user2") Person target) {
-        return followRelationDAO.existsFollowingRelationBetweenPeople(source, target);
+        OEdge edge = followRelationDAO.findFollowingEdge(source, target);
+        return null != edge;
     }
 }

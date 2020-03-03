@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Connection {
-    OrientDB database;
-    ODatabaseSession session;
+    OrientDB database = null;
+    ODatabaseSession session = null;
 
     public void openDefaultConnection() {
         loadDBDefaultConfig();
@@ -28,7 +28,9 @@ public class Connection {
 
     public void close() {
         session.close();
+        session = null;
         database.close();
+        database = null;
     }
 
     private void loadDBDefaultConfig() {
