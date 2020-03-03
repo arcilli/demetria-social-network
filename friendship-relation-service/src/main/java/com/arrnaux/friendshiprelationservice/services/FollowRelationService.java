@@ -31,7 +31,7 @@ public class FollowRelationService {
      * @param target
      * @return true if userName1 is following username2. Otherwise, return false.
      */
-    @RequestMapping(value = "/followCheck/{user1}/{user2}")
+    @RequestMapping(value = "/check/{user1}/{user2}", method = RequestMethod.GET)
     public Boolean checkFollowRelation(@PathVariable("user1") Person source,
                                        @PathVariable("user2") Person target) {
         OEdge edge = followRelationDAO.findFollowingEdge(source, target);

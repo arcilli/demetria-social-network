@@ -26,7 +26,7 @@ $(function () {
     $(".deletePostButton").on("click", function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
-                var arr = {id: this.id};
+                var arr = { id: this.id };
                 $.ajax({
                     url: "/deletePost",
                     type: 'DELETE',
@@ -138,6 +138,21 @@ $(function () {
             },
             error: function (result) {
                 console.log("Error ar voting: " + result);
+            }
+        })
+    });
+
+    $('.follow-button').on('click', function () {
+        let pathname = window.location.pathname.split("/");
+        let userNameToFollow = pathname[pathname.length - 1];
+        let targetUrl = "/follow/user/" + userNameToFollow;
+        let sourceButton = this;
+        $.ajax({
+            url: targetUrl,
+            type: 'GET',
+            success: function (result) {
+                sourceButton.innerText = "Unfollow";
+                sourceButton.classList.add("active").remove("selected");
             }
         })
     });

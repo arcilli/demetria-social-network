@@ -74,10 +74,21 @@ public class ProfileController {
         profileOwner = snUserResponseEntity.getBody();
         if (null != profileOwner) {
             posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.PUBLIC);
+            modelAndView.addObject("profileOwner", profileOwner);
+            modelAndView.addObject("userPosts", posts);
+            modelAndView.addObject("newComment", new Comment());
+
+            // Check if the profileOwner is followed by the logged user.
+            if (null != loggedUser && !loggedUser.getUserName().equals(profileOwner.getUserName())) {
+                targetUrl = "http://friendship-relation-service/follow/check/" + loggedUser.getUserName() +
+                        "/" + profileOwner.getUserName();
+                ResponseEntity<Boolean> loggedUserFollowsProfileOwner = restTemplate.exchange(targetUrl, HttpMethod.GET,
+                        null, Boolean.class);
+                if (null != loggedUserFollowsProfileOwner.getBody()) {
+                    modelAndView.addObject("userIsFollowed", loggedUserFollowsProfileOwner.getBody());
+                }
+            }
         }
-        modelAndView.addObject("profileOwner", profileOwner);
-        modelAndView.addObject("userPosts", posts);
-        modelAndView.addObject("newComment", new Comment());
         modelAndView.setViewName("profile");
         return modelAndView;
     }
