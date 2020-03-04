@@ -15,8 +15,4 @@ public enum PostVisibility {
     PostVisibility(String displayValue) {
         this.displayValue = displayValue;
     }
-
-    public String getDisplayValue() {
-        return displayValue;
-    }
 }
