@@ -2,6 +2,7 @@ package com.arrnaux.friendshiprelationservice.data.impl;
 
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.dbConnection.Connection;
+import com.arrnaux.friendshiprelationservice.model.FollowRelationValidity;
 import com.arrnaux.friendshiprelationservice.model.Person;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
@@ -57,12 +58,12 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
 
     @Override
     public OEdge storeFollowingRelation(OVertex source, OVertex destination) {
-        // TODO: Check if the edge does not already exist.
         OEdge edge = findFollowingEdge(
                 new Person(source.getProperty("userName")),
                 new Person(destination.getProperty("userName")));
         if (null == edge) {
             edge = source.addEdge(destination, "follows");
+            edge.setProperty("valid", true);
             edge.save();
         }
         return edge;

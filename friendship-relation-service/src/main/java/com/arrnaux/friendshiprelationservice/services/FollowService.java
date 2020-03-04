@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "follow")
-public class FollowRelationService {
+public class FollowService {
 
     @Autowired
     FollowRelationDAO followRelationDAO;

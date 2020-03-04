@@ -41,4 +41,21 @@ public class FollowController {
         }
         return false;
     }
+
+    @RequestMapping(value = "cancel/{usernameToBeUnfollowed}", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean unfollowUser(HttpServletRequest httpServletRequest,
+                                @PathVariable("usernameToBeUnfollowed") String usernameToBeUnfollowed) {
+        SNUser loggedUser = (SNUser) httpServletRequest.getSession().getAttribute("user");
+        if (null != loggedUser) {
+            String targetUrl = "http://friendship-relation-service/unfollow/" + usernameToBeUnfollowed;
+            ResponseEntity<Boolean> responseEntity =
+                    restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(loggedUser.getUserName()),
+                            Boolean.class);
+            if (null != responseEntity.getBody()) {
+                return responseEntity.getBody();
+            }
+        }
+        return false;
+    }
 }

@@ -143,8 +143,7 @@ $(function () {
     });
 
     $('.follow-button').on('click', function () {
-        let pathname = window.location.pathname.split("/");
-        let userNameToFollow = pathname[pathname.length - 1];
+        let userNameToFollow = extractUsernameFromLocationPath();
         let targetUrl = "/follow/user/" + userNameToFollow;
         let sourceButton = this;
         $.ajax({
@@ -152,8 +151,31 @@ $(function () {
             type: 'GET',
             success: function (result) {
                 sourceButton.innerText = "Unfollow";
-                sourceButton.classList.add("active").remove("selected");
+                sourceButton.classList.add("active", "unfollow-button").remove("selected", "follow-button");
             }
         })
     });
+
+    $('.unfollow-button').on('click', function () {
+        let userNameToUnfollow = extractUsernameFromLocationPath();
+        let targetUrl = "/follow/cancel/" + userNameToUnfollow;
+        let sourceButton = this;
+        $.ajax({
+            url: targetUrl,
+            type: 'POST',
+            success: function (result) {
+                sourceButton.innerText = "Follow";
+                sourceButton.classList.add("follow-button").remove("active", "unfollow-button");
+            },
+            error: function (result) {
+                console.log("Err: " + result);
+            }
+        })
+    });
+
+    function extractUsernameFromLocationPath() {
+        let pathname = window.location.pathname.split("/");
+        let userName = pathname[pathname.length - 1];
+        return userName;
+    }
 });

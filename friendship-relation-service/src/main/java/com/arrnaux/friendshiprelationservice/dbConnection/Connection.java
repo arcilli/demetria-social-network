@@ -53,6 +53,7 @@ public class Connection {
 //        if (!person.areIndexed(OClass.VERTEX_CLASS_NAME)) {
 //            person.createIndex("PersonUserNameIndex", OClass.INDEX_TYPE.UNIQUE, OClass.VERTEX_CLASS_NAME);
 //        }
-        session.createEdgeClass("follows");
+        OClass followRelation = session.createEdgeClass("follows");
+        followRelation.createProperty("valid", OType.BOOLEAN);
     }
 }
