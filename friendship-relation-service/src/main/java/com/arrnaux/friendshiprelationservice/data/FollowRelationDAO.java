@@ -1,7 +1,7 @@
 package com.arrnaux.friendshiprelationservice.data;
 
 import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
-import com.arrnaux.demetria.core.followRelation.model.Person;
+import com.arrnaux.demetria.core.followRelation.model.GraphPersonEntity;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import org.apache.commons.lang.NullArgumentException;
@@ -11,17 +11,17 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FollowRelationDAO {
     /**
-     * @param person
+     * @param graphPersonEntity
      * @return
      */
-    OVertex storePerson(Person person);
+    OVertex storePerson(GraphPersonEntity graphPersonEntity);
 
     /**
-     * @param person
+     * @param graphPersonEntity
      * @return a vertex representing the person stored in DB or null if no entry was found.
      */
     @Nullable
-    OVertex findByUserName(Person person) throws NullArgumentException;
+    OVertex findByUserName(GraphPersonEntity graphPersonEntity) throws NullArgumentException;
 
     /**
      * @param source
@@ -31,16 +31,16 @@ public interface FollowRelationDAO {
     OEdge storeValidFollowingRelation(OVertex source, OVertex destination);
 
     /**
-     * @param person
+     * @param graphPersonEntity
      * @param destination
      * @param followRelationValidity enum (boolean). If it is not passed, then parameter is not used in query.
      * @return the edge between source & destination, in this direction. If a @followRelationValidity parameter is passed,
      * will retrieve only the edge having that value.
      */
     @Nullable
-    OEdge findFollowingEdge(Person person, Person destination, FollowRelationValidity... followRelationValidity);
+    OEdge findFollowingEdge(GraphPersonEntity graphPersonEntity, GraphPersonEntity destination, FollowRelationValidity... followRelationValidity);
 
     @Nullable
-    OEdge invalidateFollowingEdge(Person source, Person destination);
+    OEdge invalidateFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination);
 
 }

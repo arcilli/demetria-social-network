@@ -24,5 +24,5 @@ public interface SNUserDAO {
     Boolean removeUserAccount(String email);
 
     @Nullable
-    SNUser findUserByUsername(String username);
+    SNUser findUserByUsername(String userName);
 }
