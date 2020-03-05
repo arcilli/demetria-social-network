@@ -2,8 +2,8 @@ package com.arrnaux.friendshiprelationservice.data.impl;
 
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.dbConnection.Connection;
-import com.arrnaux.friendshiprelationservice.model.FollowRelationValidity;
-import com.arrnaux.friendshiprelationservice.model.Person;
+import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
+import com.arrnaux.demetria.core.followRelation.model.Person;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
@@ -28,8 +28,9 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     public OVertex storePerson(Person person) {
         OVertex vertexPerson = findByUserName(person);
         if (null == vertexPerson) {
-            // The person has no vertex in the graph.
+            // The person has no associated vertex in the graph.
             vertexPerson = getConnection().getSession().newVertex("Person");
+            // TODO: set a property for userID retrieved from user service.
             vertexPerson.setProperty("userName", person.getUserName());
             vertexPerson.save();
         }
@@ -57,27 +58,36 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     }
 
     @Override
-    public OEdge storeFollowingRelation(OVertex source, OVertex destination) {
+    public OEdge storeValidFollowingRelation(OVertex source, OVertex destination) {
         OEdge edge = findFollowingEdge(
                 new Person(source.getProperty("userName")),
                 new Person(destination.getProperty("userName")));
         if (null == edge) {
             edge = source.addEdge(destination, "follows");
-            edge.setProperty("valid", true);
-            edge.save();
         }
+        edge.setProperty("valid", true);
+        edge.save();
         return edge;
     }
 
     @Nullable
     @Override
-    public OEdge findFollowingEdge(Person source, Person destination) throws NullArgumentException {
+    public OEdge findFollowingEdge(Person source, Person destination, FollowRelationValidity... followRelationValidity)
+            throws NullArgumentException {
         if (null == source || null == destination) {
             throw new NullArgumentException("Source or destination null.");
         }
-        String statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ?)";
+        String statement;
+        OResultSet rs;
         // For an edge, the input is where the arrow is (destinationPerson) and the out is the source of the edge.
-        OResultSet rs = getConnection().getSession().query(statement, destination.getUserName(), source.getUserName());
+        if (0 == followRelationValidity.length) {
+            statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ?)";
+            rs = getConnection().getSession().query(statement, destination.getUserName(), source.getUserName());
+        } else {
+            statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ? and valid= ?)";
+            rs = getConnection().getSession().query(statement, destination.getUserName(), source.getUserName(),
+                    followRelationValidity);
+        }
         // Only 1 result is expected.
         if (rs.hasNext()) {
             Optional<OEdge> edge = rs.next().getEdge();
@@ -85,4 +95,17 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         }
         return null;
     }
+
+    @Nullable
+    @Override
+    public OEdge invalidateFollowingEdge(Person source, Person destination) {
+        OEdge edge = findFollowingEdge(source, destination);
+        if (null != edge) {
+            edge.setProperty("valid", false);
+            edge.save();
+            return edge;
+        }
+        return null;
+    }
+
 }

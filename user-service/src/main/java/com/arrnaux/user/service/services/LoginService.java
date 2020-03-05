@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "login")
 @Log4j
-public class Login {
+public class LoginService {
 
     @Autowired
     private SNUserDAO snUserDAO;

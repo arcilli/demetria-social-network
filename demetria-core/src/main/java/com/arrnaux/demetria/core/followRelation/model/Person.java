@@ -1,7 +1,5 @@
-package com.arrnaux.friendshiprelationservice.model;
+package com.arrnaux.demetria.core.followRelation.model;
 
-import com.orientechnologies.orient.core.db.ODatabaseSession;
-import com.orientechnologies.orient.core.record.OVertex;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

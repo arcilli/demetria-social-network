@@ -1,8 +1,5 @@
-package com.arrnaux.friendshiprelationservice.model;
+package com.arrnaux.demetria.core.followRelation.model;
 
-import lombok.Getter;
-
-@Getter
 public enum FollowRelationValidity {
     INVALID(false),
     VALID(true);
@@ -11,6 +8,10 @@ public enum FollowRelationValidity {
 
     FollowRelationValidity(Boolean value) {
         this.value = value;
+    }
+
+    public boolean getValue() {
+        return value;
     }
 
 }

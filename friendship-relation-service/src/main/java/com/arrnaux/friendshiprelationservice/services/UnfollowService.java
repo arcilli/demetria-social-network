@@ -1,7 +1,7 @@
 package com.arrnaux.friendshiprelationservice.services;
 
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
-import com.arrnaux.friendshiprelationservice.model.Person;
+import com.arrnaux.demetria.core.followRelation.model.Person;
 import com.orientechnologies.orient.core.record.OEdge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

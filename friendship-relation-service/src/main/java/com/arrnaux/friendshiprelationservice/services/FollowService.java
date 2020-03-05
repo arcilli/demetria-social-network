@@ -1,7 +1,8 @@
 package com.arrnaux.friendshiprelationservice.services;
 
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
-import com.arrnaux.friendshiprelationservice.model.Person;
+import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
+import com.arrnaux.demetria.core.followRelation.model.Person;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,26 @@ public class FollowService {
     FollowRelationDAO followRelationDAO;
 
     @RequestMapping(value = "{targetUserName}", method = RequestMethod.POST)
-    // TODO: return a boolean for operation with/out success.
+    // TODO: return a boolean for operation with/without success.
     public Boolean followUser(@PathVariable("targetUserName") String targetUserName,
                               @RequestBody String sourceUsername) {
 
         OVertex sourceVertex = followRelationDAO.storePerson(new Person(sourceUsername));
         OVertex targetVertex = followRelationDAO.storePerson(new Person(targetUserName));
 
-        followRelationDAO.storeFollowingRelation(sourceVertex, targetVertex);
+        followRelationDAO.storeValidFollowingRelation(sourceVertex, targetVertex);
         return true;
     }
 
     /**
      * @param source
      * @param target
-     * @return true if userName1 is following username2. Otherwise, return false.
+     * @return true if a valid edge exist between user1 (source) and user2(target).
      */
     @RequestMapping(value = "/check/{user1}/{user2}", method = RequestMethod.GET)
     public Boolean checkFollowRelation(@PathVariable("user1") Person source,
                                        @PathVariable("user2") Person target) {
-        OEdge edge = followRelationDAO.findFollowingEdge(source, target);
+        OEdge edge = followRelationDAO.findFollowingEdge(source, target, FollowRelationValidity.VALID);
         return null != edge;
     }
 }

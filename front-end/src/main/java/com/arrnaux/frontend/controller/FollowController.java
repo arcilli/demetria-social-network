@@ -22,7 +22,7 @@ public class FollowController {
     /**
      * @param httpServletRequest
      * @param userNameToBeFollowed
-     * @return true if userName1 is following username2. Otherwise, return false.
+     * @return true if userName1 was successfully followed username2. Otherwise, return false.
      * Return a responseBody since it will be used with an AjaxRequest.
      */
     @RequestMapping(value = "user/{userNameToBeFollowed}", method = RequestMethod.GET)
