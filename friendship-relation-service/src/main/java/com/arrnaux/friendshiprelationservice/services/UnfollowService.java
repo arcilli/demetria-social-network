@@ -1,6 +1,6 @@
 package com.arrnaux.friendshiprelationservice.services;
 
-import com.arrnaux.demetria.core.followRelation.model.GraphPersonEntity;
+import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.orientechnologies.orient.core.record.OEdge;
 import org.springframework.beans.factory.annotation.Autowired;

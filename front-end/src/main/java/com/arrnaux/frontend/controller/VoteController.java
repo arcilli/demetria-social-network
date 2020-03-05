@@ -1,8 +1,7 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
-import com.arrnaux.demetria.core.userPost.model.Vote;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.demetria.core.models.userPost.Vote;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

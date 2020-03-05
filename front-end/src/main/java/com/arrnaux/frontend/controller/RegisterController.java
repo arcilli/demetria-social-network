@@ -1,6 +1,6 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUserRegistrationDTO;
+import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;

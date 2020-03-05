@@ -1,8 +1,8 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUserLoginDTO;
-import com.arrnaux.demetria.core.userAccount.model.SNUserRegistrationDTO;
-import com.arrnaux.demetria.core.userPost.model.SNPost;
+import com.arrnaux.demetria.core.models.userAccount.SNUserLoginDTO;
+import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
+import com.arrnaux.demetria.core.models.userPost.SNPost;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;

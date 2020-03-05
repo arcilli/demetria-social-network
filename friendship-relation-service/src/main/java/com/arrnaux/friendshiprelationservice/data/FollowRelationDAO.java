@@ -1,7 +1,7 @@
 package com.arrnaux.friendshiprelationservice.data;
 
-import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
-import com.arrnaux.demetria.core.followRelation.model.GraphPersonEntity;
+import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
+import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import org.apache.commons.lang.NullArgumentException;

@@ -1,8 +1,8 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
-import com.arrnaux.demetria.core.userPost.model.Comment;
-import com.arrnaux.demetria.core.userPost.model.SNPost;
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.demetria.core.models.userPost.Comment;
+import com.arrnaux.demetria.core.models.userPost.SNPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;

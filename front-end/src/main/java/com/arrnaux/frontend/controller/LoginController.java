@@ -1,7 +1,7 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
-import com.arrnaux.demetria.core.userAccount.model.SNUserLoginDTO;
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.demetria.core.models.userAccount.SNUserLoginDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

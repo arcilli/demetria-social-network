@@ -1,8 +1,8 @@
 package com.arrnaux.friendshiprelationservice.services;
 
-import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
-import com.arrnaux.demetria.core.followRelation.model.GraphPersonEntity;
-import com.arrnaux.demetria.core.userAccount.model.SNUser;
+import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
+import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;

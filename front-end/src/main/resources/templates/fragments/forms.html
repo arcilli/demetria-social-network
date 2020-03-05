@@ -144,7 +144,7 @@
         <textarea rows="10" cols="30" th:field="*{content}"></textarea><br/>
         <label for="visibility">Visibility</label>
         <select name="visibilityOption" id="visibility" th:field="*{visibility}">
-            <th:block th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.userPost.model.PostVisibility).values()}">
+            <th:block th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.models.userPost.model.PostVisibility).values()}">
                 <th:block th:if="${visibilityOpt.displayValue !=''}">
                     <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
                 </th:block>
