@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @AllArgsConstructor
+@Builder
 
-// TODO: add fields validation
 @Document(collection = "user")
 public class SNUser extends SNUserLoginDTO {
 
