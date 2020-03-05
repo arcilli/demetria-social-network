@@ -14,10 +14,10 @@
     <th:block th:fragment="followButton" th:if="${session.user} != null" }>
         <th:block th:if="${profileOwner.userName} != ${session.user.userName}">
             <th:block th:if="${userIsFollowed == true}">
-                <button class="follow-button btn btn-outline-primary my-2 my-sm-0 active">Unfollow user</button>
+                <button class="unfollow-button btn btn-outline-primary my-2 my-sm-0 active">Unfollow</button>
             </th:block>
-            <th:block th:unless="${userIsFollowed == true}">
-                <button class="follow-button btn btn-outline-primary my-2 my-sm-0">Follow user</button>
+            <th:block th:if="${null == userIsFollowed} OR ${false == userIsFollowed}">
+                <button class="follow-button btn btn-outline-primary my-2 my-sm-0">Follow</button>
             </th:block>
         </th:block>
     </th:block>

@@ -151,7 +151,8 @@ $(function () {
             type: 'GET',
             success: function (result) {
                 sourceButton.innerText = "Unfollow";
-                sourceButton.classList.add("active", "unfollow-button").remove("selected", "follow-button");
+                sourceButton.classList.add("active", "unfollow-button");
+                sourceButton.classList.remove("selected", "follow-button");
             }
         })
     });
@@ -165,7 +166,8 @@ $(function () {
             type: 'POST',
             success: function (result) {
                 sourceButton.innerText = "Follow";
-                sourceButton.classList.add("follow-button").remove("active", "unfollow-button");
+                sourceButton.classList.add("follow-button");
+                sourceButton.classList.remove("active", "unfollow-button");
             },
             error: function (result) {
                 console.log("Err: " + result);

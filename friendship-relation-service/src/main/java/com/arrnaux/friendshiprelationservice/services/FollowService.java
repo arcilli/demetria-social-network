@@ -1,8 +1,8 @@
 package com.arrnaux.friendshiprelationservice.services;
 
-import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
 import com.arrnaux.demetria.core.followRelation.model.Person;
+import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class FollowService {
     /**
      * @param source
      * @param target
-     * @return true if a valid edge exist between user1 (source) and user2(target).
+     * @return true if a valid edge exist between user1 (source) and user2(target) and if the edge is a valid relation.
      */
     @RequestMapping(value = "/check/{user1}/{user2}", method = RequestMethod.GET)
     public Boolean checkFollowRelation(@PathVariable("user1") Person source,

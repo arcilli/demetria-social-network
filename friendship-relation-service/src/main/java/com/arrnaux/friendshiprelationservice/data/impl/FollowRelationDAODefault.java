@@ -1,9 +1,9 @@
 package com.arrnaux.friendshiprelationservice.data.impl;
 
-import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
-import com.arrnaux.friendshiprelationservice.dbConnection.Connection;
 import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
 import com.arrnaux.demetria.core.followRelation.model.Person;
+import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
+import com.arrnaux.friendshiprelationservice.dbConnection.Connection;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
@@ -86,7 +86,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         } else {
             statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ? and valid= ?)";
             rs = getConnection().getSession().query(statement, destination.getUserName(), source.getUserName(),
-                    followRelationValidity);
+                    followRelationValidity[0].getValue());
         }
         // Only 1 result is expected.
         if (rs.hasNext()) {

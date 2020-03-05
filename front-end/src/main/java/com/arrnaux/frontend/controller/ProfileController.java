@@ -1,6 +1,5 @@
 package com.arrnaux.frontend.controller;
 
-import com.arrnaux.demetria.core.followRelation.model.FollowRelationValidity;
 import com.arrnaux.demetria.core.userAccount.model.SNUser;
 import com.arrnaux.demetria.core.userPost.data.SNPostDAO;
 import com.arrnaux.demetria.core.userPost.model.Comment;
@@ -84,7 +83,7 @@ public class ProfileController {
                 targetUrl = "http://friendship-relation-service/follow/check/" + loggedUser.getUserName() +
                         "/" + profileOwner.getUserName();
                 ResponseEntity<Boolean> loggedUserFollowsProfileOwner = restTemplate.exchange(targetUrl, HttpMethod.GET,
-                        new HttpEntity<>(FollowRelationValidity.VALID), Boolean.class);
+                        HttpEntity.EMPTY, Boolean.class);
                 if (null != loggedUserFollowsProfileOwner.getBody()) {
                     modelAndView.addObject("userIsFollowed", loggedUserFollowsProfileOwner.getBody());
                 }
