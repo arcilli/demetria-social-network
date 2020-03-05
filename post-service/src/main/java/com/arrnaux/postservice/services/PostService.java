@@ -117,7 +117,6 @@ public class PostService {
     public List<SNPost> getUserPostsDescending(@RequestBody String userId) {
         try {
             List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
-
             // Retrieve user information.
             SNUser snUser = requestForSNUser
                     (SNUser.builder()
@@ -149,8 +148,6 @@ public class PostService {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
-
-                // TODO: make a request to user-service
                 SNUser snUser = requestForSNUser
                         (SNUser.builder()
                                 .id(snPost.getOwnerId())
