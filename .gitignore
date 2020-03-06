@@ -1,4 +1,5 @@
 # Gabi
+scripts/DB/mongoUsersAndPosts.js
 logs/
 */.mvn/*
 !.mvn/*
