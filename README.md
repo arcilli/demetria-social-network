@@ -5,10 +5,10 @@ Demetria is a social network based on a microservice architecture.
 # Current status (on major functionalities)
 
 - [x] CRUD operations (Create account, Read(display) posts, Update user information, Delete a post)
-- [ ] Separate user service & post service
+- [x] Separate user service & post service
 - [ ] Register OpenGraph service with eureka
 - [ ] Integrate OpenGraph with post service
-- [ ] Create friendship relation
+- [x] Create friendship relation
 - [x] Implement votes and comments on posts
 - [ ] Implement & design search service - on users (and/or content)
 - [ ] Implement & design Hadoop cluster/service - opinion analysis
