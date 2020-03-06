@@ -13,7 +13,7 @@ Demetria is a social network based on a microservice architecture.
 - [ ] Implement & design search service - on users (and/or content)
 - [ ] Implement & design Hadoop cluster/service - opinion analysis
 
-# General architecure
+# General architecture
 
 ![servicesDiagram](models/servicesDiagram.svg)
 
