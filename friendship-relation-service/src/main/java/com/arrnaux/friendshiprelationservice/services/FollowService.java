@@ -36,14 +36,14 @@ public class FollowService {
         // TODO: refactor this duplicate code.
         OVertex sourceVertex = null, targetVertex = null;
         // Retrieve the id for the userNames.
-        String target = "http://user-service/users/info/" + targetUserName;
+        String target = "http://user-service/users/info/" + sourceUsername;
         ResponseEntity<SNUser> responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
         if (null != responseEntity.getBody()) {
             SNUser user = responseEntity.getBody();
             sourceVertex = followRelationDAO.storePerson(
                     new GraphPersonEntity(user));
         }
-        target = "http://user-service/users/info/" + sourceUsername;
+        target = "http://user-service/users/info/" + targetUserName;
         responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
         if (null != responseEntity.getBody()) {
             SNUser user = responseEntity.getBody();

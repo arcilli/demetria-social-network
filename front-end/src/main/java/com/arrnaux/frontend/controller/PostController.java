@@ -29,7 +29,8 @@ public class PostController {
         if (currentUser != null) {
             post.setOwnerId(currentUser.getId());
             try {
-                restTemplate.exchange("http://user-service/postService", HttpMethod.POST, new HttpEntity<>(post), String.class);
+                restTemplate.exchange("http://post-service/posts/savePost", HttpMethod.POST,
+                        new HttpEntity<>(post), String.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -44,13 +45,12 @@ public class PostController {
     @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
-        if (currentUser != null) {
+        if (null != currentUser) {
             try {
                 // TODO: ensure that currentUser is the owner of the post
-                HttpEntity<SNPost> httpEntity = new HttpEntity<>(post);
-                String url = "http://user-service/postService/";
+                String url = "http://post-service/posts/deletePost/";
                 return restTemplate.exchange(url,
-                        HttpMethod.DELETE, httpEntity, Boolean.class);
+                        HttpMethod.DELETE, new HttpEntity<>(post), Boolean.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -58,40 +58,42 @@ public class PostController {
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 
-    // only logged users can comment
     @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
     public ModelAndView displayPost(HttpServletRequest request, @PathVariable String postId) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        String requestURL = "http://user-service/postService/posts/" + postId;
+        String requestURL = "http://post-service/posts/id/" + postId;
         ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
                 SNPost.class);
         SNPost snPost = responseEntity.getBody();
         if (null != snPost) {
             switch (snPost.getVisibility()) {
                 case PUBLIC:
-                    modelAndView.addObject("authorized", true);
-                    modelAndView.addObject("post", snPost);
+                    modelAndView
+                            .addObject("authorized", true)
+                            .addObject("post", snPost);
                     if (null != loggedUser) {
+                        // Only logged users can comment.
                         modelAndView.addObject("newComment", new Comment());
                     } else {
-                        // a guest can see the content, but can't comment
-                        modelAndView.addObject("post", snPost);
-                        modelAndView.addObject("authorized", true);
+                        // A guest can see the content, but can't comment.
+                        modelAndView
+                                .addObject("post", snPost)
+                                .addObject("authorized", true);
                     }
                     modelAndView.setViewName("singlePost");
                     return modelAndView;
                 case PRIVATE:
                     if (null != loggedUser) {
                         if (loggedUser.getId().equals(snPost.getOwner().getId())) {
-                            modelAndView.addObject("post", snPost);
-                            modelAndView.addObject("newComment", new Comment());
-                            modelAndView.addObject("authorized", true);
-                            modelAndView.setViewName("singlePost");
+                            modelAndView
+                                    .addObject("post", snPost)
+                                    .addObject("newComment", new Comment())
+                                    .addObject("authorized", true)
+                                    .setViewName("singlePost");
                             return modelAndView;
                         }
                     }
-                    //TODO: treat ONLY_FRIENDS
             }
         }
         modelAndView.addObject("authorized", false);

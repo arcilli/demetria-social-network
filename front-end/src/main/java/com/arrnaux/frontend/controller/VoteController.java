@@ -26,7 +26,7 @@ public class VoteController {
 
     /**
      * @param request
-     * @param postId represents the post which was voted.
+     * @param postId    represents the post which was voted.
      * @param voteValue raw value of the vote
      * @return the average value of the post, after considering the actual vote from the logged user.
      * If the user has already voted the post, his vote is removed & the actual one is added.
@@ -43,7 +43,7 @@ public class VoteController {
                         .ownerId(currentUser.getId())
                         .value(voteValue)
                         .build();
-                ResponseEntity<Double> voteRankValue = restTemplate.exchange("http://user-service/postService/posts/vote/",
+                ResponseEntity<Double> voteRankValue = restTemplate.exchange("http://post-service/posts/vote/",
                         HttpMethod.POST, new HttpEntity<>(newVote), Double.class);
                 if (null != voteRankValue.getBody()) {
                     return voteRankValue.getBody();

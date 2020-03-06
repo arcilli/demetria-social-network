@@ -1,7 +1,6 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -15,9 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("follow")
 public class FollowController {
 
-    @Autowired
-    @LoadBalanced
+    final
     RestTemplate restTemplate;
+
+    public FollowController(@LoadBalanced RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * @param httpServletRequest

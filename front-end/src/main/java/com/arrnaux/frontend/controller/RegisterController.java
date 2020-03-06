@@ -1,7 +1,6 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -9,9 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,11 +19,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RegisterController {
 
-    @Autowired
-    @LoadBalanced
+    final
     RestTemplate restTemplate;
 
-    @GetMapping("/signup")
+    public RegisterController(@LoadBalanced RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String displaySignupForm(Model model) {
         model.addAttribute("newUser", new SNUserRegistrationDTO());
         return "signup";
@@ -36,10 +39,10 @@ public class RegisterController {
         try {
             ResponseEntity<Boolean> responseEntity =
                     restTemplate.exchange("http://user-service/register", HttpMethod.POST, httpEntity, Boolean.class);
-            if (responseEntity.getStatusCode() == HttpStatus.CREATED && responseEntity.getBody()) {
+            if (responseEntity.getStatusCode() == HttpStatus.CREATED && null != responseEntity.getBody()) {
                 modelAndView.addObject("userCreated", true);
             } else {
-                if (responseEntity.getStatusCode() == HttpStatus.IM_USED && !responseEntity.getBody()) {
+                if (responseEntity.getStatusCode() == HttpStatus.IM_USED && null == responseEntity.getBody()) {
                     modelAndView.addObject("newUser", user);
                     modelAndView.addObject("usernameAlreadyExists", true);
                 }

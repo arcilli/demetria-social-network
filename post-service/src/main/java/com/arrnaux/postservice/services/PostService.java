@@ -28,7 +28,7 @@ import java.util.List;
 @Log
 
 @RestController
-@RequestMapping(value = "postService")
+@RequestMapping("posts")
 public class PostService {
 
     private SNPostDAO snPostDAO;
@@ -47,7 +47,7 @@ public class PostService {
      * TODO: need to bring here a token for user/another method to authorize the actual request.
      */
     @Nullable
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "savePost", method = RequestMethod.POST)
     public String savePost(@RequestBody SNPost snPost) {
         try {
             // TODO: replace now() with DB operation
@@ -64,7 +64,7 @@ public class PostService {
      * @param post represents an object in which only id field is not null.
      * @return deletes a post by id
      */
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deletePost", method = RequestMethod.DELETE)
     public Boolean deletePost(@RequestBody SNPost post) {
         try {
             int nrOfDeletedPosts = snPostDAO.removePost(post.getId());
@@ -113,7 +113,7 @@ public class PostService {
      * @return a list of an users's post, sorted descending by date or null
      */
     @Nullable
-    @RequestMapping(value = "posts/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public List<SNPost> getUserPostsDescending(@RequestBody String userId) {
         try {
             List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
@@ -143,7 +143,7 @@ public class PostService {
      * Display a post (accessed by permalink) with associated comments & votes.
      */
     @Nullable
-    @RequestMapping(value = "posts/{postId}", method = RequestMethod.GET)
+    @RequestMapping(value = "id/{postId}", method = RequestMethod.GET)
     public SNPost getPostById(@PathVariable String postId) {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
@@ -173,7 +173,7 @@ public class PostService {
      * If postVisibility is PostVisibiliy.None, return both private & public posts.
      */
     @Nullable
-    @RequestMapping(value = "posts/user/{userName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{userName}", method = RequestMethod.POST)
     public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName,
                                                @RequestBody PostVisibility postVisibility) {
         try {
@@ -210,7 +210,7 @@ public class PostService {
      * Takes the current vote and replace it in votes list corresponding to the post if the user has already voted for
      * the post. Otherwise, append the vote to the vote list.
      */
-    @RequestMapping(value = "/posts/vote/", method = RequestMethod.POST)
+    @RequestMapping(value = "/vote/", method = RequestMethod.POST)
     public Double voteAPost(@RequestBody Vote currentVote) {
         try {
             SNPost originalPost = snPostDAO.removeVoteGivenByUser(currentVote.getPostId(), currentVote.getOwnerId());

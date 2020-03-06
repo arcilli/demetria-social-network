@@ -62,7 +62,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     public OEdge storeValidFollowingRelation(OVertex source, OVertex destination) {
         OEdge edge = findFollowingEdge(
                 GraphPersonEntity.builder().userName(source.getProperty("userName")).build(),
-                GraphPersonEntity.builder().userName(source.getProperty("userName")).build()
+                GraphPersonEntity.builder().userName(destination.getProperty("userName")).build()
         );
         if (null == edge) {
             edge = source.addEdge(destination, "follows");

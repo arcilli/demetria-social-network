@@ -7,14 +7,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -23,24 +21,23 @@ public class LoginController {
 
     private final RestTemplate restTemplate;
 
-    // This uses constructor injection to set the controller's final copy of restTemplate.
     public LoginController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String displayLoginForm(Model model, HttpServletRequest httpServletRequest) {
-        // Check the session
-        // If the session has already an attribute on "user" redirect to home);
+    public ModelAndView displayLoginForm(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
+        ModelAndView modelAndView = new ModelAndView();
         if (null == session.getAttribute("user")) {
             // the user not already logged in
             // display login form
-            model.addAttribute("userLoginDTO", new SNUserLoginDTO());
-            return "login";
+            modelAndView.addObject("userLoginDTO", new SNUserLoginDTO());
+            modelAndView.setViewName("login");
         } else {
-            return "redirect:/";
+            modelAndView.setViewName("redirect:/");
         }
+        return modelAndView;
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -60,7 +57,7 @@ public class LoginController {
                 }
             } catch (HttpClientErrorException e) {
                 modelAndView.addObject("badCredentials", true);
-                // data in form should be persisted after an unsuccessful login, except the password
+                // Data in form should be persisted after an unsuccessful login, except the password.
                 userLoginDTO.setPassword("");
                 modelAndView.addObject("userLoginDTO", userLoginDTO);
                 modelAndView.setViewName("login");

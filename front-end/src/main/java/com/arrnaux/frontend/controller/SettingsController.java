@@ -1,7 +1,6 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("settings")
 public class SettingsController {
 
-    @Autowired
+    final
     RestTemplate restTemplate;
 
-    // TODO: declare modelAndView in function, not as an argument
+    public SettingsController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @RequestMapping(value = "profile", method = RequestMethod.GET)
     public ModelAndView displayUserInformation(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
-            // the modifiedUser is initialized with loggedUser
+            // The modifiedUser is initialized with loggedUser.
             modelAndView.addObject("modifiedUser", loggedUser);
             modelAndView.setViewName("settings/profile");
         } else {
@@ -63,6 +65,7 @@ public class SettingsController {
 
     // TODO: maybe receive only 2 objects (a SNUser - corresponding to oldPass) and a newUser (like the registration form
     // - with newPass and newPassMatch
+    // TODO: To be implemented.
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
     public ModelAndView changePassword(HttpServletRequest request, @ModelAttribute String oldPassword,
                                        @ModelAttribute String newPassword, @ModelAttribute String newPasswordMatch) {

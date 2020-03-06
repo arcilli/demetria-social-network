@@ -3,7 +3,6 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class CommentController {
 
-    @Autowired
+    final
     RestTemplate restTemplate;
+
+    public CommentController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * @param request
@@ -38,8 +41,9 @@ public class CommentController {
             try {
                 newComment.setOwnerId(currentUser.getId());
                 post.appendComment(newComment);
-                ResponseEntity<Comment> responseEntity = restTemplate.exchange("http://user-service/postService/createComment",
-                        HttpMethod.POST, new HttpEntity<>(post), Comment.class);
+                String targetUrl = "http://post-service/posts/createComment";
+                ResponseEntity<Comment> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
+                        new HttpEntity<>(post), Comment.class);
                 if (null != responseEntity.getBody()) {
                     return responseEntity.getBody();
                 }
