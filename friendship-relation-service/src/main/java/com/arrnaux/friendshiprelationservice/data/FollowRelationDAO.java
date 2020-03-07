@@ -8,6 +8,8 @@ import org.apache.commons.lang.NullArgumentException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface FollowRelationDAO {
     /**
@@ -43,4 +45,10 @@ public interface FollowRelationDAO {
     @Nullable
     OEdge invalidateFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination);
 
+    /**
+     * @param snUser is an incomplete object.
+     * @return a list o ids corresponding to the user that @snUser is following.
+     */
+    @Nullable
+    List<String> getFollowedUsers(GraphPersonEntity snUser);
 }

@@ -58,4 +58,15 @@ public interface SNPostDAO {
      * @return
      */
     Integer getLastCommentIndexForPost(SNPost snPost);
+
+    /**
+     * @param nrOfPostToBeRetrieved
+     * @param snPostId              is the last post displayed. It is a partial object. Only the id field will be populated.
+     *                              If it's equal to -1, no posts has been displayed yet.
+     * @param users                 represents a list of users ids.
+     * @return
+     */
+    @Nullable
+    List<SNPost> getMorePostsFromUsers(Integer nrOfPostToBeRetrieved, String snPostId, List<String> userIds,
+                                       PostVisibility postVisibility);
 }

@@ -175,9 +175,36 @@ $(function () {
         })
     });
 
-    function extractUsernameFromLocationPath() {
+    var extractUsernameFromLocationPath = function () {
         let pathname = window.location.pathname.split("/");
         let userName = pathname[pathname.length - 1];
         return userName;
+    }
+
+    $('.show-more-button').on('click', function () {
+        let targetUrl = "/timeline/showMore";
+        $.ajax({
+            url: targetUrl,
+            type: 'POST',
+            contentType: 'text/plain',
+            data: getLastShowedPostId(),
+            success: function (result) {
+                $(result).insertBefore(".show-more-button");
+            },
+            error: function (result) {
+                console.log("Error: " + error);
+            }
+        })
+    });
+
+    var getLastShowedPostId = function () {
+        let posts = $('.userPost');
+        let lastId = -1;
+        if (0 != posts.length) {
+            // Get the id of the last post that has been showed.
+            console.log(posts[posts.length - 1])
+            lastId = posts[posts.length - 1].id;
+        }
+        return lastId + "";
     }
 });

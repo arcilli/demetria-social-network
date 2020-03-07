@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demetria</title>
+</head>
+<!-- <th:block th:each="post : ${posts}">
+            <span th:text=${post}></span>
+        </th:block> -->
+
+<body>
+    <th:block th:fragment="timeline-part">
+        <th:block th:each="post : ${posts}">
+            <th:block th:replace="fragments/posts :: displayPost(${post})">
+            </th:block>
+        </th:block>
+    </th:block>
+</body>
+
+</html>

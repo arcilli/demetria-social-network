@@ -5,20 +5,17 @@ import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.demetria.core.models.userPost.Vote;
+import com.arrnaux.postservice.Helper.OwnersInteroperability;
 import com.arrnaux.postservice.data.SNPostDAO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +32,15 @@ public class PostService {
 
     private RestTemplate restTemplate;
 
+    private OwnersInteroperability ownersInteroperability;
+
     @Autowired
-    public PostService(SNPostDAO snPostDAO, RestTemplate restTemplate) {
+    public PostService(SNPostDAO snPostDAO, RestTemplate restTemplate, OwnersInteroperability ownersInteroperability) {
         this.snPostDAO = snPostDAO;
         this.restTemplate = restTemplate;
+        this.ownersInteroperability = ownersInteroperability;
     }
+
 
     /**
      * @param snPost
@@ -86,7 +87,7 @@ public class PostService {
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public Comment appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
-        SNUser snUser = requestForSNUser(
+        SNUser snUser = ownersInteroperability.requestForSNUser(
                 SNUser.builder()
                         .id(receivedComment.getOwnerId())
                         .build()
@@ -118,7 +119,7 @@ public class PostService {
         try {
             List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
             // Retrieve user information.
-            SNUser snUser = requestForSNUser
+            SNUser snUser = ownersInteroperability.requestForSNUser
                     (SNUser.builder()
                             .id(userId)
                             .build()
@@ -127,7 +128,7 @@ public class PostService {
                 // Add for every post the owner with obfuscated details.
                 for (SNPost snPost : posts) {
                     snPost.setOwner(snUser);
-                    addOwnerToComment(snPost);
+                    ownersInteroperability.addOwnerToComment(snPost);
                 }
                 return posts;
             }
@@ -148,7 +149,7 @@ public class PostService {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
-                SNUser snUser = requestForSNUser
+                SNUser snUser = ownersInteroperability.requestForSNUser
                         (SNUser.builder()
                                 .id(snPost.getOwnerId())
                                 .build()
@@ -156,7 +157,7 @@ public class PostService {
                 if (null != snUser) {
                     snUser.obfuscateUserInformation();
                     snPost.setOwner(snUser);
-                    addOwnerToComment(snPost);
+                    ownersInteroperability.addOwnerToComment(snPost);
                     return snPost;
                 }
             }
@@ -177,7 +178,7 @@ public class PostService {
     public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName,
                                                @RequestBody PostVisibility postVisibility) {
         try {
-            SNUser snUser = requestForSNUser
+            SNUser snUser = ownersInteroperability.requestForSNUser
                     (SNUser.builder()
                             .userName(userName)
                             .build());
@@ -193,7 +194,7 @@ public class PostService {
                 if (null != posts) {
                     for (SNPost post : posts) {
                         post.setOwner(snUser);
-                        addOwnerToComment(post);
+                        ownersInteroperability.addOwnerToComment(post);
                     }
                 }
                 return posts;
@@ -226,40 +227,5 @@ public class PostService {
             e.printStackTrace();
         }
         return (double) -1;
-    }
-
-    private void addOwnerToComment(@NotNull SNPost snPost) {
-        List<Comment> comments = snPost.getCommentList();
-        if (null != comments) {
-            for (Comment comment : comments) {
-                SNUser commentOwner = requestForSNUser
-                        (SNUser.builder()
-                                .id(comment.getOwnerId())
-                                .build()
-                        );
-                if (null != commentOwner) {
-                    comment.setOwner(commentOwner);
-                }
-            }
-        }
-    }
-
-    /**
-     * @param snUser is not completely populated. It contains only id or userName.
-     * @return the user with obfuscated information. The obfuscation is made at the user service.
-     */
-    private SNUser requestForSNUser(SNUser snUser) {
-        String identifier = snUser.getUserName();
-        StringBuilder targetURL = new StringBuilder("http://user-service/users/info/");
-        if (null != snUser.getUserName()) {
-            identifier = snUser.getUserName();
-            targetURL.append("username");
-        } else if (null != snUser.getId()) {
-            identifier = snUser.getId();
-            targetURL.append("id");
-        }
-        ResponseEntity<SNUser> responseEntity = restTemplate.exchange(targetURL.toString(), HttpMethod.POST,
-                new HttpEntity<>(identifier), SNUser.class);
-        return responseEntity.getBody();
     }
 }

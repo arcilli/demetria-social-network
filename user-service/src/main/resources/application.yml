@@ -13,3 +13,4 @@ eureka:
       #            defaultZone: http://eureka-server:8761/eureka
       #      Local development
       defaultZone: http://localhost:8761/eureka
+    registry-fetch-interval-seconds: 2

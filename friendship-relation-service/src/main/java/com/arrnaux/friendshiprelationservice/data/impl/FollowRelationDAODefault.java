@@ -6,11 +6,14 @@ import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.dbConnection.Connection;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
+import com.orientechnologies.orient.core.sql.executor.OResult;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -110,4 +113,26 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         return null;
     }
 
+    @Nullable
+    @Override
+    public List<String> getFollowedUsers(GraphPersonEntity snUser) {
+        String query;
+        OResultSet rs = null;
+        // TODO: add a condition for checking that the relation is valid.
+        if (null != snUser.getUserName()) {
+            query = "SELECT in.storedId FROM follows where out.userName = ?";
+            rs = getConnection().getSession().query(query, snUser.getUserName());
+        } else if (null != snUser.getStoredId()) {
+            query = "SELECT in.storedId FROM follows where out.storedId= ? ";
+            rs = getConnection().getSession().query(query, snUser.getStoredId());
+        }
+        assert null != rs;
+        // TODO: replace this with lambda expressions.
+        List<String> followedPersons = new ArrayList<>();
+        while (rs.hasNext()) {
+            OResult id = rs.next();
+            followedPersons.add(id.getProperty("in.storedId"));
+        }
+        return followedPersons;
+    }
 }

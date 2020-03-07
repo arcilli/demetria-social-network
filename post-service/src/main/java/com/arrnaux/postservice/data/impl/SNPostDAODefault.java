@@ -130,4 +130,31 @@ public class SNPostDAODefault implements SNPostDAO {
         }
         return 0;
     }
+
+    @Nullable
+    @Override
+    public List<SNPost> getMorePostsFromUsers(Integer nrOfPostToBeRetrieved, String snPostId, List<String> userIds,
+                                              PostVisibility postVisibility) {
+        // select nrOfPostsToBeRetrieved public posts that have the snPostId timestamp lower than snPostId
+        // and that are owned by one of the user from userIds.
+        SNPost currentPost;
+
+        if (snPostId.equals("-1")) {
+            Optional<SNPost> snPostOptional = snPostRepository.
+                    findFirstByOwnerIdInAndVisibilityOrderByCreationDateDesc(userIds, postVisibility);
+            currentPost = snPostOptional.orElse(null);
+        } else {
+            currentPost = getPostById(snPostId);
+        }
+        if (null != currentPost) {
+            Date currentPostDate = currentPost.getCreationDate();
+            Query query = new Query()
+                    .addCriteria(Criteria.where("creationDate").lt(currentPostDate))
+                    .addCriteria(Criteria.where("ownerId").in(userIds))
+                    .addCriteria(Criteria.where("visibility").is(postVisibility))
+                    .limit(nrOfPostToBeRetrieved);
+            return mongoOps.find(query, SNPost.class);
+        }
+        return null;
+    }
 }
