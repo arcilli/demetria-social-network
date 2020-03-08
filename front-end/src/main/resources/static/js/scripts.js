@@ -45,11 +45,14 @@ $(function () {
         });
     });
 
-    // ajax request for adding a comment
-    $(".addCommentButton").on("click", function (event) {
+    // Ajax request for adding a comment
+    // The button is a part of a form.
+    $('.posts-wrapper').on('click', '.addCommentButton', function (event) {
         event.preventDefault();
 
-        let formId = -2;
+        let formId = -1;
+
+        // Find the element that represents the current form.
         $(this).parents().map(function () {
             if (this.tagName == "FORM") {
                 formId = this.id.value;
@@ -71,6 +74,9 @@ $(function () {
                     form.before(element);
                     form[0][0].value = "";
                 }
+            }, error: function (result) {
+                // TODO: display a modal with the error.
+                console.log("Error at posting the comment: " + result);
             }
         })
     });
@@ -135,8 +141,7 @@ $(function () {
                 if (-1 != result) {
                     currentPosts.find(".postRanking")[0].innerText = "Post rank: " + result.toFixed(1);
                 }
-            },
-            error: function (result) {
+            }, error: function (result) {
                 console.log("Error ar voting: " + result);
             }
         })
@@ -153,6 +158,8 @@ $(function () {
                 sourceButton.innerText = "Unfollow";
                 sourceButton.classList.add("active", "unfollow-button");
                 sourceButton.classList.remove("selected", "follow-button");
+            }, error: function (result) {
+                console.log("Error at following: " + result);
             }
         })
     });
@@ -168,9 +175,8 @@ $(function () {
                 sourceButton.innerText = "Follow";
                 sourceButton.classList.add("follow-button");
                 sourceButton.classList.remove("active", "unfollow-button");
-            },
-            error: function (result) {
-                console.log("Err: " + result);
+            }, error: function (result) {
+                console.log("Error at unfollowing: " + result);
             }
         })
     });
@@ -190,9 +196,8 @@ $(function () {
             data: getLastShowedPostId(),
             success: function (result) {
                 $(result).insertBefore(".show-more-button");
-            },
-            error: function (result) {
-                console.log("Error: " + error);
+            }, error: function (result) {
+                console.log("Error at retrieving more posts: " + error);
             }
         })
     });

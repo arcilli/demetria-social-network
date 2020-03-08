@@ -7,15 +7,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 public class CommentController {
 
     final
@@ -33,9 +33,10 @@ public class CommentController {
      * @return the newly inserted comment with obfuscated owner or null if the operation ended with an error.
      */
     @Nullable
-    @ResponseBody
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
+    @ResponseBody
     public Comment createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
+        // TODO: treat the case when the user is inserting an empty comment.
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {
