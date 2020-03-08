@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head th:replace="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
     <title>Demetria</title>
 </head>
+
 <body>
-<nav th:replace="fragments/header :: top-bar"></nav>
-Hello there, little one! :) You are logged-in.<br/>
-<h1>This page will contain posts from my friends.</h1>
-<div class="body-header"></div>
-<div class="main-content">
-    <div th:replace="fragments/forms :: createAPost"></div>
-    <b>Timeline from friends</b>
-    <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
-</div>
-<div class="body-footer"></div>
+    <nav th:replace="fragments/header :: top-bar"></nav>
+    Hello there, little one! :) You are logged-in.<br />
+    <h1>This page will contain posts from my friends.</h1>
+    <div class="body-header"></div>
+    <div class="main-content">
+        <div th:replace="fragments/forms :: createAPost"></div>
+        <b>Timeline from friends</b>
+        <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
+    </div>
+    <div class="body-footer"></div>
 </body>
+
 </html>
