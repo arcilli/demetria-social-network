@@ -51,22 +51,20 @@ public class ProfileController {
         return modelAndView;
     }
 
-    // TODO: now the entire collection is displayed. Get only a chunk and dispaly a button for mode
-    // TODO: replace with timeline service.
     // TODO: issue #21: Secure endpoints, display register form when the user is not logged but is accessing a resource.
-
     // To be refactored.
     @RequestMapping(value = "/profiles/{userName}", method = RequestMethod.GET)
     public ModelAndView showUserProfile(HttpServletRequest request, @PathVariable("userName") String userName) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         SNUser profileOwner = null;
-        List<SNPost> posts = null;
+        List<SNPost> posts;
         // Everyone can see the public posts, no matter if is logged or not.
         // Retrieve profile's owner information.
         String targetUrl = "http://user-service/users/info/" + userName;
         ResponseEntity<SNUser> snUserResponseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
                 null, SNUser.class);
+
         profileOwner = snUserResponseEntity.getBody();
         if (null != profileOwner) {
             if (null != loggedUser && loggedUser.getUserName().equals(userName)) {
@@ -76,11 +74,15 @@ public class ProfileController {
             }
             modelAndView.addObject("newComment", new Comment());
             modelAndView.addObject("profileOwner", profileOwner);
+            assert null != posts;
+            modelAndView.addObject("userPosts", posts);
+        } else {
+            // The user does not exists.
+            modelAndView.setViewName("error");
+            return modelAndView;
         }
-        modelAndView.addObject("userPosts", posts);
 
         // Check if the profileOwner is followed by the logged user.
-        assert profileOwner != null;
         if (null != loggedUser && !loggedUser.getUserName().equals(profileOwner.getUserName())) {
             targetUrl = "http://friendship-relation-service/follow/check/" + loggedUser.getUserName() +
                     "/" + profileOwner.getUserName();
