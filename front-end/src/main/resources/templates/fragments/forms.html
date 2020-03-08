@@ -1,180 +1,182 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head><title>This page should not be public</title>
-</head>
-<body>
-<div th:fragment="loginFragment">
-    <div th:if="${userLoginDTO != null}">
-        <h1>Login</h1>
-        <form id="loginForm" th:action="@{/login}" method="post" th:object="${userLoginDTO}">
-            <div class="form-group">
-                <label for="loginFormEmail">Email address</label>
-                <input type="email" class="form-control" id="loginFormEmail" th:field="*{email}"
-                       aria-describedby="emailHelp" placeholder="Enter email" required>
-            </div>
-            <div class="form-group">
-                <label for="loginFormPassword">Password</label>
-                <input type="password" class="form-control" id="loginFormPassword" th:field="*{password}"
-                       placeholder="Password">
-            </div>
-            <!--                        TODO: set a style for this-->
-            <!--            TODO: See what's wrong here-->
-            <div class="form-group" id="badCredentials" th:if="${badCredentials != null}">Bad credentials</div>
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>
-        </form>
-    </div>
-</div>
 
-<div th:fragment="registerFragment">
-    <div id="signupForm" th:if="${userCreated == null}">
-        <h1>Register to Demetria!</h1>
-        <div>
-            <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${newUser}"
-                  oninput='passwordMatchRegistrationForm
-                  .setCustomValidity(passwordMatchRegistrationForm.value != passwordRegistrationForm.value ?
-                   "Passwords do not match." : "")'>
-                <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <label for="firstNameRegistrationForm">First name</label>
-                        <input type="text" class="form-control" id="firstNameRegistrationForm" placeholder="First name"
-                               th:field="*{firstName}" required minlength="2">
-                        <div class="invalid-feedback">
-                            Please enter valid values.
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="lastNameRegistrationForm">Last name</label>
-                        <input type="text" class="form-control" id="lastNameRegistrationForm" placeholder="Last name"
-                               th:field="*{lastName}" required minlength="2">
-                        <div class="invalid-feedback">
-                            Please enter valid values.
-                        </div>
-                    </div>
-                    <!--                    TODO: Uncomment this only after implement unique usernames-->
-                    <div class="col-md-4 mb-3">
-                        <label for="userNameRegistrationForm">Username</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend">@</span>
-                            </div>
-                            <input type="text" class="form-control" id="userNameRegistrationForm" placeholder="Username"
-                                   aria-describedby="inputGroupPrepend" th:field="*{userName}" required>
-                            <div class="invalid-feedback">
-                                Please choose a username.
-                            </div>
-                            <div class="username-already-exists" th:if="${usernameAlreadyExists != null}">An
-                                account associated with this username is already created.
-                            </div>
-                        </div>
-                    </div>
+<head>
+    <title>This page should not be public</title>
+</head>
+
+<body>
+    <div th:fragment="loginFragment">
+        <div th:if="${userLoginDTO != null}">
+            <h1>Login</h1>
+            <form id="loginForm" th:action="@{/login}" method="post" th:object="${userLoginDTO}">
+                <div class="form-group">
+                    <label for="loginFormEmail">Email address</label>
+                    <input type="email" class="form-control" id="loginFormEmail" th:field="*{email}"
+                        aria-describedby="emailHelp" placeholder="Enter email" required>
                 </div>
-                <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <label for="emailRegistrationForm">Email</label>
-                        <input type="email" class="form-control" id="emailRegistrationForm" placeholder="Email"
-                               th:field="*{email}"
-                               pattern="[^@]+@[^\.]+\..+"
-                               required>
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.
-                        </small>
-                        <div class="invalid-feedback">
-                            Please enter a valid email.
-                        </div>
-                        <!--                        TODO: set a style for this-->
-                        <div class="email-already-exists" th:if="${emailAlreadyExists != null}">An
-                            account associated with this email is already created.
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="passwordRegistrationForm">Password</label>
-                        <input type="password" class="form-control"
-                               id="passwordRegistrationForm" placeholder="Password"
-                               th:field="*{password}" required minlength="8">
-                        <div class="invalid-feedback">
-                            Please enter a password that is at least 8 characters long.
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="passwordMatchRegistrationForm">Retype password</label>
-                        <input type="password" class="form-control"
-                               id="passwordMatchRegistrationForm"
-                               placeholder="Retype password"
-                               th:field="*{passwordMatch}" required>
-                    </div>
+                <div class="form-group">
+                    <label for="loginFormPassword">Password</label>
+                    <input type="password" class="form-control" id="loginFormPassword" th:field="*{password}"
+                        placeholder="Password">
                 </div>
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
+                <!--                        TODO: set a style for this-->
+                <!--            TODO: See what's wrong here-->
+                <div class="form-group" id="badCredentials" th:if="${badCredentials != null}">Bad credentials</div>
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>
             </form>
         </div>
     </div>
-</div>
 
-<div th:fragment="userSettings">
-    <form action="#" method="post" th:if="${session.user != null}" th:action="@{profile}" th:object="${modifiedUser}">
-        <label for="lastName">Last name:</label>
-        <input type="text" id="lastName" th:field="*{lastName}" th:value="${lastName}"/><br/>
-        <label for="firstName">First name:</label>
-        <input type="text" id="firstName" th:field="*{firstName}" th:value="${firstName}"/><br/>
-        <!--        TODO: add an action for changing a password-->
-        <!--        <button type="button" onclick="">Change password</button>-->
-        <br/>
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
-    </form>
+    <div th:fragment="registerFragment">
+        <div id="signupForm" th:if="${userCreated == null}">
+            <h1>Register to Demetria!</h1>
+            <div>
+                <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${newUser}"
+                    oninput='passwordMatchRegistrationForm
+                  .setCustomValidity(passwordMatchRegistrationForm.value != passwordRegistrationForm.value ?
+                   "Passwords do not match." : "")'>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="firstNameRegistrationForm">First name</label>
+                            <input type="text" class="form-control" id="firstNameRegistrationForm"
+                                placeholder="First name" th:field="*{firstName}" required minlength="2">
+                            <div class="invalid-feedback">
+                                Please enter valid values.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="lastNameRegistrationForm">Last name</label>
+                            <input type="text" class="form-control" id="lastNameRegistrationForm"
+                                placeholder="Last name" th:field="*{lastName}" required minlength="2">
+                            <div class="invalid-feedback">
+                                Please enter valid values.
+                            </div>
+                        </div>
+                        <!--                    TODO: Uncomment this only after implement unique usernames-->
+                        <div class="col-md-4 mb-3">
+                            <label for="userNameRegistrationForm">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                </div>
+                                <input type="text" class="form-control" id="userNameRegistrationForm"
+                                    placeholder="Username" aria-describedby="inputGroupPrepend" th:field="*{userName}"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Please choose a username.
+                                </div>
+                                <div class="username-already-exists" th:if="${usernameAlreadyExists != null}">An
+                                    account associated with this username is already created.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="emailRegistrationForm">Email</label>
+                            <input type="email" class="form-control" id="emailRegistrationForm" placeholder="Email"
+                                th:field="*{email}" pattern="[^@]+@[^\.]+\..+" required>
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                                else.
+                            </small>
+                            <div class="invalid-feedback">
+                                Please enter a valid email.
+                            </div>
+                            <!--                        TODO: set a style for this-->
+                            <div class="email-already-exists" th:if="${emailAlreadyExists != null}">An
+                                account associated with this email is already created.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="passwordRegistrationForm">Password</label>
+                            <input type="password" class="form-control" id="passwordRegistrationForm"
+                                placeholder="Password" th:field="*{password}" required minlength="8">
+                            <div class="invalid-feedback">
+                                Please enter a password that is at least 8 characters long.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="passwordMatchRegistrationForm">Retype password</label>
+                            <input type="password" class="form-control" id="passwordMatchRegistrationForm"
+                                placeholder="Retype password" th:field="*{passwordMatch}" required>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!--    TODO: add a confirmation message-->
-    <div th:replace="fragments/forms :: deleteAccountButton"></div>
-    <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
-    <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
-</div>
+    <div th:fragment="userSettings">
+        <form action="#" method="post" th:if="${session.user != null}" th:action="@{profile}"
+            th:object="${modifiedUser}">
+            <label for="lastName">Last name:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" th:value="${lastName}" /><br />
+            <label for="firstName">First name:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" th:value="${firstName}" /><br />
+            <!--        TODO: add an action for changing a password-->
+            <!--        <button type="button" onclick="">Change password</button>-->
+            <br />
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
+        </form>
 
-<!--TODO: populate with an object or find a solution-->
-<div th:fragment="changePass">
-    <form action="#" th:action="@{/settings/changePassword}" th:object="${}">
-        <label for="oldPassword">Old password</label>
-        <input type="password" id="oldPassword" required="required" th:field="${oldPassword}"/><br/>
-        <label for="newPassword">New password</label>
-        <input type="password" id="newPassword" required="required" th:field="${newPassword}"/><br/>
-        <label for="newPasswordMatch">Confirm new password</label>
-        <input type="password" id="newPasswordMatch" required="required" th:field="${newPasswordMatch}"/>
-    </form>
-</div>
+        <!--    TODO: add a confirmation message-->
+        <div th:replace="fragments/forms :: deleteAccountButton"></div>
+        <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
+        <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>
+    </div>
 
-<div th:fragment="createAPost">
-    <form action="#" method="post" th:action="createAPost" th:object="${post}">
-        <textarea rows="10" cols="30" th:field="*{content}"></textarea><br/>
-        <label for="visibility">Visibility</label>
-        <select name="visibilityOption" id="visibility" th:field="*{visibility}">
-            <th:block th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.models.userPost.PostVisibility).reversedValues()}">
-                <th:block th:if="${visibilityOpt.displayValue !=''}">
-                    <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+    <!--TODO: populate with an object or find a solution-->
+    <div th:fragment="changePass">
+        <form action="#" th:action="@{/settings/changePassword}" th:object="${}">
+            <label for="oldPassword">Old password</label>
+            <input type="password" id="oldPassword" required="required" th:field="${oldPassword}" /><br />
+            <label for="newPassword">New password</label>
+            <input type="password" id="newPassword" required="required" th:field="${newPassword}" /><br />
+            <label for="newPasswordMatch">Confirm new password</label>
+            <input type="password" id="newPasswordMatch" required="required" th:field="${newPasswordMatch}" />
+        </form>
+    </div>
+
+    <div th:fragment="createAPost">
+        <form action="#" method="post" th:action="createAPost" th:object="${post}">
+            <textarea rows="10" cols="30" th:field="*{content}"></textarea><br />
+            <label for="visibility">Visibility</label>
+            <select name="visibilityOption" id="visibility" th:field="*{visibility}">
+                <th:block
+                    th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.models.userPost.PostVisibility).reversedValues()}">
+                    <th:block th:if="${visibilityOpt.displayValue !=''}">
+                        <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+                    </th:block>
                 </th:block>
-            </th:block>
-        </select>
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
-        <br/>
-    </form>
-</div>
+            </select>
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
+            <br />
+        </form>
+    </div>
 
-<div th:fragment="deleteAccountButton">
-    <button id="deleteAccountButton" type="button" class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal"
+    <div th:fragment="deleteAccountButton">
+        <button id="deleteAccountButton" type="button" class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal"
             data-target="#confirmDeleteAccountModal">
-        Delete account
-    </button>
-    <!-- Modal -->
-    <div class="modal fade" id="confirmDeleteAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    Are you sure?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="confirmAccountDeleteButton">Confirm delete
-                    </button>
+            Delete account
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="confirmDeleteAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="confirmAccountDeleteButton">Confirm delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>
