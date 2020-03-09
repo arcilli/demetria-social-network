@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head th:insert="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
     <title th:text="${post.content}"></title>
 </head>
+
 <body>
-<td th:replace="fragments/header :: top-bar"></td>
-<td th:if="${authorized == null || authorized == false}">Nothing here for you. :(</td>
-<td th:if="${authorized == true}">
-    <div th:replace="fragments/posts :: displayPost(${post})"></div>
-</td>
+    <td th:replace="fragments/header :: top-bar"></td>
+    <td th:if="${authorized == null || authorized == false}">Nothing here for you. :(</td>
+    <td th:if="${authorized == true}">
+        <div th:replace="fragments/posts :: displayPost(${post})"></div>
+    </td>
 </body>
+
 </html>

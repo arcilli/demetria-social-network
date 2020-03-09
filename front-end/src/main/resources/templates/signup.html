@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head th:replace="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
     <title>Sign up</title>
 </head>
-<body>
-<!--display this only if user has not successfully registered, else display a button that redirects on login-->
-<!--th:object will be the object that will be populated with data when the form is submitted-->
-<div th:if="${userCreated == true}">
-    <span>The account has been created.</span>
-    <a href="/login">
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
-    </a>
-</div>
-<div th:replace="fragments/forms :: registerFragment">
 
-</div>
+<body>
+    <!--display this only if user has not successfully registered, else display a button that redirects on login-->
+    <!--th:object will be the object that will be populated with data when the form is submitted-->
+    <div th:if="${userCreated == true}">
+        <span>The account has been created.</span>
+        <a href="/login">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
+        </a>
+    </div>
+    <div th:replace="fragments/forms :: registerFragment">
+
+    </div>
 </body>
+
 </html>
