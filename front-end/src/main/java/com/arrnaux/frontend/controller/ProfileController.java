@@ -59,15 +59,11 @@ public class ProfileController {
         SNUser profileOwner = snUserResponseEntity.getBody();
 
         if (null != profileOwner) {
-            if (null != loggedUser && loggedUser.getUserName().equals(userName)) {
-                posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.NONE);
-            } else {
-                posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.PUBLIC);
-            }
-            modelAndView.addObject("newComment", new Comment());
-            modelAndView.addObject("profileOwner", profileOwner);
-            assert null != posts;
-            modelAndView.addObject("userPosts", posts);
+            // The userName is valid, so the owner of the profile exists.
+            modelAndView
+                    .addObject("profileOwner", profileOwner)
+                    .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser));
+            modelAndView.setViewName("profile");
         } else {
             // The user does not exists.
             modelAndView.setViewName("error");
@@ -92,7 +88,7 @@ public class ProfileController {
             ResponseEntity<Boolean> loggedUserFollowsProfileOwner = restTemplate.exchange(targetUrl, HttpMethod.GET,
                     HttpEntity.EMPTY, Boolean.class);
             if (null != loggedUserFollowsProfileOwner.getBody()) {
-                modelAndView.addObject("userIsFollowed", loggedUserFollowsProfileOwner.getBody());
+                return loggedUserFollowsProfileOwner.getBody();
             }
         }
         return false;
