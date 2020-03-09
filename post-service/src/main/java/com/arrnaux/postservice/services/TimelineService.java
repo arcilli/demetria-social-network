@@ -4,7 +4,7 @@ import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
-import com.arrnaux.postservice.Helper.OwnersInteroperability;
+import com.arrnaux.postservice.Helper.UserAsOwnerOperations;
 import com.arrnaux.postservice.data.SNPostDAO;
 import com.mongodb.lang.Nullable;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class TimelineService {
     SNPostDAO snPostDAO;
 
     final
-    OwnersInteroperability ownersInteroperability;
+    UserAsOwnerOperations userAsOwnerOperations;
 
-    public TimelineService(SNPostDAO snPostDAO, RestTemplate restTemplate, OwnersInteroperability ownersInteroperability) {
+    public TimelineService(SNPostDAO snPostDAO, RestTemplate restTemplate, UserAsOwnerOperations userAsOwnerOperations) {
         this.snPostDAO = snPostDAO;
         this.restTemplate = restTemplate;
-        this.ownersInteroperability = ownersInteroperability;
+        this.userAsOwnerOperations = userAsOwnerOperations;
     }
 
     /**
@@ -42,22 +43,29 @@ public class TimelineService {
      * @return
      */
     @RequestMapping(value = "showMorePosts/{lastShowedId}", method = RequestMethod.POST)
-    private List<SNPost> showMorePosts(@RequestBody SNUser loggedUser, @PathVariable("lastShowedId") String lastShowedId) {
+    public List<SNPost> showMorePosts(@RequestBody SNUser loggedUser, @PathVariable("lastShowedId") String lastShowedId) {
         List<String> ids = getFollowedPersons(
                 GraphPersonEntity.builder()
                         .storedId(loggedUser.getId())
                         .userName(loggedUser.getUserName())
                         .build()
         );
-        // Getting all posts that are owned by person having one of the ids.
-        List<SNPost> postsToBeDisplayed = snPostDAO.getMorePostsFromUsers(10, lastShowedId,
+        // Include my own posts in timeline.
+        ids.add(loggedUser.getId());
+
+        // Getting all posts that are owned by a person having one of the ids.
+        List<SNPost> postsToBeDisplayed = snPostDAO.getMorePostsFromUsers(5, lastShowedId,
                 ids, PostVisibility.PUBLIC);
 
         // <UserId, UserDetails> map
         HashMap<String, SNUser> users = new HashMap<>();
         for (String id : ids) {
             // Make a request to user-service and get an obfuscated user object.
-            SNUser snUser = getUserDetails(id);
+            SNUser snUser = userAsOwnerOperations.requestForSNUser(
+                    SNUser.builder()
+                            .id(id)
+                            .build()
+            );
             if (null != snUser) {
                 users.put(id, snUser);
             }
@@ -65,7 +73,45 @@ public class TimelineService {
         if (null != postsToBeDisplayed) {
             for (SNPost snPost : postsToBeDisplayed) {
                 snPost.setOwner(users.get(snPost.getOwnerId()));
-                ownersInteroperability.addOwnerToComment(snPost);
+                userAsOwnerOperations.addOwnerToComment(snPost);
+            }
+            return postsToBeDisplayed;
+        }
+        return null;
+    }
+
+    /**
+     * @param loggedUser
+     * @param lastShowedId
+     * @return a chunk of posts owned by @loggedUSer
+     */
+
+    // TODO: maybe refactor with showMorePosts
+    @RequestMapping(value = "showMorePostsFromSelf/{lastShowedId}", method = RequestMethod.POST)
+    public List<SNPost> showMorePostsFromSelf(@RequestBody SNUser loggedUser,
+                                              @PathVariable("lastShowedId") String lastShowedId) {
+
+        if (null != loggedUser) {
+            // Get information about loggedUser.
+            loggedUser = userAsOwnerOperations.requestForSNUser(
+                    SNUser.builder()
+                            .id(loggedUser.getId())
+                            .build()
+            );
+            if (null == loggedUser) {
+                return null;
+            }
+            List<String> ids = new ArrayList<>();
+            ids.add(loggedUser.getId());
+
+            // Retrieve posts owned by the user, private & public, that are lt lastShowedId.
+            List<SNPost> postsToBeDisplayed = snPostDAO.getMorePostsFromUsers(5, lastShowedId,
+                    ids, PostVisibility.NONE);
+            if (null != postsToBeDisplayed) {
+                for (SNPost snPost : postsToBeDisplayed) {
+                    snPost.setOwner(loggedUser);
+                    userAsOwnerOperations.addOwnerToComment(snPost);
+                }
             }
             return postsToBeDisplayed;
         }
@@ -86,14 +132,6 @@ public class TimelineService {
         ResponseEntity<List<String>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
                 new HttpEntity<>(snUser), new ParameterizedTypeReference<List<String>>() {
                 });
-        return responseEntity.getBody();
-    }
-
-    @Nullable
-    private SNUser getUserDetails(String userId) {
-        String targetURL = "http://user-service/users/info/id/";
-        ResponseEntity<SNUser> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST, new HttpEntity<>(userId),
-                SNUser.class);
         return responseEntity.getBody();
     }
 }

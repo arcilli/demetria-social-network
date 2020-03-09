@@ -23,4 +23,6 @@ public interface SNPostRepository extends MongoRepository<SNPost, String> {
 
     Optional<SNPost> findFirstByOwnerIdInAndVisibilityOrderByCreationDateDesc(List<String> ownerId,
                                                                               PostVisibility visibility);
+
+    Optional<SNPost> findFirstByOwnerIdInOrderByCreationDateDesc(List<String> ownerId);
 }

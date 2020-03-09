@@ -23,7 +23,7 @@ $(function () {
     });
 
     // ajax request for deleting a post
-    $(".deletePostButton").on("click", function () {
+    $('posts-wrapper').on('click', '.deletePostButton', function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
                 var arr = { id: this.id };
@@ -195,13 +195,14 @@ $(function () {
             contentType: 'text/plain',
             data: getLastShowedPostId(),
             success: function (result) {
-                $(result).insertBefore(".show-more-button");
+                $(result).insertBefore('.show-more-button');
             }, error: function (result) {
                 console.log("Error at retrieving more posts: " + error);
             }
         })
     });
 
+    // TODO: Make this work.
     var getLastShowedPostId = function () {
         let posts = $('.userPost');
         let lastId = -1;
@@ -212,4 +213,20 @@ $(function () {
         }
         return lastId + "";
     }
+
+    $('.profile-show-more-button').on('click', function () {
+        let targetUrl = "/timeline/showMoreFromSelf/"
+        $.ajax({
+            url: targetUrl,
+            type: 'POST',
+            contentType: 'text/plain',
+            data: getLastShowedPostId(),
+            success: function (result) {
+                $(result).insertBefore('.profile-show-more-button');
+            },
+            error: function (result) {
+                console.log("Error at retrieving more posts: " + result);
+            }
+        })
+    });
 });

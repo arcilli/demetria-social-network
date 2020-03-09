@@ -5,7 +5,7 @@ import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.demetria.core.models.userPost.Vote;
-import com.arrnaux.postservice.Helper.OwnersInteroperability;
+import com.arrnaux.postservice.Helper.UserAsOwnerOperations;
 import com.arrnaux.postservice.data.SNPostDAO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +32,13 @@ public class PostService {
 
     private RestTemplate restTemplate;
 
-    private OwnersInteroperability ownersInteroperability;
+    private UserAsOwnerOperations userAsOwnerOperations;
 
     @Autowired
-    public PostService(SNPostDAO snPostDAO, RestTemplate restTemplate, OwnersInteroperability ownersInteroperability) {
+    public PostService(SNPostDAO snPostDAO, RestTemplate restTemplate, UserAsOwnerOperations userAsOwnerOperations) {
         this.snPostDAO = snPostDAO;
         this.restTemplate = restTemplate;
-        this.ownersInteroperability = ownersInteroperability;
+        this.userAsOwnerOperations = userAsOwnerOperations;
     }
 
 
@@ -87,7 +87,7 @@ public class PostService {
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     public Comment appendCommentToExistingList(@RequestBody SNPost postWithReceivedComment) {
         Comment receivedComment = postWithReceivedComment.getCommentList().get(0);
-        SNUser snUser = ownersInteroperability.requestForSNUser(
+        SNUser snUser = userAsOwnerOperations.requestForSNUser(
                 SNUser.builder()
                         .id(receivedComment.getOwnerId())
                         .build()
@@ -119,7 +119,7 @@ public class PostService {
         try {
             List<SNPost> posts = snPostDAO.getUserPostsDateDesc(userId);
             // Retrieve user information.
-            SNUser snUser = ownersInteroperability.requestForSNUser
+            SNUser snUser = userAsOwnerOperations.requestForSNUser
                     (SNUser.builder()
                             .id(userId)
                             .build()
@@ -128,7 +128,7 @@ public class PostService {
                 // Add for every post the owner with obfuscated details.
                 for (SNPost snPost : posts) {
                     snPost.setOwner(snUser);
-                    ownersInteroperability.addOwnerToComment(snPost);
+                    userAsOwnerOperations.addOwnerToComment(snPost);
                 }
                 return posts;
             }
@@ -149,7 +149,7 @@ public class PostService {
         try {
             SNPost snPost = snPostDAO.getPostById(postId);
             if (null != snPost) {
-                SNUser snUser = ownersInteroperability.requestForSNUser
+                SNUser snUser = userAsOwnerOperations.requestForSNUser
                         (SNUser.builder()
                                 .id(snPost.getOwnerId())
                                 .build()
@@ -157,7 +157,7 @@ public class PostService {
                 if (null != snUser) {
                     snUser.obfuscateUserInformation();
                     snPost.setOwner(snUser);
-                    ownersInteroperability.addOwnerToComment(snPost);
+                    userAsOwnerOperations.addOwnerToComment(snPost);
                     return snPost;
                 }
             }
@@ -178,7 +178,7 @@ public class PostService {
     public List<SNPost> getUserPostsDescending(@PathVariable("userName") String userName,
                                                @RequestBody PostVisibility postVisibility) {
         try {
-            SNUser snUser = ownersInteroperability.requestForSNUser
+            SNUser snUser = userAsOwnerOperations.requestForSNUser
                     (SNUser.builder()
                             .userName(userName)
                             .build());
@@ -194,7 +194,7 @@ public class PostService {
                 if (null != posts) {
                     for (SNPost post : posts) {
                         post.setOwner(snUser);
-                        ownersInteroperability.addOwnerToComment(post);
+                        userAsOwnerOperations.addOwnerToComment(post);
                     }
                 }
                 return posts;

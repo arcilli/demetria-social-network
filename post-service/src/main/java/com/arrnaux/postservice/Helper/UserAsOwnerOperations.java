@@ -3,10 +3,10 @@ package com.arrnaux.postservice.Helper;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,12 +14,12 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
-public class OwnersInteroperability {
+public class UserAsOwnerOperations {
 
     final
     RestTemplate restTemplate;
 
-    public OwnersInteroperability(RestTemplate restTemplate) {
+    public UserAsOwnerOperations(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -43,6 +43,7 @@ public class OwnersInteroperability {
      * @param snUser is not completely populated. It contains only id or userName.
      * @return the user with obfuscated information. The obfuscation is made at the user service.
      */
+    @Nullable
     public SNUser requestForSNUser(SNUser snUser) {
         String identifier = snUser.getUserName();
         StringBuilder targetURL = new StringBuilder("http://user-service/users/info/");

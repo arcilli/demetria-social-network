@@ -1,27 +1,21 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
-import com.arrnaux.demetria.core.models.userPost.Comment;
-import com.arrnaux.demetria.core.models.userPost.PostVisibility;
-import com.arrnaux.demetria.core.models.userPost.SNPost;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
-@Controller
+@RestController
 public class ProfileController {
 
     final
@@ -52,20 +46,18 @@ public class ProfileController {
     }
 
     // TODO: issue #21: Secure endpoints, display register form when the user is not logged but is accessing a resource.
-    // To be refactored.
+    // Everyone can see the public posts, no matter if it is logged or not.
     @RequestMapping(value = "/profiles/{userName}", method = RequestMethod.GET)
     public ModelAndView showUserProfile(HttpServletRequest request, @PathVariable("userName") String userName) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        SNUser profileOwner = null;
-        List<SNPost> posts;
-        // Everyone can see the public posts, no matter if is logged or not.
-        // Retrieve profile's owner information.
+
+        // Get information about the owner of the profile.
         String targetUrl = "http://user-service/users/info/" + userName;
         ResponseEntity<SNUser> snUserResponseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
                 null, SNUser.class);
+        SNUser profileOwner = snUserResponseEntity.getBody();
 
-        profileOwner = snUserResponseEntity.getBody();
         if (null != profileOwner) {
             if (null != loggedUser && loggedUser.getUserName().equals(userName)) {
                 posts = getPostsForUser(profileOwner.getUserName(), PostVisibility.NONE);
@@ -79,12 +71,23 @@ public class ProfileController {
         } else {
             // The user does not exists.
             modelAndView.setViewName("error");
-            return modelAndView;
         }
+        return modelAndView;
+    }
 
-        // Check if the profileOwner is followed by the logged user.
-        if (null != loggedUser && !loggedUser.getUserName().equals(profileOwner.getUserName())) {
-            targetUrl = "http://friendship-relation-service/follow/check/" + loggedUser.getUserName() +
+    /**
+     * @param profileOwner is NotNull, is the user that owns the profile.
+     * @param user         is the user for which is checked if is following the profileOwner.
+     * @return true if user is following profileOwner. Otherwise, false.
+     */
+    private boolean profileIsFollowedByUser(@NotNull SNUser profileOwner, SNUser user) {
+        if (null != user) {
+            if (userIsTheOwnerOfTheProfile(profileOwner, user)) {
+                // An user cannot follow himself.
+                return false;
+            }
+
+            String targetUrl = "http://friendship-relation-service/follow/check/" + user.getUserName() +
                     "/" + profileOwner.getUserName();
             ResponseEntity<Boolean> loggedUserFollowsProfileOwner = restTemplate.exchange(targetUrl, HttpMethod.GET,
                     HttpEntity.EMPTY, Boolean.class);
@@ -92,19 +95,10 @@ public class ProfileController {
                 modelAndView.addObject("userIsFollowed", loggedUserFollowsProfileOwner.getBody());
             }
         }
-        modelAndView.setViewName("profile");
-        return modelAndView;
+        return false;
     }
 
-    @Nullable
-    // TODO: replace with timeline.
-    private List<SNPost> getPostsForUser(String username, @NotNull PostVisibility postVisibility) {
-        String targetURL = "http://post-service/posts/user/" + username;
-        if (null != postVisibility) {
-            return (restTemplate.exchange(targetURL, HttpMethod.POST,
-                    new HttpEntity<>(postVisibility), new ParameterizedTypeReference<List<SNPost>>() {
-                    })).getBody();
-        }
-        return null;
+    private boolean userIsTheOwnerOfTheProfile(@NotNull SNUser profileOwner, @NotNull SNUser user) {
+        return profileOwner.getUserName().equals(user.getUserName());
     }
 }
