@@ -112,7 +112,7 @@ $(function () {
     });
 
     // Rating stars
-    $('.stars a').on('click', function () {
+    $('.posts-wrapper').on('click', '.stars a', function () {
         let articleId = -1;
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
@@ -204,8 +204,8 @@ $(function () {
 
     // TODO: Make this work.
     var getLastShowedPostId = function () {
-        let posts = $('.userPost');
-        let lastId = -1;
+        let posts = $('article');
+        let lastId = 0;
         if (0 != posts.length) {
             // Get the id of the last post that has been showed.
             console.log(posts[posts.length - 1])
@@ -215,7 +215,7 @@ $(function () {
     }
 
     $('.profile-show-more-button').on('click', function () {
-        let targetUrl = "/timeline/showMoreFromSelf/"
+        let targetUrl = "/timeline/showMore/user/" + extractUsernameFromLocationPath();
         $.ajax({
             url: targetUrl,
             type: 'POST',

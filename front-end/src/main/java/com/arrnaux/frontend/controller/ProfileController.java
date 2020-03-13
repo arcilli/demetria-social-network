@@ -45,7 +45,6 @@ public class ProfileController {
         return modelAndView;
     }
 
-    // TODO: issue #21: Secure endpoints, display register form when the user is not logged but is accessing a resource.
     // Everyone can see the public posts, no matter if it is logged or not.
     @RequestMapping(value = "/profiles/{userName}", method = RequestMethod.GET)
     public ModelAndView showUserProfile(HttpServletRequest request, @PathVariable("userName") String userName) {

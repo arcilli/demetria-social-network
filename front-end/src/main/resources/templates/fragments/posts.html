@@ -7,10 +7,10 @@
 </head>
 
 <body>
-    <!--Stars so an user can vote a post-->
-    <span th:fragment="rateStarts" class="stars">
+<!--Stars so an user can vote a post-->
+<span th:fragment="rateStarts" class="stars">
         <!--    Replace this with a for instruction created in Thymleaf-->
-        <!--    TODO: if an user has already voted the post, color the stars corresponding to his vote.-->
+    <!--    TODO: if an user has already voted the post, color the stars corresponding to his vote.-->
         <a class="star-1" href="#">1</a>
         <a class="star-2" href="#">2</a>
         <a class="star-3" href="#">3</a>
@@ -18,63 +18,54 @@
         <a class="star-5" href="#">5</a>
     </span>
 
-    <td th:fragment=createComment(postId) th:if="${newComment != null}">
-        <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
-            <input type="text" th:field="*{content}" placeholder="Add comment" />
-            <input type="hidden" name="id" th:value="${postId}" />
-            <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
-            </button>
-        </form>
-    </td>
+<td th:fragment=createComment(postId) th:if="${newComment != null}">
+    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
+        <input type="text" th:field="*{content}" placeholder="Add comment"/>
+        <input type="hidden" name="id" th:value="${postId}"/>
+        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
+        </button>
+    </form>
+</td>
 
-    <!--Posts owned by an user-->
-    <!--TODO: add a flex container for this-->
-    <div th:fragment="userPosts" th:object="${userPosts}">
-        <article class="userPost" th:each="post : ${userPosts}" th:id="${post.id}">
-            <div th:replace="fragments/posts :: displayPost(${post})"></div>
-        </article>
-        <!--    Implement paginating queries for this-->
-        <!--    <button>More posts</button>-->
-    </div>
-
-    <div th:fragment="displayPost(post)">
+<div th:fragment="displayPost(post)">
+    <article class="userPost" th:id="${post.id}">
         <div class="postHeader flex-container">
             <div class="postOwner">
                 <a th:href="@{'/profiles/' + ${post.owner.userName}}"
-                    th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+                   th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
             </div>
             <!--        TODO: better display time from the post (hours, day, m, years), with the same structure of the link-->
             <div class="postCreationDate">
                 <a th:href="@{'/posts/' + ${post.id}}">
                     <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM yyyy')}+': '">
-                </td>
-            </a>
-            <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span>
-        </div>
-    </div>
-    <div class="postContent" th:text="${post.content}"></div>
-    <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
-    <td th:if="${session.user != null}">
-        <span th:replace="fragments/posts :: rateStarts"></span>
-    </td>
-    <div class="postComments">
-        <div class="postComment " th:each="comment : ${post.commentList}">
-            <div>
-                <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
-                   th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
-                <span th:text="': '+${comment.content}"></span>
+                    </td>
+                </a>
+                <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span></span>
             </div>
         </div>
-        <div>
-            <form th:replace="fragments/posts :: createComment(${post.id})"></form>
-            <td th:if="${session.user != null and session.user.id == post.ownerId}">
-                <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
-                    post
-                </button>
-            </td>
+        <div class="postContent" th:text="${post.content}"></div>
+        <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
+        <td th:if="${session.user != null}">
+            <span th:replace="fragments/posts :: rateStarts"></span>
+        </td>
+        <div class="postComments">
+            <div class="postComment " th:each="comment : ${post.commentList}">
+                <div>
+                    <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
+                       th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+                    <span th:text="': '+${comment.content}"></span>
+                </div>
+            </div>
+            <div>
+                <form th:replace="fragments/posts :: createComment(${post.id})"></form>
+                <td th:if="${session.user != null and session.user.id == post.ownerId}">
+                    <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
+                        post
+                    </button>
+                </td>
+            </div>
         </div>
-    </div>
+    </article>
 </div>
-
 </body>
 </html>

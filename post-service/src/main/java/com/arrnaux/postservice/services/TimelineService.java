@@ -80,42 +80,34 @@ public class TimelineService {
         return null;
     }
 
-    /**
-     * @param loggedUser
-     * @param lastShowedId
-     * @return a chunk of posts owned by @loggedUSer
-     */
+    @RequestMapping(value = "showMorePosts/{lastShowedId}/{userName}", method = RequestMethod.POST)
+    public List<SNPost> showMorePostsFromUserName(@RequestBody PostVisibility postVisibility,
+                                                  @PathVariable("lastShowedId") String lastShowedId,
+                                                  @PathVariable("userName") String userName) {
+        SNUser targetUser = userAsOwnerOperations.requestForSNUser(
+                SNUser.builder()
+                        .userName(userName)
+                        .build()
+        );
 
-    // TODO: maybe refactor with showMorePosts
-    @RequestMapping(value = "showMorePostsFromSelf/{lastShowedId}", method = RequestMethod.POST)
-    public List<SNPost> showMorePostsFromSelf(@RequestBody SNUser loggedUser,
-                                              @PathVariable("lastShowedId") String lastShowedId) {
-
-        if (null != loggedUser) {
-            // Get information about loggedUser.
-            loggedUser = userAsOwnerOperations.requestForSNUser(
-                    SNUser.builder()
-                            .id(loggedUser.getId())
-                            .build()
-            );
-            if (null == loggedUser) {
-                return null;
-            }
-            List<String> ids = new ArrayList<>();
-            ids.add(loggedUser.getId());
-
-            // Retrieve posts owned by the user, private & public, that are lt lastShowedId.
-            List<SNPost> postsToBeDisplayed = snPostDAO.getMorePostsFromUsers(5, lastShowedId,
-                    ids, PostVisibility.NONE);
-            if (null != postsToBeDisplayed) {
-                for (SNPost snPost : postsToBeDisplayed) {
-                    snPost.setOwner(loggedUser);
-                    userAsOwnerOperations.addOwnerToComment(snPost);
-                }
-            }
-            return postsToBeDisplayed;
+        // Check if the userName is valid.
+        if (null == targetUser) {
+            return null;
         }
-        return null;
+
+        List<String> ids = new ArrayList<>();
+        ids.add(targetUser.getId());
+
+        List<SNPost> postsToBeDisplayed;
+        postsToBeDisplayed = getPostsFromUsers(ids, lastShowedId, postVisibility);
+
+        if (null != postsToBeDisplayed) {
+            for (SNPost snPost : postsToBeDisplayed) {
+                snPost.setOwner(targetUser);
+                userAsOwnerOperations.addOwnerToComment(snPost);
+            }
+        }
+        return postsToBeDisplayed;
     }
 
     /**
@@ -133,5 +125,11 @@ public class TimelineService {
                 new HttpEntity<>(snUser), new ParameterizedTypeReference<List<String>>() {
                 });
         return responseEntity.getBody();
+    }
+
+    @Nullable
+    private List<SNPost> getPostsFromUsers(List<String> ids, String lastShowedId, PostVisibility postVisibility) {
+        return snPostDAO.getMorePostsFromUsers(5, lastShowedId,
+                ids, postVisibility);
     }
 }

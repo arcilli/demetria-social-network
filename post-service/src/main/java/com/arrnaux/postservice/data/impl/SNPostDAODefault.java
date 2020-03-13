@@ -142,7 +142,7 @@ public class SNPostDAODefault implements SNPostDAO {
         SNPost currentPost;
 
         // Find the first post. It will be used to retrieve posts that are older than it.
-        if (snPostId.equals("-1")) {
+        if (snPostId.equals("0")) {
             Optional<SNPost> snPostOptional;
             if (postVisibility == PostVisibility.NONE) {
                 snPostOptional = snPostRepository.findFirstByOwnerIdInOrderByCreationDateDesc(userIds);
@@ -157,7 +157,7 @@ public class SNPostDAODefault implements SNPostDAO {
         if (null != currentPost) {
             Date currentPostDate = currentPost.getCreationDate();
             Query query = new Query()
-                    .addCriteria(Criteria.where("creationDate").lte(currentPostDate))
+                    .addCriteria(Criteria.where("creationDate").lt(currentPostDate))
                     .addCriteria(Criteria.where("ownerId").in(userIds))
                     .limit(nrOfPostToBeRetrieved)
                     .with(Sort.by(Sort.Direction.DESC, "creationDate"));
