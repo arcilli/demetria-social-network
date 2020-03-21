@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: post-service
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017
+      database: test
+      repositories:
+        #        TODO: this is deprecated, use something else.
+        enabled: true
 
 eureka:
   instance:

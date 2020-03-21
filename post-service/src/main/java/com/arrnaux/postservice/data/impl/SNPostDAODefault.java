@@ -7,13 +7,12 @@ import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.demetria.core.models.userPost.Vote;
 import com.arrnaux.postservice.data.SNPostDAO;
 import com.arrnaux.postservice.data.SNPostRepository;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,7 +35,9 @@ public class SNPostDAODefault implements SNPostDAO {
 
     private final SNPostRepository snPostRepository;
 
-    private MongoOperations mongoOps = new MongoTemplate(MongoClients.create(), "test");
+    @Autowired
+    MongoOperations mongoOps;
+//    private MongoOperations mongoOps = new MongoTemplate(MongoClients.create(), "test");
 
     public SNPostDAODefault(SNPostRepository snPostRepository) {
         this.snPostRepository = snPostRepository;

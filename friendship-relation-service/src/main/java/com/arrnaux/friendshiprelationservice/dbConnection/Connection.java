@@ -1,6 +1,7 @@
 package com.arrnaux.friendshiprelationservice.dbConnection;
 
 import com.orientechnologies.orient.core.db.ODatabaseSession;
+import com.orientechnologies.orient.core.db.ODatabaseType;
 import com.orientechnologies.orient.core.db.OrientDB;
 import com.orientechnologies.orient.core.db.OrientDBConfig;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
@@ -9,6 +10,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
@@ -17,7 +24,14 @@ import org.springframework.stereotype.Component;
 @Setter
 
 @Component
+@Log4j
+@Configuration
+@EnableConfigurationProperties
 public class Connection {
+
+    @Value("${orientdb.connection.service.name}")
+    private String serviceName;
+
     OrientDB database = null;
     ODatabaseSession session = null;
 
@@ -34,7 +48,21 @@ public class Connection {
     }
 
     private void loadDBDefaultConfig() {
-        database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
+        if (null != serviceName) {
+            log.info("Environment property: " + serviceName);
+            String connectionURL = "remote:" + serviceName;
+            database = new OrientDB(connectionURL, OrientDBConfig.defaultConfig());
+        } else {
+            log.info("Checking for localhost database.");
+            database = new OrientDB("remote:localhost", OrientDBConfig.defaultConfig());
+        }
+        // Creates the database.
+        try {
+            database.open("test", "admin", "admin");
+        } catch (Exception e) {
+            database.create("test", ODatabaseType.PLOCAL);
+            database.close();
+        }
     }
 
     private void newSessionDefaultConfig() {

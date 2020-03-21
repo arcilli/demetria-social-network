@@ -5,6 +5,4 @@ FROM openjdk:8-jre
 
 RUN mkdir /usr/local/eureka-server
 COPY target/eureka-server-0.0.1-SNAPSHOT.jar /usr/local/eureka-server/
-COPY Docker/run.sh /
-RUN chmod +x run.sh
-CMD ./run.sh
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/usr/local/eureka-server/eureka-server-0.0.1-SNAPSHOT.jar"]

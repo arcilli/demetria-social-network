@@ -64,7 +64,7 @@ public class ProfileController {
                     .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser));
             modelAndView.setViewName("profile");
         } else {
-            // The user does not exists.
+            // The user does not exist.
             modelAndView.setViewName("error");
         }
         return modelAndView;

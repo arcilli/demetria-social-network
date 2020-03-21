@@ -1,7 +1,4 @@
 FROM openjdk:8-jre
-
 RUN mkdir /usr/local/frontend
 COPY target/front-end-1.0-SNAPSHOT.jar /usr/local/frontend
-COPY Docker/frontend.sh /
-RUN chmod +x frontend.sh
-CMD ./frontend.sh
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/usr/local/frontend/front-end-1.0-SNAPSHOT.jar"]
