@@ -13,22 +13,25 @@ services:
       - "8080:8080"
     networks:
       - my-overlay
-    #  post-service:
-    #    image: arcilli/demetria-post-service:0.0.1-SNAPSHOT
-    #    ports:
-    #      - "8083:8083"
-    #    networks:
-    #      - my-overlay
+  post-service:
+    image: arcilli/demetria-post-service:1.0-SNAPSHOT
+    ports:
+      - "8083:8083"
+    networks:
+      - my-overlay
   front-end:
     image: arcilli/demetria-front-end:1.0-SNAPSHOT
     ports:
       - "8081:8081"
     networks:
       - my-overlay
-  #  friendship-relation:
-  #    image: arcilli/demetria-friendship-relation:0.0.1-SNAPSHOT
-  #    ports:
-  #    - "8082:8082"
+  friendship-relation:
+    image: arcilli/demetria-friendship-relation-service:1.0-SNAPSHOT
+    ports:
+      - "8082:8082"
+    networks:
+      - my-overlay
+  # TODO: add volumes
   mongo:
     image: mongo
     ports:
@@ -37,9 +40,11 @@ services:
       - "27019:27019"
     networks:
       - my-overlay
-#  orient-db:
-#    image:
-#    port:
+  orient-db:
+   image: orientdb:latest
+   ports:
+     - "2424:2424"
+     - "2480:24"
 networks:
   my-overlay:
     driver: overlay
