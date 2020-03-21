@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: user-service
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017
+      database: test
+      host: mongo
+      port: 27017
+      repositories:
+        #        TODO: this is deprecated, use something else.
+        enabled: true
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 2
+    hostname: user-service
+    preferIpAddress: false
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+    registry-fetch-interval-seconds: 2

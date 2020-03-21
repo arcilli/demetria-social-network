@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>front-end</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>front-end</name>
     <description>Demo project for Spring Boot</description>
 
@@ -66,24 +66,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>com.spotify</groupId>-->
-            <!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
-            <!--                <version>1.4.13</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>default</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>build</goal>-->
-            <!--                            <goal>push</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    <repository>arcilli/demetria-front-end</repository>-->
-            <!--                    <tag>${project.version}</tag>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>arcilli/demetria-front-end</repository>
+                    <tag>${project.version}</tag>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
