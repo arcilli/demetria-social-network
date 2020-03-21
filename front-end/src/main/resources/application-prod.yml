@@ -3,9 +3,6 @@ server:
 spring:
   application:
     name: front-end
-  thymeleaf:
-    mode: HTML5
-    cache: false
 
 eureka:
   instance:

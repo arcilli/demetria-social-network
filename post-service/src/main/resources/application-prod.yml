@@ -1,0 +1,17 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: post-service
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 2
+    hostname: post-service
+    preferIpAddress: false
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+    registry-fetch-interval-seconds: 2

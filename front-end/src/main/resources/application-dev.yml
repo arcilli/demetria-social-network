@@ -3,8 +3,9 @@ server:
 spring:
   application:
     name: front-end
-  template:
-    cache:false
+  thymeleaf:
+    mode: HTML5
+    cache: false
 
 eureka:
   instance:

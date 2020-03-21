@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>friendship-relation-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>friendship-relation-service</name>
     <description>Service serving the friendship relation</description>
 
