@@ -1,20 +1,22 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 @RequestMapping("settings")
+@Log
 public class SettingsController {
 
     final
@@ -43,6 +45,7 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
+            log.info("User: " + loggedUser.toString() + "is changing his information.");
             loggedUser.updateObjectWithNotNullValues(modifiedUser);
             try {
                 ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/settings/profile",
