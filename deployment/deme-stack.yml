@@ -8,13 +8,13 @@ services:
     networks:
       - my-overlay
   user-service:
-    image: arcilli/demetria-user-service:1.0-SNAPSHOT
+    image: arcilli/demetria-user-service:2.0-SNAPSHOT
     ports:
       - "8080:8080"
     networks:
       - my-overlay
   post-service:
-    image: arcilli/demetria-post-service:1.0-SNAPSHOT
+    image: arcilli/demetria-post-service:2.0-SNAPSHOT
     ports:
       - "8083:8083"
     networks:
@@ -32,19 +32,39 @@ services:
     networks:
       - my-overlay
   # TODO: add volumes
-  mongo:
+  rs1:
     image: mongo
+    command: mongod --replSet "rs0"
+    networks:
+      - my-overlay
+  rs2:
+    image: mongo
+    command: mongod --replSet "rs0"
+    networks:
+      - my-overlay
+  rs3:
+    image: mongo
+    command: mongod --replSet "rs0"
+    networks:
+      - my-overlay
+  rs-setup:
+    image: arcilli/demetria-mongo-replicas:1.0-SNAPSHOT
+    networks:
+      - my-overlay
     ports:
       - "27017:27017"
       - "27018:27018"
       - "27019:27019"
-    networks:
-      - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
   orient-db:
-   image: orientdb:latest
-   ports:
-     - "2424:2424"
-     - "2480:24"
+    image: orientdb:latest
+    ports:
+      - "2424:2424"
+      - "2480:24"
 networks:
   my-overlay:
     driver: overlay
