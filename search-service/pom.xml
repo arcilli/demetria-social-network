@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>search-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>search-service</name>
     <description>Demetria search service</description>
 
