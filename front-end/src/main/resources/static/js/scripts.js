@@ -187,6 +187,9 @@ $(function () {
         return userName;
     }
 
+    /**
+     * Used in timeline, for displaying more posts.
+     */
     $('.show-more-button').on('click', function () {
         let targetUrl = "/timeline/showMore";
         $.ajax({

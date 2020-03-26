@@ -4,6 +4,7 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -21,8 +22,12 @@ import java.util.List;
 @ToString(callSuper = true)
 @Document(collection = "post")
 public class SNPost {
+
     @Id
     private String id;
+
+    @Transient
+    public static final String DEFAULT_POST_ID = "0";
 
     private String ownerId;
 
@@ -62,6 +67,4 @@ public class SNPost {
                 mapToDouble(Vote::getValue)
                 .average().orElse(-1);
     }
-
-
 }

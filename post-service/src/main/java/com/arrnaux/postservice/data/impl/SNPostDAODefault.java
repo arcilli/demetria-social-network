@@ -10,7 +10,6 @@ import com.arrnaux.postservice.data.SNPostRepository;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j;
 import org.bson.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -35,12 +34,11 @@ public class SNPostDAODefault implements SNPostDAO {
 
     private final SNPostRepository snPostRepository;
 
-    @Autowired
-    MongoOperations mongoOps;
-//    private MongoOperations mongoOps = new MongoTemplate(MongoClients.create(), "test");
+    private final MongoOperations mongoOps;
 
-    public SNPostDAODefault(SNPostRepository snPostRepository) {
+    public SNPostDAODefault(SNPostRepository snPostRepository, MongoOperations mongoOps) {
         this.snPostRepository = snPostRepository;
+        this.mongoOps = mongoOps;
     }
 
     @Override
@@ -133,17 +131,29 @@ public class SNPostDAODefault implements SNPostDAO {
         return 0;
     }
 
+    /**
+     * @param nrOfPostToBeRetrieved
+     * @param snPostId              is the last post displayed. It is a partial object. Only the id field will be populated.
+     *                              If it's equal to DEFAULT_POST_ID, no posts has been displayed yet.
+     * @param userIds
+     * @param postVisibility
+     * @return a number of nrOfPostsToBeRetrieved public posts that have the snPostId timestamp lower than snPostId
+     * and are owned by an user from userIds.
+     */
     @Nullable
     @Override
     public List<SNPost> getMorePostsFromUsers(Integer nrOfPostToBeRetrieved, String snPostId, List<String> userIds,
                                               PostVisibility postVisibility) {
-        // select nrOfPostsToBeRetrieved public posts that have the snPostId timestamp lower than snPostId
-        // and that are owned by an user from userIds.
 
         SNPost currentPost;
+        Query query = new Query();
 
-        // Find the first post. It will be used to retrieve posts that are older than it.
-        if (snPostId.equals("0")) {
+        // Find the post with postId equals to snPostId.
+        if (!snPostId.equals(SNPost.DEFAULT_POST_ID)) {
+            currentPost = getPostById(snPostId);
+        } else {
+            // The is no post displayed yet.
+            // Find the last one
             Optional<SNPost> snPostOptional;
             if (postVisibility == PostVisibility.NONE) {
                 snPostOptional = snPostRepository.findFirstByOwnerIdInOrderByCreationDateDesc(userIds);
@@ -152,20 +162,22 @@ public class SNPostDAODefault implements SNPostDAO {
                         findFirstByOwnerIdInAndVisibilityOrderByCreationDateDesc(userIds, postVisibility);
             }
             currentPost = snPostOptional.orElse(null);
-        } else {
-            currentPost = getPostById(snPostId);
         }
         if (null != currentPost) {
             Date currentPostDate = currentPost.getCreationDate();
-            Query query = new Query()
-                    .addCriteria(Criteria.where("creationDate").lt(currentPostDate))
-                    .addCriteria(Criteria.where("ownerId").in(userIds))
+            query.addCriteria(Criteria.where("ownerId").in(userIds))
                     .limit(nrOfPostToBeRetrieved)
                     .with(Sort.by(Sort.Direction.DESC, "creationDate"));
-
             if (postVisibility != PostVisibility.NONE) {
-                // The postVisibility matters, so taking in consideration when the query is made.
+                // The postVisibility matters, so take in consideration when the query is made.
                 query.addCriteria(Criteria.where("visibility").is(postVisibility));
+            }
+
+            // If snPostId is SNPost.DEFAULT_POST_ID, then exclude currentPost since it's already displayed.
+            if (!snPostId.equals(SNPost.DEFAULT_POST_ID)) {
+                query.addCriteria(Criteria.where("creationDate").lt(currentPostDate));
+            } else {
+                query.addCriteria(Criteria.where("creationDate").lte(currentPostDate));
             }
             return mongoOps.find(query, SNPost.class);
         }

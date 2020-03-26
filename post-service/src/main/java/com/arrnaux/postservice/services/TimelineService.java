@@ -39,7 +39,7 @@ public class TimelineService {
 
     /**
      * @param loggedUser
-     * @param lastShowedId is equal to -1 if no post has been displayed so far.
+     * @param lastShowedId is equal to SNPost.DEFAULT_POST_ID if no post has been displayed so far.
      * @return
      */
     @RequestMapping(value = "showMorePosts/{lastShowedId}", method = RequestMethod.POST)
@@ -95,11 +95,11 @@ public class TimelineService {
             return null;
         }
 
-        List<String> ids = new ArrayList<>();
-        ids.add(targetUser.getId());
+        List<String> ownersIds = new ArrayList<>();
+        ownersIds.add(targetUser.getId());
 
         List<SNPost> postsToBeDisplayed;
-        postsToBeDisplayed = getPostsFromUsers(ids, lastShowedId, postVisibility);
+        postsToBeDisplayed = getPostsFromUsers(ownersIds, lastShowedId, postVisibility);
 
         if (null != postsToBeDisplayed) {
             for (SNPost snPost : postsToBeDisplayed) {
