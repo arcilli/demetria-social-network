@@ -4,6 +4,8 @@ package com.arrnaux.user.data;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
+
 public interface SNUserDAO {
 
     @Nullable
@@ -25,4 +27,7 @@ public interface SNUserDAO {
 
     @Nullable
     SNUser findUserByUsername(String userName);
+
+    @Nullable
+    List<SNUser> findUserByNameQuery(String[] namesTerms);
 }

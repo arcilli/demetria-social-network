@@ -1,4 +1,4 @@
-package com.arrnaux.user.services;
+package com.arrnaux.user.services.settings;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;

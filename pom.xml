@@ -20,7 +20,6 @@
     </properties>
 
     <modules>
-        <!--        <module>demetria-core</module>-->
         <module>user-service</module>
         <module>post-service</module>
         <module>front-end</module>

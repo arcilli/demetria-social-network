@@ -1,14 +1,19 @@
 package com.arrnaux.user.data.impl;
 
-import com.arrnaux.user.data.SNUserDAO;
-import com.arrnaux.user.data.SNUserRepository;
 import com.arrnaux.demetria.core.models.userAccount.PasswordUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.user.data.SNUserDAO;
+import com.arrnaux.user.data.SNUserRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor
@@ -18,6 +23,9 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Autowired
     private SNUserRepository snUserRepository;
+
+    @Autowired
+    private MongoOperations mongoOperations;
 
     @Nullable
     @Override
@@ -66,5 +74,14 @@ public class SNUserDAODefault implements SNUserDAO {
     @Nullable
     public SNUser findUserByUsername(String username) {
         return snUserRepository.findByUserName(username).orElse(null);
+    }
+
+    @Override
+    @Nullable
+    public List<SNUser> findUserByNameQuery(String[] namesTerms) {
+        Query query = new Query()
+                .addCriteria(Criteria.where("lastName").in(Arrays.asList(namesTerms)))
+                .addCriteria(Criteria.where("firstName").in(Arrays.asList(namesTerms)));
+        return mongoOperations.find(query, SNUser.class);
     }
 }
