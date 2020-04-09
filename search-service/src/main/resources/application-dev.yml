@@ -1,3 +1,9 @@
+logging:
+  level:
+    org:
+      springframework:
+        data: debug
+
 server:
   port: 8085
 spring:
@@ -14,8 +20,3 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
     registry-fetch-interval-seconds: 2
-logging:
-  level:
-    org:
-      springframework:
-        data: debug
