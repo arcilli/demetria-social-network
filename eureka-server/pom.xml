@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>eureka-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>eureka-server</name>
     <description>Demo project for Spring Boot</description>
 
