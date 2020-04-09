@@ -6,8 +6,8 @@
 </head>
 
 <body>
-    <!--    Display a menu nav or a nav with login/register buttons-->
-    <span th:fragment="top-bar">
+<!--    Display a menu nav or a nav with login/register buttons-->
+<span th:fragment="top-bar">
         <th:block th:if="${session.user != null} and ${session.user != ''}">
             <span th:replace="fragments/header :: top-menu-nav"></span>
         </th:block>
@@ -16,61 +16,65 @@
         </th:block>
     </span>
 
-    <!--Nav menu for a logged user-->
-    <nav th:if="${session.user != null} and ${session.user != ''}" th:fragment="top-menu-nav"
-        class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+<!--Nav menu for a logged user-->
+<nav th:if="${session.user != null} and ${session.user != ''}" th:fragment="top-menu-nav"
+     class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:if="${session.user != null}"
-                        th:href="@{'/profiles/' + ${session.user.userName}}">Profile<span
-                            class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-            <!--        display a dropdown menu with logout & user settings-->
-            <a href="/logout">
-                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Logout</button>
-            </a>
-            <a href="/settings/profile">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Account settings</button>
-            </a>
-        </div>
-    </nav>
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:if="${session.user != null}"
+                   th:href="@{'/profiles/' + ${session.user.userName}}">Profile<span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li>
+                <th:block th:replace="fragments/search :: query-box">
+                </th:block>
+            </li>
+        </ul>
+        <!--        display a dropdown menu with logout & user settings-->
+        <a href="/logout">
+            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Logout</button>
+        </a>
+        <a href="/settings/profile">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Account settings</button>
+        </a>
+    </div>
+</nav>
 
-    <th:block th:fragment="headerIncludes">
-        <!--    Bootstrap css-->
-        <link rel="stylesheet" th:href="@{/css/style.css}" />
-        <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}" />
-        <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}" />
-        <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}" />
-        <!--    Used for star rating-->
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+<th:block th:fragment="headerIncludes">
+    <!--    Bootstrap css-->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}"/>
+    <!--    Used for star rating-->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
-        <script th:src="@{/js/scripts.js}"></script>
-    </th:block>
+    <script th:src="@{/js/scripts.js}"></script>
+</th:block>
 
-    <!--A header element (instead of a nav) for a visitor that is not logged-->
-    <th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
-        You are not logged in.
-        <a href="/login">
-            <button>Login</button>
-        </a>... or
-        <button>Register</button>
-    </th:block>
+<!--A header element (instead of a nav) for a visitor that is not logged-->
+<th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
+    You are not logged in.
+    <a href="/login">
+        <button>Login</button>
+    </a>... or
+    <button>Register</button>
+</th:block>
 </body>
 
 </html>
