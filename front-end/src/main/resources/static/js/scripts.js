@@ -232,22 +232,4 @@ $(function () {
             }
         })
     });
-
-    $('.top-search-form').on('submit', function (event) {
-        // event.preventDefault();
-        // let form = this;
-
-        // $.ajax({
-        //     url: form.action,
-        //     type: 'POST',
-        //     contentType: 'text/plain',
-        //     data: this[0].value,
-        //     success: function (result) {
-        //         console.log("succes");
-        //     },
-        //     error: function (result) {
-        //         console.log("error");
-        //     }
-        // });
-    });
 });

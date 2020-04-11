@@ -34,13 +34,10 @@ public class SearchService {
      */
     @RequestMapping(value = "user", method = RequestMethod.POST)
     public List<SNUser> searchForUser(@RequestBody String query) {
-        // ar trebui sa fac split pe query
-        // si sa vad daca toate cuvintele din
-
         String[] queryTerms = query.split("\\s");
         log.info("Searching user with: " + Arrays.toString(queryTerms));
 
-        // make a call to user-service & retrieve a list with persons that correspond to the search criteria
+        // Retrieve a list with persons that correspond to the search criteria.
         String targetURL = "http://user-service/search/user";
         List<SNUser> users = restTemplate.exchange(targetURL, HttpMethod.POST, new HttpEntity<>(queryTerms),
                 new ParameterizedTypeReference<List<SNUser>>() {

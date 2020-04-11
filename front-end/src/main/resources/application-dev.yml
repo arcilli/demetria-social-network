@@ -1,11 +1,14 @@
 server:
   port: 8081
+
 spring:
   application:
     name: front-end
   thymeleaf:
     mode: HTML5
     cache: false
+  profiles:
+    active: dev
 
 eureka:
   instance:
