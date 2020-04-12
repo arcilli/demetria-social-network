@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   eureka-server:
-    image: arcilli/demetria-eureka-server:0.0.1-SNAPSHOT
+    image: arcilli/demetria-eureka-server:1.0-SNAPSHOT
     ports:
       - "8761:8761"
     networks:
@@ -31,7 +31,6 @@ services:
       - "8082:8082"
     networks:
       - my-overlay
-  # TODO: add volumes
   rs1:
     image: mongo
     command: mongod --replSet "rs0"
@@ -54,7 +53,7 @@ services:
     volumes:
       - mongo-rs3:/data/db
   rs-setup:
-    image: arcilli/demetria-mongo-replicas:2.0-SNAPSHOT
+    image: arcilli/demetria-mongo-replicas:2.2
     networks:
       - my-overlay
     ports:
@@ -66,6 +65,7 @@ services:
         condition: on-failure
         delay: 10s
         max_attempts: 10
+  # TODO: add volumes
   orient-db:
     image: orientdb:latest
     ports:
