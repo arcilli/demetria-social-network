@@ -42,11 +42,12 @@ public class SearchService {
         List<SNUser> users = restTemplate.exchange(targetURL, HttpMethod.POST, new HttpEntity<>(queryTerms),
                 new ParameterizedTypeReference<List<SNUser>>() {
                 }).getBody();
-        // TODO: if no exact match was found, return a partial one.
         if (null != users) {
             for (SNUser user : users) {
                 user.obfuscateUserInformation();
             }
+        } else {
+            // TODO: if no exact match was found, return a partial one.
         }
         return users;
     }

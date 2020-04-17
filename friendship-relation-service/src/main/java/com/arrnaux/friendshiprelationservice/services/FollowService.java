@@ -40,7 +40,7 @@ public class FollowService {
         ResponseEntity<SNUser> responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
         if (null != responseEntity.getBody()) {
             SNUser user = responseEntity.getBody();
-            sourceVertex = followRelationDAO.storePerson(
+            sourceVertex = followRelationDAO.storePerson(++++
                     new GraphPersonEntity(user));
         }
         target = "http://user-service/users/info/" + targetUserName;

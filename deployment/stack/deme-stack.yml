@@ -65,12 +65,20 @@ services:
         condition: on-failure
         delay: 10s
         max_attempts: 10
-  # TODO: add volumes
   orient-db:
     image: orientdb:latest
     ports:
       - "2424:2424"
       - "2480:2480"
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd
+    volumes:
+      - orient-config:/orientdb/config
+      - orient-databases:/orientdb/databases
+      - orient-backup:/orientdb/backup
+    networks:
+      - my-overlay
+## Add a service that setup the initial data for orientdb.
 networks:
   my-overlay:
     driver: overlay
@@ -81,4 +89,10 @@ volumes:
   mongo-rs2:
     external: false
   mongo-rs3:
+    external: false
+  orient-config:
+    external: false
+  orient-databases:
+    external: false
+  orient-backup:
     external: false

@@ -1,0 +1,13 @@
+version: '3'
+services:
+  odb1:
+    image: arcilli/demetria-orientdb-distr:3.0.30-1
+    volumes:
+      - /var/configs/:/orientdb/config
+      - /var/databases:/orientdb/databases
+    environment:
+      ORIENTDB_ROOT_PASSWORD: root
+      ORIENTDB_NAME_NODE: odb1
+    ports:
+      - "2424:2424"
+      - "2480:2480"
