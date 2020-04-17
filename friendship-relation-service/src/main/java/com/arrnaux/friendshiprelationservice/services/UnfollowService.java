@@ -3,15 +3,18 @@ package com.arrnaux.friendshiprelationservice.services;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.orientechnologies.orient.core.record.OEdge;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("unfollow")
 public class UnfollowService {
 
-    @Autowired
+    final
     FollowRelationDAO followRelationDAO;
+
+    public UnfollowService(FollowRelationDAO followRelationDAO) {
+        this.followRelationDAO = followRelationDAO;
+    }
 
     @RequestMapping(value = "{usernameToBeUnfollowed}", method = RequestMethod.POST)
     public Boolean unfollowUser(@PathVariable("usernameToBeUnfollowed") String usernameToBeUnfollowed,

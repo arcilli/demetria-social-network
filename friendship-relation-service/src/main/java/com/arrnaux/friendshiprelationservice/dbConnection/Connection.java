@@ -60,6 +60,7 @@ public class Connection {
         try {
             database.open("test", "admin", "admin");
         } catch (Exception e) {
+            // Create the database if it doesn't exist.
             database.create("test", ODatabaseType.PLOCAL);
             database.close();
         }

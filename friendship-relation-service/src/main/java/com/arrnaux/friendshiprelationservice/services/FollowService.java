@@ -6,7 +6,6 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class FollowService {
     final
     RestTemplate restTemplate;
 
-    public FollowService(FollowRelationDAO followRelationDAO, @LoadBalanced RestTemplate restTemplate) {
+    public FollowService(FollowRelationDAO followRelationDAO, RestTemplate restTemplate) {
         this.followRelationDAO = followRelationDAO;
         this.restTemplate = restTemplate;
     }
@@ -40,8 +39,7 @@ public class FollowService {
         ResponseEntity<SNUser> responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
         if (null != responseEntity.getBody()) {
             SNUser user = responseEntity.getBody();
-            sourceVertex = followRelationDAO.storePerson(++++
-                    new GraphPersonEntity(user));
+            sourceVertex = followRelationDAO.storePerson(new GraphPersonEntity(user));
         }
         target = "http://user-service/users/info/" + targetUserName;
         responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
