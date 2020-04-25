@@ -23,7 +23,7 @@ $(function () {
     });
 
     // ajax request for deleting a post
-    $('posts-wrapper').on('click', '.deletePostButton', function () {
+    $('.posts-wrapper').on('click', '.deletePostButton', function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
                 var arr = { id: this.id };
