@@ -7,6 +7,7 @@
 </head>
 
 <body>
+
     <span th:fragment="profileOwnerInfo" th:object="${profileOwner}">
         <h3 th:text="${profileOwner.lastName+' '+profileOwner.FirstName}"></h3>
     </span>
@@ -21,7 +22,7 @@
             </th:block>
         </th:block>
     </th:block>
-    
+
     <footer>
         <th:block th:replace="fragments/footer: stars-js"></th:replace>
     </footer>

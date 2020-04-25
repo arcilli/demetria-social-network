@@ -20,10 +20,10 @@
 
 <td th:fragment=createComment(postId) th:if="${newComment != null}">
     <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
-        <input type="text" th:field="*{content}" placeholder="Add comment"/>
+        <input type="text" class="form-control" th:field="*{content}" placeholder="Add comment"/>
         <input type="hidden" name="id" th:value="${postId}"/>
-        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment
-        </button>
+        <br/>
+        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment</button>
     </form>
 </td>
 
@@ -31,6 +31,8 @@
     <article class="userPost" th:id="${post.id}">
         <div class="postHeader flex-container">
             <div class="postOwner">
+                <img src="https://image.stirileprotv.ro/media/images/1408x882/Mar2019/62029378.jpg" alt="profile_photo"
+                     class="image-post">
                 <a th:href="@{'/profiles/' + ${post.owner.userName}}"
                    th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
             </div>
@@ -42,12 +44,18 @@
                 </a>
                 <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span></span>
             </div>
+            <th:block th:if="${session.user != null and session.user.id == post.ownerId}">
+                <button type="button" class="btn btn-link btn-sm deletePostButton">Delete
+                    post
+                </button>
+            </th:block>
         </div>
         <div class="postContent" th:text="${post.content}"></div>
         <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
         <td th:if="${session.user != null}">
             <span th:replace="fragments/posts :: rateStarts"></span>
         </td>
+        <br/>
         <div class="postComments">
             <div class="postComment " th:each="comment : ${post.commentList}">
                 <div>
@@ -58,11 +66,6 @@
             </div>
             <div>
                 <form th:replace="fragments/posts :: createComment(${post.id})"></form>
-                <td th:if="${session.user != null and session.user.id == post.ownerId}">
-                    <button type="button" class="btn btn-outline-danger btn-sm deletePostButton">Delete
-                        post
-                    </button>
-                </td>
             </div>
         </div>
     </article>

@@ -7,18 +7,56 @@
 </head>
 
 <body>
-    <!--TODO: add user image-->
-    <nav th:replace="fragments/header :: top-bar"></nav>
-    <div class="profile-information">
-        <span th:replace="fragments/userProfileInfo :: profileOwnerInfo"></span>
-        <span th:replace="fragments/userProfileInfo :: followButton"></span>
+
+<nav th:replace="fragments/header :: top-bar"></nav>
+
+<div class="container custom-container">
+    <div class="row">
+        <!--TODO: add user image-->
+        <div class="col-3">
+            <div class="card custom-box">
+                <img class="card-img-top" src="https://image.stirileprotv.ro/media/images/1408x882/Mar2019/62029378.jpg" alt="profile_photo">
+                <div class="card-body">
+                    <div class="profile-information">
+                        <span th:replace="fragments/userProfileInfo :: profileOwnerInfo"></span>
+                        <span th:replace="fragments/userProfileInfo :: followButton"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="card custom-box">
+                <div class="text-center my-posts">
+                    <h3 class="card-header">My posts</h3>
+                </div>
+                <div class="card-body">
+                    <div class="posts-wrapper">
+                        <th:block th:replace="fragments/timeline :: timeline-part">
+                        </th:block>
+                        <button class="profile-show-more-button btn btn-outline-primary my-2 my-sm-0">
+                            Show more posts
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <h3>My posts:</h3>
-    <div class="posts-wrapper">
-        <th:block th:replace="fragments/timeline :: timeline-part">
-        </th:block>
-        <button class="profile-show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
-    </div>
+</div>
+
+<!--&lt;!&ndash;TODO: add user image&ndash;&gt;-->
+<!--<nav th:replace="fragments/header :: top-bar"></nav>-->
+<!--<div class="profile-information">-->
+<!--    <span th:replace="fragments/userProfileInfo :: profileOwnerInfo"></span>-->
+<!--    <span th:replace="fragments/userProfileInfo :: followButton"></span>-->
+<!--</div>-->
+<!--<h3>My posts:</h3>-->
+<!--<div class="posts-wrapper">-->
+<!--    <th:block th:replace="fragments/timeline :: timeline-part">-->
+<!--    </th:block>-->
+<!--    <button class="profile-show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>-->
+<!--</div>-->
+
 </body>
 
 </html>

@@ -7,18 +7,41 @@
 </head>
 
 <body>
-    <nav th:replace="fragments/header :: top-bar"></nav>
-    Hello there, little one! :) You are logged-in.<br />
-    <h1>This page will contain posts from my friends.</h1>
-    <div class="body-header"></div>
-    <div class="main-content">
-        <div th:replace="fragments/forms :: createAPost"></div>
-        <b>Timeline from friends</b>
-        <div class="posts-wrapper">
-            <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
+
+<nav th:replace="fragments/header :: top-bar"></nav>
+
+<div class="container custom-container">
+    <div class="row">
+        <div class="col-12 custom-box">
+            <div th:replace="fragments/forms :: createAPost"></div>
         </div>
     </div>
-    <div class="body-footer"></div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Timeline from friends</h5>
+                    <div class="posts-wrapper">
+                        <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--    <h1>This page will contain posts from my friends.</h1>-->
+<!--    <div class="body-header"></div>-->
+<!--    <div class="main-content">-->
+<!--        <div th:replace="fragments/forms :: createAPost"></div>-->
+<!--        <b>Timeline from friends</b>-->
+<!--        <div class="posts-wrapper">-->
+<!--            <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="body-footer"></div>-->
+
 </body>
 
 </html>

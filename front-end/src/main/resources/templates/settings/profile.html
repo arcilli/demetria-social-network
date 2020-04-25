@@ -6,9 +6,15 @@
 </head>
 <body>
 <nav th:replace="fragments/header :: top-bar"></nav>
-<div class="profile">
-    <div th:replace="fragments/forms :: userSettings"></div>
-    <!--<div th:replace="fragments/forms :: changePass"></div>-->
+<div class="container custom-container">
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="profile">
+                <div th:replace="fragments/forms :: userSettings"></div>
+                <!--<div th:replace="fragments/forms :: changePass"></div>-->
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

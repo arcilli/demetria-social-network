@@ -11,6 +11,7 @@
         <th:block th:each="post : ${posts}">
             <th:block th:replace="fragments/posts :: displayPost(${post})">
             </th:block>
+            <hr>
         </th:block>
     </th:block>
 </body>

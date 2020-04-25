@@ -1,3 +1,45 @@
+body {
+    background-color: #f7f7f9 !important;
+}
+
+.custom-container {
+    margin-top: 15px;
+}
+
+.custom-box {
+    margin-bottom: 15px;
+}
+
+.custom-button {
+    margin-right: 10px;
+}
+
+.custom-textarea {
+    overflow: hidden;
+    min-height: 80px;
+    width: 500px;
+}
+
+.image-post {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 30px;
+    height: 30px;
+}
+
+.my-posts {
+    background: #343a40;
+    color: white;
+}
+
+.not-logged {
+    color: white;
+}
+
+.deletePostButton {
+    margin-bottom: 3px;
+}
+
 .flex-container {
     display: flex;
 }
@@ -10,7 +52,8 @@
 }
 
 #loginForm {
-    max-width: 30%;
+    /*max-width: 30%;*/
+    max-width: 100%;
 }
 
 /*Star ranking*/
@@ -48,10 +91,10 @@ span.active a.active ~ a:after {
 }
 
 span:hover a:after {
-    color: blue !important;
+    color: #ffd700 !important;
 }
 
 span.active a:after,
 .stars a.active:after {
-    color: blue;
+    color: #ffd700;
 }
