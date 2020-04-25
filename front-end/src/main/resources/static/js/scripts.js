@@ -26,7 +26,7 @@ $(function () {
     $('.posts-wrapper').on('click', '.deletePostButton', function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
-                var arr = { id: this.id };
+                var arr = {id: this.id};
                 $.ajax({
                     url: "/deletePost",
                     type: 'DELETE',

@@ -7,17 +7,17 @@
 </head>
 
 <body>
-    <!--display this only if user has not successfully registered, else display a button that redirects on login-->
-    <!--th:object will be the object that will be populated with data when the form is submitted-->
-    <div th:if="${userCreated == true}">
-        <span>The account has been created.</span>
-        <a href="/login">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
-        </a>
-    </div>
-    <div th:replace="fragments/forms :: registerFragment">
+<!--display this only if user has not successfully registered, else display a button that redirects on login-->
+<!--th:object will be the object that will be populated with data when the form is submitted-->
+<div th:if="${userCreated == true}">
+    <span>The account has been created.</span>
+    <a href="/login">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
+    </a>
+</div>
+<div th:replace="fragments/forms :: registerFragment">
 
-    </div>
+</div>
 </body>
 
 </html>

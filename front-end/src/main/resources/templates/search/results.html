@@ -7,14 +7,14 @@
 </head>
 
 <body>
-    <nav th:replace="fragments/header :: top-bar"></nav>
-    Found users:
-    <th:block th:if="${null != foundUsers}" th:each="user: ${foundUsers}">
-        <!-- insert photo here -->
-        <h3>
-            <a th:href="@{'/profiles/' + ${user.userName}}" th:text="${user.firstName}+' '+${user.lastName}">
-            </a></h3>
-    </th:block>
+<nav th:replace="fragments/header :: top-bar"></nav>
+Found users:
+<th:block th:if="${null != foundUsers}" th:each="user: ${foundUsers}">
+    <!-- insert photo here -->
+    <h3>
+        <a th:href="@{'/profiles/' + ${user.userName}}" th:text="${user.firstName}+' '+${user.lastName}">
+        </a></h3>
+</th:block>
 </body>
 
 </html>
