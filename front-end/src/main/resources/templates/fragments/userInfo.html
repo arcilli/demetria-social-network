@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span th:fragment="userFullName(user)">
+        <th:block th:text="${user.getFullName()}"></th:block>
+</span>
+
+<th:block th:fragment="userPhoto(user)">
+    <th:block th:if="${null == user.profileImageBase64}">
+        <img class="img-fluid"
+             src="https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-7.png"
+             th:alt="${user.getFullName()}" th:id="${'pp-'+user.id}"/>
+    </th:block>
+    <th:block th:if="${null != user.profileImageBase64}">
+        <img class="img-fluid"
+             th:src="${user.profileImageBase64}" th:alt="${user.getFullName()}" th:id="${'pp-'+user.id}"/>
+    </th:block>
+</th:block>
+</body>
+</html>

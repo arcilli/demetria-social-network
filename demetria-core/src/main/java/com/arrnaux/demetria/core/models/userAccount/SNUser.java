@@ -1,5 +1,6 @@
 package com.arrnaux.demetria.core.models.userAccount;
 
+import com.mongodb.lang.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,6 +29,15 @@ public class SNUser extends SNUserLoginDTO {
     @NotNull
     protected String userName;
 
+    @Nullable
+    protected String profileImageBase64;
+
+    /**
+     * Adapter from SNUserRegistrationDTO to SNUser
+     *
+     * @param snUserRegistrationDTO represents the extended information for an user (the user with validation for
+     *                              password)
+     */
     public SNUser(SNUserRegistrationDTO snUserRegistrationDTO) {
         super(snUserRegistrationDTO.getEmail(), snUserRegistrationDTO.getPassword());
         this.firstName = snUserRegistrationDTO.getFirstName();
@@ -43,5 +53,21 @@ public class SNUser extends SNUserLoginDTO {
     public SNUser obfuscateUserInformation() {
         this.setPassword("");
         return this;
+    }
+
+    /**
+     * Used in Thymleaf.
+     *
+     * @return a full name of an user.
+     */
+    public String getFullName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (null != firstName) {
+            stringBuilder.append(firstName);
+            if (null != lastName) {
+                stringBuilder.append(' ' + lastName);
+            }
+        }
+        return stringBuilder.toString();
     }
 }

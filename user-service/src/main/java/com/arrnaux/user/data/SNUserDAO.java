@@ -30,4 +30,7 @@ public interface SNUserDAO {
 
     @Nullable
     List<SNUser> findUserByNameQuery(String[] namesTerms);
+
+    @Nullable
+    SNUser replaceProfileImage(SNUser snUser, String encodedProfileImage);
 }

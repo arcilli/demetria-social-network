@@ -8,10 +8,6 @@
 
 <body>
 
-<span th:fragment="profileOwnerInfo" th:object="${profileOwner}">
-        <h3 th:text="${profileOwner.lastName+' '+profileOwner.FirstName}"></h3>
-    </span>
-
 <th:block th:fragment="followButton" th:if="${session.user} != null" }>
     <th:block th:if="${profileOwner.userName} != ${session.user.userName}">
         <th:block th:if="${userIsFollowed == true}">
@@ -23,9 +19,6 @@
     </th:block>
 </th:block>
 
-<footer>
-    <th:block th:replace="fragments/footer: stars-js"></th:replace>
-</footer>
 </body>
 
 </html>

@@ -12,7 +12,7 @@
     <artifactId>demetria-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demetria-core</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Core for Demetria social network</description>
 
     <properties>
         <java.version>1.8</java.version>

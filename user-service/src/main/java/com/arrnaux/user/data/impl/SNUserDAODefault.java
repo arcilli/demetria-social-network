@@ -4,11 +4,13 @@ import com.arrnaux.demetria.core.models.userAccount.PasswordUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
 import com.arrnaux.user.data.SNUserRepository;
+import com.mongodb.client.result.UpdateResult;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
@@ -83,5 +85,23 @@ public class SNUserDAODefault implements SNUserDAO {
                 .addCriteria(Criteria.where("lastName").in(Arrays.asList(namesTerms)))
                 .addCriteria(Criteria.where("firstName").in(Arrays.asList(namesTerms)));
         return mongoOperations.find(query, SNUser.class);
+    }
+
+    @Override
+    @Nullable
+    public SNUser replaceProfileImage(SNUser snUser, String encodedProfileImage) {
+        if (null != snUser.getId()) {
+            Update update = new Update();
+            update.set("profileImageBase64", encodedProfileImage);
+
+            Query query = new Query();
+            query.addCriteria(Criteria.where("id").is(snUser.getId()));
+
+            UpdateResult updateResult = mongoOperations.updateFirst(query, update, SNUser.class);
+            if (1 == updateResult.getModifiedCount()) {
+                return findById(snUser.getId());
+            }
+        }
+        return null;
     }
 }

@@ -12,21 +12,25 @@
 
 <div class="container custom-container">
     <div class="row">
-        <!--TODO: add user image-->
-        <div class="col-3">
+        <div class="col-sm-3">
             <div class="card custom-box">
-                <img class="card-img-top" src="https://image.stirileprotv.ro/media/images/1408x882/Mar2019/62029378.jpg"
-                     alt="profile_photo">
+                <th:block th:replace="fragments/userInfo :: userPhoto(${profileOwner})">
+                </th:block>
                 <div class="card-body">
                     <div class="profile-information">
-                        <span th:replace="fragments/userProfileInfo :: profileOwnerInfo"></span>
+                        <span>
+                            <h3>
+                            <th:block th:replace="fragments/userInfo :: userFullName(${profileOwner})">
+                            </th:block>
+                        </h3>
+                        </span>
                         <span th:replace="fragments/userProfileInfo :: followButton"></span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-9">
+        <div class="col-sm-9">
             <div class="card custom-box">
                 <div class="text-center my-posts">
                     <h3 class="card-header">My posts</h3>

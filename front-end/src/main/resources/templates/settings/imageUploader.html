@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="imageUploader(user)">
+    <div class="upload-btn-wrapper">
+        <th:block>
+            <button type="button" class="btn btn-outline-primary">Upload a file</button>
+            <input type="file" name="profilePicture" class="profile-picture-uploader"
+                   th:id="${'imageUploader-'+user.id}"/>
+        </th:block>
+    </div>
+</th:block>
+</body>
+</html>

@@ -185,7 +185,7 @@ $(function () {
         let pathname = window.location.pathname.split("/");
         let userName = pathname[pathname.length - 1];
         return userName;
-    }
+    };
 
     /**
      * Used in timeline, for displaying more posts.
@@ -215,7 +215,7 @@ $(function () {
             lastId = posts[posts.length - 1].id;
         }
         return lastId + "";
-    }
+    };
 
     $('.profile-show-more-button').on('click', function () {
         let targetUrl = "/timeline/showMore/user/" + extractUsernameFromLocationPath();
@@ -231,5 +231,27 @@ $(function () {
                 console.log("Error at retrieving more posts: " + result);
             }
         })
+    });
+
+    $('.profile-picture-uploader').on('change', function () {
+        let form = new FormData();
+        form.append('profilePicture', this.files[0]);
+        let targetUrl = "/settings/changeProfilePhoto";
+        let elements = this.id.split("-");
+        let userId = elements[elements.length - 1];
+        $.ajax({
+            url: targetUrl,
+            type: 'POST',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form,
+            success: function (data) {
+                $("#pp-" + userId)[0].src = data;
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
     });
 });
