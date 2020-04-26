@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>search-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.2</version>
     <name>search-service</name>
     <description>Demetria search service</description>
 
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.arrnaux</groupId>
             <artifactId>demetria-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>2.2</version>
         </dependency>
     </dependencies>
 
@@ -93,9 +93,21 @@
                 <configuration>
                     <repository>arcilli/demetria-search-service</repository>
                     <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>arcilli.repos</id>
+            <name>localhost</name>
+            <url>file:///home/arcilli/repos/demetria/${project.artifactId}/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

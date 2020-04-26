@@ -1,5 +1,6 @@
 FROM openjdk:8-jre
 
+ARG JAR_FILE
 RUN mkdir /usr/local/user-service
-COPY target/user-service-2.0-SNAPSHOT.jar /usr/local/user-service/
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/usr/local/user-service/user-service-2.0-SNAPSHOT.jar"]
+COPY ./target/${JAR_FILE} /usr/local/user-service/user-service.jar
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "user-service.jar"]
