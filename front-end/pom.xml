@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.arrnaux</groupId>
             <artifactId>demetria-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>2.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
