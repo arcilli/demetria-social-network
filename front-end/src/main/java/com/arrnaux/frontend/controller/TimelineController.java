@@ -42,11 +42,12 @@ public class TimelineController {
         String targetUrl = "http://post-service/timeline/showMorePosts/" + lastShowedId + "/" + userName;
         List<SNPost> posts;
         if (null != loggedUser && loggedUser.getUserName().equals(userName)) {
-            // if the loggedUser is the userName, return public and private
+            // The user is viewing his own profile, so display private and public posts.
             posts = restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(PostVisibility.NONE),
                     new ParameterizedTypeReference<List<SNPost>>() {
                     }).getBody();
         } else {
+            // Somebody (user or outsider) is watching a profile. Only public posts will be displayed.
             posts = restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(PostVisibility.PUBLIC),
                     new ParameterizedTypeReference<List<SNPost>>() {
                     }).getBody();
@@ -61,9 +62,14 @@ public class TimelineController {
 
     private ModelAndView createModelAndView(List<SNPost> posts) {
         if (null != posts) {
-            ModelAndView modelAndView = new ModelAndView()
-                    .addObject("posts", posts)
-                    .addObject("newComment", new Comment());
+            ModelAndView modelAndView = new ModelAndView();
+            if (0 != posts.size()) {
+                modelAndView
+                        .addObject("posts", posts)
+                        .addObject("newComment", new Comment());
+            } else {
+                modelAndView.addObject("noMorePosts", true);
+            }
             modelAndView.setViewName("fragments/timeline :: timeline-part");
             return modelAndView;
         }

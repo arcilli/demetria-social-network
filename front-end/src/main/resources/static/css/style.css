@@ -1,3 +1,13 @@
+#noMorePosts {
+    text-align: center;
+}
+
+/*TODO: This is not working.*/
+.profile-show-more-button {
+    margin: 0 auto;
+    display: block;
+}
+
 .upload-btn-wrapper {
     position: relative;
     overflow: hidden;
@@ -35,7 +45,7 @@ body {
     width: 500px;
 }
 
-.image-post img{
+.image-post img {
     border-radius: 50%;
     object-fit: cover;
     width: 30px;

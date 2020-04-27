@@ -5,7 +5,7 @@ spring:
   application:
     name: front-end
   thymeleaf:
-    mode: HTML5
+    mode: HTML
     cache: false
   profiles:
     active: dev

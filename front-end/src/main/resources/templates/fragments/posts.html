@@ -53,23 +53,31 @@
         </div>
         <div class="postContent" th:text="${post.content}"></div>
         <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
-        <td th:if="${session.user != null}">
-            <span th:replace="fragments/posts :: rateStarts"></span>
-        </td>
-        <br/>
-        <div class="postComments">
-            <div class="postComment " th:each="comment : ${post.commentList}">
+        <th:block th:if="${null != session.user}">
+            <td>
+                <span th:replace="fragments/posts :: rateStarts"></span>
+            </td>
+            <br/>
+            <div class="postComments">
+                <div class="postComment " th:each="comment : ${post.commentList}">
+                    <div>
+                        <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
+                           th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+                        <span th:text="': '+${comment.content}"></span>
+                    </div>
+                </div>
                 <div>
-                    <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
-                       th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
-                    <span th:text="': '+${comment.content}"></span>
+                    <form th:replace="fragments/posts :: createComment(${post.id})"></form>
                 </div>
             </div>
-            <div>
-                <form th:replace="fragments/posts :: createComment(${post.id})"></form>
-            </div>
-        </div>
+        </th:block>
         <hr/>
+    </article>
+</div>
+
+<div th:fragment="noMorePosts">
+    <article class="userPost" id="noMorePosts">
+        <div>No more posts. :(</div>
     </article>
 </div>
 </body>

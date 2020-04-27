@@ -8,8 +8,15 @@
 
 <body>
 <th:block th:fragment="timeline-part">
-    <th:block th:each="post : ${posts}">
-        <th:block th:replace="fragments/posts :: displayPost(${post})">
+    <th:block th:if="${true == noMorePosts}">
+        <th:block th:replace="fragments/posts :: noMorePosts">
+        </th:block>
+    </th:block>
+
+    <th:block th:if="${true != noMorePosts}">
+        <th:block th:each="post : ${posts}">
+            <th:block th:replace="fragments/posts :: displayPost(${post})">
+            </th:block>
         </th:block>
     </th:block>
 </th:block>

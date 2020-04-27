@@ -17,16 +17,66 @@
     }, false);
 })();
 
-$(function () {
-    // TODO: make a request for change the current post
+$(function (events, handler) {
+// TODO: make a request for change the current post
     $(".editPostButton").on("click", function () {
     });
 
-    // ajax request for deleting a post
-    $('.posts-wrapper').on('click', '.deletePostButton', function () {
+    $("#confirmAccountDeleteButton").on("click", function () {
+        $.ajax({
+            url: "/deleteAccount",
+            type: 'DELETE',
+            contentType: 'application/json',
+            // an error needs to be treated as a success case (since a redirect header is returned)
+            error: function () {
+                window.location.replace("/");
+            }
+        });
+    });
+
+    let postsWrapper = $(".posts-wrapper");
+    // Rating stars
+    postsWrapper.on('click', '.stars a', function () {
+        let articleId = -1;
+        $(this).parents().map(function () {
+            if (this.tagName == "ARTICLE") {
+                articleId = this.id;
+            }
+        });
+        // For each star, if it is <= this, color it.
+        articleId = "#" + articleId;
+        let currentPosts = $(articleId);
+        let nodeItems = currentPosts.find(".stars")[0].children;
+        for (let i = 0; i < nodeItems.length; ++i) {
+            if (nodeItems[i].innerText <= this.innerText) {
+                nodeItems[i].classList.add('active');
+            } else {
+                nodeItems[i].classList.remove("active");
+            }
+        }
+        articleId = articleId.substr(1);
+        let targetUrl = "/votePost/" + articleId + "/" + this.innerText;
+        $.ajax({
+            url: targetUrl,
+            type: 'POST',
+            success: function (result) {
+                // The result is equal to post's rank value after computing the vote.
+                // -1 is the value for an error.
+                if (-1 != result) {
+                    currentPosts.find(".postRanking")[0].innerText = "Post rank: " + result.toFixed(1);
+                }
+            }, error: function (result) {
+                console.log("Error ar voting: " + result);
+            }
+        })
+    });
+
+    // Delete a post
+    postsWrapper.on('click', '.deletePostButton', function () {
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
                 var arr = {id: this.id};
+                // ajax request for deleting a post
                 $.ajax({
                     url: "/deletePost",
                     type: 'DELETE',
@@ -47,11 +97,10 @@ $(function () {
 
     // Ajax request for adding a comment
     // The button is a part of a form.
-    $('.posts-wrapper').on('click', '.addCommentButton', function (event) {
+    postsWrapper.on('click', '.addCommentButton', function (event) {
         event.preventDefault();
 
         let formId = -1;
-
         // Find the element that represents the current form.
         $(this).parents().map(function () {
             if (this.tagName == "FORM") {
@@ -77,72 +126,6 @@ $(function () {
             }, error: function (result) {
                 // TODO: display a modal with the error.
                 console.log("Error at posting the comment: " + result);
-            }
-        })
-    });
-
-    // To be tested.
-    var getIdForPost = function (elementId) {
-        $(elementId).parents().map(function () {
-            if (this.tagName == "ARTICLE") {
-                return this.id;
-            }
-        });
-    };
-
-    // To be tested, as well
-    var getFirstIdFoundAscendent = function (element) {
-        var parent = element.parentNode;
-        while (parent.id == "") {
-            parent = parent.parentNode;
-        }
-        return parent.id;
-    };
-
-    $("#confirmAccountDeleteButton").on("click", function () {
-        $.ajax({
-            url: "/deleteAccount",
-            type: 'DELETE',
-            contentType: 'application/json',
-            // an error needs to be treated as a success case (since a redirect header is returned)
-            error: function () {
-                window.location.replace("/");
-            }
-        });
-    });
-
-    // Rating stars
-    $('.posts-wrapper').on('click', '.stars a', function () {
-        let articleId = -1;
-        $(this).parents().map(function () {
-            if (this.tagName == "ARTICLE") {
-                articleId = this.id;
-            }
-        });
-        // For each star, if it is <= this, color it.
-        articleId = "#" + articleId;
-        let currentPosts = $(articleId);
-        let nodeItems = currentPosts.find(".stars")[0].children
-        for (let i = 0; i < nodeItems.length; ++i) {
-            if (nodeItems[i].innerText <= this.innerText) {
-                nodeItems[i].classList.add('active');
-            } else {
-                nodeItems[i].classList.remove("active");
-            }
-        }
-        articleId = articleId.substr(1);
-        let targetUrl = "/votePost/" + articleId + "/" + this.innerText;
-        $.ajax({
-            url: targetUrl,
-            type: 'POST',
-            success: function (result) {
-                // The result is equal to post's rank value after computing the vote.
-                // -1 is the value for an error.
-                if (-1 != result) {
-                    currentPosts.find(".postRanking")[0].innerText = "Post rank: " + result.toFixed(1);
-                }
-            }, error: function (result) {
-                console.log("Error ar voting: " + result);
             }
         })
     });
@@ -181,57 +164,9 @@ $(function () {
         })
     });
 
-    var extractUsernameFromLocationPath = function () {
-        let pathname = window.location.pathname.split("/");
-        let userName = pathname[pathname.length - 1];
-        return userName;
-    };
+    $('.show-more-button').on('click', showMoreFromNewsFeed);
 
-    /**
-     * Used in timeline, for displaying more posts.
-     */
-    $('.show-more-button').on('click', function () {
-        let targetUrl = "/timeline/showMore";
-        $.ajax({
-            url: targetUrl,
-            type: 'POST',
-            contentType: 'text/plain',
-            data: getLastShowedPostId(),
-            success: function (result) {
-                $(result).insertBefore('.show-more-button');
-            }, error: function (result) {
-                console.log("Error at retrieving more posts: " + error);
-            }
-        })
-    });
-
-    // TODO: Make this work.
-    var getLastShowedPostId = function () {
-        let posts = $('article');
-        let lastId = 0;
-        if (0 != posts.length) {
-            // Get the id of the last post that has been showed.
-            console.log(posts[posts.length - 1])
-            lastId = posts[posts.length - 1].id;
-        }
-        return lastId + "";
-    };
-
-    $('.profile-show-more-button').on('click', function () {
-        let targetUrl = "/timeline/showMore/user/" + extractUsernameFromLocationPath();
-        $.ajax({
-            url: targetUrl,
-            type: 'POST',
-            contentType: 'text/plain',
-            data: getLastShowedPostId(),
-            success: function (result) {
-                $(result).insertBefore('.profile-show-more-button');
-            },
-            error: function (result) {
-                console.log("Error at retrieving more posts: " + result);
-            }
-        })
-    });
+    $('.profile-show-more-button').on('click', showMoreFromUserProfile);
 
     $('.profile-picture-uploader').on('change', function () {
         let form = new FormData();
@@ -255,3 +190,58 @@ $(function () {
         });
     });
 });
+
+/**
+ * Used in timeline, for displaying more posts.
+ */
+let showMoreFromNewsFeed = function () {
+    let targetUrl = "/timeline/showMore";
+    let lastShowedId = getLastShowedPostId();
+    $.ajax({
+        url: targetUrl,
+        type: 'POST',
+        contentType: 'text/plain',
+        data: lastShowedId,
+        success: function (result) {
+            $(result).insertBefore('.show-more-button');
+        }, error: function (result) {
+            console.log("Error at retrieving more posts: " + result);
+        }
+    }).then(r => {
+    });
+};
+
+let showMoreFromUserProfile = function (doneCallback, ...doneCallbacks) {
+    let targetUrl = "/timeline/showMore/user/" + extractUsernameFromLocationPath();
+    let lastShowedId = getLastShowedPostId();
+    $.ajax({
+        url: targetUrl,
+        type: 'POST',
+        contentType: 'text/plain',
+        data: lastShowedId,
+        success: function (result) {
+            if ("noMorePosts" !== lastShowedId) {
+                $(result).insertBefore('.profile-show-more-button');
+            }
+        },
+        error: function (result) {
+            console.log("Error at retrieving more posts: " + result);
+        }
+    }).then(r => {
+    });
+};
+
+let getLastShowedPostId = function getLastShowedPostId() {
+    let posts = $('article');
+    let lastId = 0;
+    if (0 != posts.length) {
+        // Get the id of the last post that has been showed.
+        lastId = posts[posts.length - 1].id;
+    }
+    return lastId + "";
+};
+
+let extractUsernameFromLocationPath = function () {
+    let pathname = window.location.pathname.split("/");
+    return pathname[pathname.length - 1];
+};
