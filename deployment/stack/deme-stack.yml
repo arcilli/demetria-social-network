@@ -2,33 +2,39 @@ version: '3.7'
 
 services:
   eureka-server:
-    image: arcilli/demetria-eureka-server:1.0-SNAPSHOT
+    image: arcilli/demetria-eureka-server:2.2
     ports:
       - "8761:8761"
     networks:
       - my-overlay
   user-service:
-    image: arcilli/demetria-user-service:2.0-SNAPSHOT
+    image: arcilli/demetria-user-service:2.3-SNAPSHOT
     ports:
       - "8080:8080"
     networks:
       - my-overlay
   post-service:
-    image: arcilli/demetria-post-service:2.0-SNAPSHOT
+    image: arcilli/demetria-post-service:2.2
     ports:
       - "8083:8083"
     networks:
       - my-overlay
   front-end:
-    image: arcilli/demetria-front-end:2.0-SNAPSHOT
+    image: arcilli/demetria-front-end:2.3-SNAPSHOT
     ports:
       - "8081:8081"
     networks:
       - my-overlay
   friendship-relation:
-    image: arcilli/demetria-friendship-relation-service:1.0-SNAPSHOT
+    image: arcilli/demetria-friendship-relation-service:2.2
     ports:
       - "8082:8082"
+    networks:
+      - my-overlay
+  search-service:
+    image: arcilli/demetria-search-service:2.3-SNAPSHOT
+    ports:
+      - "8085:8085"
     networks:
       - my-overlay
   rs1:
@@ -79,6 +85,7 @@ services:
     networks:
       - my-overlay
 ## Add a service that setup the initial data for orientdb.
+
 networks:
   my-overlay:
     driver: overlay
