@@ -110,6 +110,10 @@ $(function (events, handler) {
 
         formId = formId + "CommForm";
         let form = $("#" + formId);
+        // Do nothing if the comment is empty;
+        if ("" === form[0][0].value) {
+            return;
+        }
         $.ajax({
             url: form[0].action,
             type: 'post',

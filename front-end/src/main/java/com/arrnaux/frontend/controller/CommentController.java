@@ -37,6 +37,10 @@ public class CommentController {
     @ResponseBody
     public Comment createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
         // TODO: treat the case when the user is inserting an empty comment.
+        if (newComment.getContent().equals("")) {
+            return null;
+        }
+
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (currentUser != null) {
             try {

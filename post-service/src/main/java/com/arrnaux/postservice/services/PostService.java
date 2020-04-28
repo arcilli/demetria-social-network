@@ -45,7 +45,6 @@ public class PostService {
     /**
      * @param snPost
      * @return the id of the saved post or null
-     * TODO: need to bring here a token for user/another method to authorize the actual request.
      */
     @Nullable
     @RequestMapping(value = "savePost", method = RequestMethod.POST)
@@ -69,7 +68,7 @@ public class PostService {
     public Boolean deletePost(@RequestBody SNPost post) {
         try {
             int nrOfDeletedPosts = snPostDAO.removePost(post.getId());
-            // delete operation ended with success
+            // Delete operation ended with success.
             if (nrOfDeletedPosts == 1) {
                 return true;
             }
