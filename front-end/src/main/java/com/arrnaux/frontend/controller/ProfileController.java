@@ -1,7 +1,6 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class ProfileController {
     final
     RestTemplate restTemplate;
 
-    public ProfileController(@LoadBalanced RestTemplate restTemplate) {
+    public ProfileController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -30,10 +29,7 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (loggedUser != null) {
-            String targetURL = "http://user-service/settings/deleteAccount";
-            ResponseEntity<Boolean> responseEntity = restTemplate.exchange(targetURL, HttpMethod.DELETE,
-                    new HttpEntity<>(loggedUser), Boolean.class);
-            if (null != responseEntity.getBody() && responseEntity.getBody()) {
+            if (userWasDeletedFromGraphAndDocDB(loggedUser)) {
                 // The account has been deleted.
                 request.getSession().invalidate();
                 modelAndView.setViewName("redirect:/");
@@ -95,5 +91,22 @@ public class ProfileController {
 
     private boolean userIsTheOwnerOfTheProfile(@NotNull SNUser profileOwner, @NotNull SNUser user) {
         return profileOwner.getUserName().equals(user.getUserName());
+    }
+
+    private boolean userWasDeletedFromGraphAndDocDB(SNUser user) {
+        // Delete the account from graph & after that delete it from document-oriented database.
+        String targetURL = "http://friendship-relation-service/graphOperations/deletePersonFromGraph";
+        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
+                new HttpEntity<>(user), Boolean.class);
+        if (null != responseEntity.getBody() && responseEntity.getBody()) {
+            // Continue deleting the user from document-oriented DB.
+            targetURL = "http://user-service/settings/deleteAccount";
+            responseEntity = restTemplate.exchange(targetURL, HttpMethod.DELETE,
+                    new HttpEntity<>(user), Boolean.class);
+            if (null != responseEntity.getBody()) {
+                return responseEntity.getBody();
+            }
+        }
+        return false;
     }
 }

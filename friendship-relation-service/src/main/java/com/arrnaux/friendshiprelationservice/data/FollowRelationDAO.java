@@ -51,4 +51,12 @@ public interface FollowRelationDAO {
      */
     @Nullable
     List<String> getFollowedUsers(GraphPersonEntity snUser);
+
+    /**
+     * Delete the vertex represented by a GraphPersonalityEntity and its vertices (in & out).
+     *
+     * @param snUser is a partial object.
+     * @return true if the vertex was successfully deleted.
+     */
+    boolean deletePersonEntityFromGraph(GraphPersonEntity snUser);
 }

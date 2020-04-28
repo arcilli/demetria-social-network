@@ -61,6 +61,13 @@ public class SNUserDAODefault implements SNUserDAO {
         return hashedPassword.map(s -> findUserByEmailAndPassword(email, s)).orElse(null);
     }
 
+    /**
+     * Remove the user from document-oriented DB.
+     * For a completely remove of the user from network, make sure it's also deleted from graph.
+     *
+     * @param email
+     * @return
+     */
     @Override
     public Boolean removeUserAccount(String email) {
         try {

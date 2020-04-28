@@ -123,7 +123,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
             query = "SELECT in.storedId FROM follows where out.userName = ?";
             rs = getConnection().getSession().query(query, snUser.getUserName());
         } else if (null != snUser.getStoredId()) {
-            query = "SELECT in.storedId FROM follows where out.storedId= ? ";
+            query = "SELECT in.storedId FROM follows where out.storedId= ?";
             rs = getConnection().getSession().query(query, snUser.getStoredId());
         }
         assert null != rs;
@@ -135,4 +135,25 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         }
         return followedPersons;
     }
+
+    @Override
+    public boolean deletePersonEntityFromGraph(GraphPersonEntity snUser) {
+        if (null == snUser || null == snUser.getStoredId()) {
+            return false;
+        }
+
+        String query;
+        OResultSet rs = null;
+        if (null != snUser.getStoredId()) {
+            query = "DELETE VERTEX Person where storedId= ?";
+            rs = getConnection().getSession().command(query, snUser.getStoredId());
+        }
+        int count = 0;
+        while (null != rs && rs.hasNext()) {
+            ++count;
+            rs.next();
+        }
+        return 1 == count;
+    }
+
 }

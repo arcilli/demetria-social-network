@@ -30,4 +30,14 @@ public class GraphOperationsService {
                         .build()
         );
     }
+
+    @RequestMapping(value = "deletePersonFromGraph", method = RequestMethod.POST)
+    public boolean deletePersonAndItsEdges(@RequestBody SNUser userToBeDeleted) {
+        return followRelationDAO.deletePersonEntityFromGraph(
+                GraphPersonEntity.builder()
+                        .userName(userToBeDeleted.getUserName())
+                        .storedId(userToBeDeleted.getId())
+                        .build()
+        );
+    }
 }

@@ -39,7 +39,7 @@ public class SettingsService {
 
     @RequestMapping(value = "deleteAccount", method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteUserAccount(@RequestBody SNUser snUser) {
-        log.info("Attempt to delete user: " + snUser.getEmail());
+        log.info("Attempt to delete user: " + snUser.getId());
         if (null != snUserDAO.findUserByEmail(snUser.getEmail())) {
             Boolean result = snUserDAO.removeUserAccount(snUser.getEmail());
             if (result) {
