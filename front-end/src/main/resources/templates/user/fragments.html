@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User's frgaments</title>
 </head>
 <body>
 <span th:fragment="userFullName(user)">
-        <th:block th:text="${user.getFullName()}"></th:block>
+        <th:block th:text="${user.getFullName()}">
+        </th:block>
 </span>
 
 <th:block th:fragment="userPhoto(user)">
@@ -19,6 +20,21 @@
         <img class="img-fluid"
              th:src="${user.profileImageBase64}" th:alt="${user.getFullName()}" th:id="${'pp-'+user.id}"/>
     </th:block>
+</th:block>
+
+<th:block th:fragment="displayUserName(user)">
+    <div class="flex-container profile-username">
+        <div class="row">
+            <div class="flex-item">
+                <th:block th:if="${null != user AND null != user.userName}">
+                    <a th:href="@{'/profiles/' + ${user.userName}}">
+                        <th:block th:text="${'@' + user.userName}">
+                        </th:block>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </div>
 </th:block>
 </body>
 </html>

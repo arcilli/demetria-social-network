@@ -50,7 +50,7 @@ public interface FollowRelationDAO {
      * @return a list o ids corresponding to the user that @snUser is following.
      */
     @Nullable
-    List<String> getFollowedUsers(GraphPersonEntity snUser);
+    List<String> getFollowedUsersIds(GraphPersonEntity snUser);
 
     /**
      * Delete the vertex represented by a GraphPersonalityEntity and its vertices (in & out).
@@ -59,4 +59,17 @@ public interface FollowRelationDAO {
      * @return true if the vertex was successfully deleted.
      */
     boolean deletePersonEntityFromGraph(GraphPersonEntity snUser);
+
+    /**
+     *
+     * @param snUser
+     * @return the number of persons who are followed by @snUSer.
+     */
+    long countNumberOfFollowedPersons(GraphPersonEntity snUser);
+
+    /**
+     * @param snUser
+     * @return the number of person who are following @snUser.
+     */
+    long countNumberOfFollowers(GraphPersonEntity snUser);
 }

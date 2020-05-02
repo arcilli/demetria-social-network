@@ -115,7 +115,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
 
     @Nullable
     @Override
-    public List<String> getFollowedUsers(GraphPersonEntity snUser) {
+    public List<String> getFollowedUsersIds(GraphPersonEntity snUser) {
         String query;
         OResultSet rs = null;
         // TODO: add a condition for checking that the relation is valid.
@@ -156,4 +156,39 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         return 1 == count;
     }
 
+    @Override
+    public long countNumberOfFollowedPersons(GraphPersonEntity snUser) {
+        if (null == snUser || null == snUser.getStoredId()) {
+            return -1;
+        }
+
+        String alias = "noFollowedPersons";
+        String query = "SELECT COUNT(*) AS " + alias + " FROM follows WHERE out.storedId= ?";
+        return processCountQuery(snUser, query, alias);
+    }
+
+    @Override
+    public long countNumberOfFollowers(GraphPersonEntity snUser) {
+        if (null == snUser || null == snUser.getStoredId()) {
+            return -1;
+        }
+
+        String alias = "noFollowers";
+        String query = "SELECT COUNT(*) AS " + alias + " FROM follows WHERE in.storedId = ?";
+        return processCountQuery(snUser, query, alias);
+    }
+
+    private long processCountQuery(GraphPersonEntity snUser, String query, String alias) {
+        OResultSet rs = getConnection().getSession().query(query, snUser.getStoredId());
+        long val = -1;
+        long count = 0;
+        while (rs.hasNext()) {
+            val = rs.next().getProperty(alias);
+            ++count;
+        }
+        if (1 == count) {
+            return val;
+        }
+        return (long)-1.0;
+    }
 }

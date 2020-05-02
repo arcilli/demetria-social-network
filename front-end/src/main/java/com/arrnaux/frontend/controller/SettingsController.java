@@ -1,6 +1,7 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.frontend.util.users.UserUtilsService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -30,10 +31,9 @@ public class SettingsController {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
             // Fetch the user to ensure that it contains the newest profile picture.
-            ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/users/info/id",
-                    HttpMethod.POST, new HttpEntity<>(loggedUser.getId()), SNUser.class);
-            if (null != responseEntity.getBody()) {
-                loggedUser = responseEntity.getBody();
+            SNUser userWithUpdatedPicture = UserUtilsService.getObfuscatedUserById(loggedUser.getId());
+            if (null != userWithUpdatedPicture) {
+                loggedUser = userWithUpdatedPicture;
                 // Overwrite the session attribute to contain newest picture.
                 request.getSession().setAttribute("user", loggedUser);
             }

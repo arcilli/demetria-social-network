@@ -3,8 +3,7 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import com.arrnaux.frontend.util.posts.PostsUtilsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,6 @@ public class CommentController {
     @RequestMapping(value = "createComment", method = RequestMethod.POST)
     @ResponseBody
     public Comment createCommentForPost(HttpServletRequest request, SNPost post, Comment newComment) {
-        // TODO: treat the case when the user is inserting an empty comment.
         if (newComment.getContent().equals("")) {
             return null;
         }
@@ -46,9 +44,7 @@ public class CommentController {
             try {
                 newComment.setOwnerId(currentUser.getId());
                 post.appendComment(newComment);
-                String targetUrl = "http://post-service/posts/createComment";
-                ResponseEntity<Comment> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
-                        new HttpEntity<>(post), Comment.class);
+                ResponseEntity<Comment> responseEntity = PostsUtilsService.createComment(post);
                 if (null != responseEntity.getBody()) {
                     return responseEntity.getBody();
                 }

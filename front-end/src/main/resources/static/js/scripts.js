@@ -134,42 +134,13 @@ $(function (events, handler) {
         })
     });
 
-    $('.follow-button').on('click', function () {
-        let userNameToFollow = extractUsernameFromLocationPath();
-        let targetUrl = "/follow/user/" + userNameToFollow;
-        let sourceButton = this;
-        $.ajax({
-            url: targetUrl,
-            type: 'GET',
-            success: function (result) {
-                sourceButton.innerText = "Unfollow";
-                sourceButton.classList.add("active", "unfollow-button");
-                sourceButton.classList.remove("selected", "follow-button");
-            }, error: function (result) {
-                console.log("Error at following: " + result);
-            }
-        })
-    });
+    $('.follow-button').on('click', followUser);
+    $('.user-list-wrapper').on('click', '.follow-button', followUser);
 
-    $('.unfollow-button').on('click', function () {
-        let userNameToUnfollow = extractUsernameFromLocationPath();
-        let targetUrl = "/follow/cancel/" + userNameToUnfollow;
-        let sourceButton = this;
-        $.ajax({
-            url: targetUrl,
-            type: 'POST',
-            success: function (result) {
-                sourceButton.innerText = "Follow";
-                sourceButton.classList.add("follow-button");
-                sourceButton.classList.remove("active", "unfollow-button");
-            }, error: function (result) {
-                console.log("Error at unfollowing: " + result);
-            }
-        })
-    });
+    $('.unfollow-button').on('click', unfollowUser);
+    $('.user-list-wrapper').on('click', '.unfollow-button', unfollowUser);
 
     $('.show-more-button').on('click', showMoreFromNewsFeed);
-
     $('.profile-show-more-button').on('click', showMoreFromUserProfile);
 
     $('.profile-picture-uploader').on('change', function () {
@@ -248,4 +219,38 @@ let getLastShowedPostId = function getLastShowedPostId() {
 let extractUsernameFromLocationPath = function () {
     let pathname = window.location.pathname.split("/");
     return pathname[pathname.length - 1];
+};
+
+let followUser = function () {
+    let userNameToFollow = extractUsernameFromLocationPath();
+    let targetUrl = "/follow/user/" + userNameToFollow;
+    let sourceButton = this;
+    $.ajax({
+        url: targetUrl,
+        type: 'GET',
+        success: function (result) {
+            sourceButton.innerText = "Unfollow";
+            sourceButton.classList.add("active", "unfollow-button");
+            sourceButton.classList.remove("selected", "follow-button");
+        }, error: function (result) {
+            console.log("Error at following: " + result);
+        }
+    })
+};
+
+let unfollowUser = function () {
+    let userNameToUnfollow = extractUsernameFromLocationPath();
+    let targetUrl = "/follow/cancel/" + userNameToUnfollow;
+    let sourceButton = this;
+    $.ajax({
+        url: targetUrl,
+        type: 'POST',
+        success: function (result) {
+            sourceButton.innerText = "Follow";
+            sourceButton.classList.add("follow-button");
+            sourceButton.classList.remove("active", "unfollow-button");
+        }, error: function (result) {
+            console.log("Error at unfollowing: " + result);
+        }
+    })
 };

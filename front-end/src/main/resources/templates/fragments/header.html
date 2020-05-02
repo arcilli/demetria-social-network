@@ -74,12 +74,11 @@
 <th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
     <nav class="navbar navbar-dark bg-dark">
         <div class="not-logged">
-            <span class="nav-text">You are not logged in.</span>
-            <a href="/login">
-                <button class="btn btn-primary btn-sm">Login</button>
-            </a>
-            <span>&nbsp;or&nbsp;</span>
-            <button class="btn btn-primary btn-sm">Register</button>
+            <span class="nav-text">You are not logged in.
+            <a href="/login"><button class="btn btn-primary btn-sm">Login</button></a>
+             or
+                <a href="/"><button class="btn btn-primary btn-sm">Register</button></a>
+            </span>
         </div>
     </nav>
     <br/>

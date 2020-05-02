@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
-<head th:replace="fragments/header :: headerIncludes">
+<head>
     <meta charset="UTF-8">
-    <title>User profile</title>
+    <title>
+        <th:block th:include="user/fragments :: userFullName(${profileOwner})">
+        </th:block>
+        | Demetria
+    </title>
+    <th:block th:replace="fragments/header :: headerIncludes">
+    </th:block>
 </head>
 
 <body>
@@ -12,17 +18,31 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="card custom-box">
-                <th:block th:replace="fragments/userInfo :: userPhoto(${profileOwner})">
+                <th:block th:replace="user/fragments :: userPhoto(${profileOwner})">
                 </th:block>
                 <div class="card-body">
                     <div class="profile-information">
                         <span>
                             <h3>
-                            <th:block th:replace="fragments/userInfo :: userFullName(${profileOwner})">
+                            <th:block th:replace="user/fragments :: userFullName(${profileOwner})">
                             </th:block>
                         </h3>
+                            <span>
+                                <th:block th:replace="user/fragments :: displayUserName(${profileOwner})">
+                                </th:block>
+                            </span>
+                            <span>
+                                <th:block th:if="${-1 != noFollowers}"
+                                          th:replace="profile/fragments :: displayFollowersButton(${profileOwner}, ${noFollowers})">
+                                </th:block>
+                            </span>
+                            <span>
+                                <th:block th:if="${-1 != noFollowedUsers}"
+                                          th:replace="profile/fragments :: displayNoFollowingUsersButton(${profileOwner}, ${noFollowedUsers})">
+                                </th:block>
+                            </span>
                         </span>
-                        <span th:replace="fragments/userProfileInfo :: followButton"></span>
+                        <span th:replace="profile/fragments :: followButton(${profileOwner})"></span>
                     </div>
                 </div>
             </div>

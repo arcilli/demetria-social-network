@@ -1,5 +1,6 @@
 package com.arrnaux.postservice.services;
 
+import com.arrnaux.demetria.core.interaction.FriendshipUtils;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
@@ -7,10 +8,6 @@ import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.postservice.Helper.UserAsOwnerOperations;
 import com.arrnaux.postservice.data.SNPostDAO;
 import com.mongodb.lang.Nullable;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -73,7 +70,7 @@ public class TimelineService {
         if (null != postsToBeDisplayed) {
             for (SNPost snPost : postsToBeDisplayed) {
                 snPost.setOwner(users.get(snPost.getOwnerId()));
-                userAsOwnerOperations.addOwnerToComment(snPost);
+                UserAsOwnerOperations.addOwnerToComment(snPost);
             }
             return postsToBeDisplayed;
         }
@@ -116,15 +113,12 @@ public class TimelineService {
      */
     @Nullable
     private List<String> getFollowedPersons(GraphPersonEntity graphPersonEntity) {
-        String targetURL = "http://friendship-relation-service/graphOperations/findFollowedPers";
-        SNUser snUser = SNUser.builder()
-                .id(graphPersonEntity.getStoredId())
-                .userName(graphPersonEntity.getUserName())
-                .build();
-        ResponseEntity<List<String>> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
-                new HttpEntity<>(snUser), new ParameterizedTypeReference<List<String>>() {
-                });
-        return responseEntity.getBody();
+        return FriendshipUtils.getFollowedUsersIds(restTemplate,
+                SNUser.builder()
+                        .id(graphPersonEntity.getStoredId())
+                        .userName(graphPersonEntity.getUserName())
+                        .build()
+        );
     }
 
     @Nullable

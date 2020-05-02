@@ -8,7 +8,8 @@
 
 <body>
 <nav th:replace="fragments/header :: top-bar"></nav>
-Found users:
+
+<!--TODO: display on the left side my profile and on the right side found users (same as following etc etc).-->
 <th:block th:if="${null != foundUsers}" th:each="user: ${foundUsers}">
     <!-- insert photo here -->
     <h3>

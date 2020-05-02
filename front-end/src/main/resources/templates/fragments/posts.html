@@ -32,10 +32,10 @@
         <div class="postHeader flex-container">
             <div class="postOwner">
                 <span class="image-post">
-                <th:block th:replace="fragments/userInfo :: userPhoto(${post.owner})">
+                <th:block th:replace="user/fragments :: userPhoto(${post.owner})">
                 </th:block>
                 </span>
-                <span th:replace="fragments/userInfo :: userFullName(${post.owner})"></span>
+                <span th:replace="user/fragments :: userFullName(${post.owner})"></span>
             </div>
             <!--        TODO: better display time from the post (hours, day, m, years), with the same structure of the link-->
             <div class="postCreationDate">

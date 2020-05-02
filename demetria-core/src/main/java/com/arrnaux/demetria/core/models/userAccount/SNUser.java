@@ -65,7 +65,7 @@ public class SNUser extends SNUserLoginDTO {
         if (null != firstName) {
             stringBuilder.append(firstName);
             if (null != lastName) {
-                stringBuilder.append(' ' + lastName);
+                stringBuilder.append(' ').append(lastName);
             }
         }
         return stringBuilder.toString();

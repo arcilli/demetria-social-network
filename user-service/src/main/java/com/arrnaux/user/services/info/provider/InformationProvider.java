@@ -4,7 +4,10 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "users")
@@ -22,27 +25,20 @@ public class InformationProvider {
      * @param userName
      * @return an user with obfuscated information or null if the user with associated username does not exist.
      */
-    // TODO: replace in use with getObfuscatedUser
     @Nullable
-    @RequestMapping(value = "/info/{username}", method = RequestMethod.POST)
+    @RequestMapping(value = "/info/user/{username}", method = RequestMethod.GET)
     public SNUser getUserWithObfuscatedInfo(@PathVariable("username") String userName) {
         return getObfuscatedUserByUsername(userName);
     }
 
     @Nullable
-    @RequestMapping(value = "/info/username", method = RequestMethod.POST)
-    public SNUser getObfuscatedUser(@RequestBody String userName) {
-        return getObfuscatedUserByUsername(userName);
-    }
-
-    @Nullable
-    @RequestMapping(value = "/info/id", method = RequestMethod.POST)
-    public SNUser getObfuscatedUserById(@RequestBody String id) {
-        SNUser snUser = snUserDAO.findById(id);
+    @RequestMapping(value = "/info/id/{userId}", method = RequestMethod.GET)
+    public SNUser getObfuscatedUserByIdPath(@PathVariable("userId") String userId) {
+        SNUser snUser = snUserDAO.findById(userId);
         if (null != snUser) {
-            snUser.obfuscateUserInformation();
+            return snUser.obfuscateUserInformation();
         }
-        return snUser;
+        return null;
     }
 
     @Nullable

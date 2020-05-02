@@ -4,11 +4,9 @@ import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
+import com.arrnaux.friendshiprelationservice.util.user.UserUtilsService;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,29 +26,19 @@ public class FollowService {
     }
 
     @RequestMapping(value = "{targetUserName}", method = RequestMethod.POST)
-    // TODO: return a boolean for operation with/without success.
     public Boolean followUser(@PathVariable("targetUserName") String targetUserName,
                               @RequestBody String sourceUsername) {
 
-        // TODO: refactor this duplicate code.
         OVertex sourceVertex = null, targetVertex = null;
         // Retrieve the id for the userNames.
-        String target = "http://user-service/users/info/" + sourceUsername;
-        ResponseEntity<SNUser> responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
-        if (null != responseEntity.getBody()) {
-            SNUser user = responseEntity.getBody();
-            sourceVertex = followRelationDAO.storePerson(new GraphPersonEntity(user));
-        }
-        target = "http://user-service/users/info/" + targetUserName;
-        responseEntity = restTemplate.exchange(target, HttpMethod.POST, HttpEntity.EMPTY, SNUser.class);
-        if (null != responseEntity.getBody()) {
-            SNUser user = responseEntity.getBody();
-            targetVertex = followRelationDAO.storePerson(
-                    new GraphPersonEntity(user));
+        SNUser sourceUser = UserUtilsService.getObfuscatedUserByUserName(sourceUsername);
+        SNUser targetUser = UserUtilsService.getObfuscatedUserByUserName(targetUserName);
+        if (null != sourceUser && null != targetUser) {
+            sourceVertex = followRelationDAO.storePerson(new GraphPersonEntity(sourceUser));
+            targetVertex = followRelationDAO.storePerson(new GraphPersonEntity(targetUser));
         }
         if (null != sourceVertex && null != targetVertex) {
-            followRelationDAO.storeValidFollowingRelation(sourceVertex, targetVertex);
-            return true;
+            return null != followRelationDAO.storeValidFollowingRelation(sourceVertex, targetVertex);
         }
         return false;
     }

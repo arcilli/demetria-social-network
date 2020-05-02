@@ -2,28 +2,19 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userAccount.SNUserLoginDTO;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.arrnaux.frontend.util.users.UserUtilsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
-
-    private final RestTemplate restTemplate;
-
-    public LoginController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public ModelAndView displayLoginForm(HttpServletRequest httpServletRequest) {
@@ -46,15 +37,11 @@ public class LoginController {
         HttpSession session = request.getSession();
         if (null == session.getAttribute("user")) {
             try {
-                ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/login/form",
-                        HttpMethod.POST, new HttpEntity<>(userLoginDTO), SNUser.class);
-                if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-                    SNUser loggedUser = responseEntity.getBody();
-                    if (null != loggedUser) {
-                        session.setAttribute("user", loggedUser.obfuscateUserInformation());
-                    }
-                    modelAndView.setViewName("redirect:/");
+                SNUser loggedUser = UserUtilsService.loginRequest(userLoginDTO);
+                if (null != loggedUser) {
+                    session.setAttribute("user", loggedUser.obfuscateUserInformation());
                 }
+                modelAndView.setViewName("redirect:/");
             } catch (HttpClientErrorException e) {
                 modelAndView.addObject("badCredentials", true);
                 // Data in form should be persisted after an unsuccessful login, except the password.

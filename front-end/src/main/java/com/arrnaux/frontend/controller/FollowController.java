@@ -1,10 +1,8 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,13 +31,7 @@ public class FollowController {
                               @PathVariable("userNameToBeFollowed") String userNameToBeFollowed) {
         SNUser loggedUser = (SNUser) httpServletRequest.getSession().getAttribute("user");
         if (null != loggedUser) {
-            String targetUrl = "http://friendship-relation-service/follow/" + userNameToBeFollowed;
-            ResponseEntity<Boolean> responseEntity =
-                    restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(loggedUser.getUserName()),
-                            Boolean.class);
-            if (null != responseEntity.getBody()) {
-                return responseEntity.getBody();
-            }
+            return FriendshipUtilsService.followUser(loggedUser, userNameToBeFollowed);
         }
         return false;
     }
@@ -50,13 +42,7 @@ public class FollowController {
                                 @PathVariable("usernameToBeUnfollowed") String usernameToBeUnfollowed) {
         SNUser loggedUser = (SNUser) httpServletRequest.getSession().getAttribute("user");
         if (null != loggedUser) {
-            String targetUrl = "http://friendship-relation-service/unfollow/" + usernameToBeUnfollowed;
-            ResponseEntity<Boolean> responseEntity =
-                    restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(loggedUser.getUserName()),
-                            Boolean.class);
-            if (null != responseEntity.getBody()) {
-                return responseEntity.getBody();
-            }
+            return FriendshipUtilsService.unfollowUser(loggedUser, usernameToBeUnfollowed);
         }
         return false;
     }

@@ -51,7 +51,6 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>2.1.3.RELEASE</version>
         </dependency>
-        <!--        dependință la core pentru tipuri de date-->
         <dependency>
             <groupId>com.arrnaux</groupId>
             <artifactId>demetria-core</artifactId>

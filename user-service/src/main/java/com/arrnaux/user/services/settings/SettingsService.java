@@ -25,7 +25,7 @@ public class SettingsService {
     @PostMapping("profile")
     public ResponseEntity<SNUser> changeUserDetails(@RequestBody SNUser snUser) {
         log.info("Attempt to edit user details for: " + snUser.getEmail());
-        // Initialize password with the stored value, since others layers don't have access at it
+        // Initialize password with the stored value, since others layers don't have access at it.
         if (null != snUserDAO.findUserByEmail(snUser.getEmail())) {
             String hashedPassword = Objects.requireNonNull(snUserDAO.findUserByEmail(snUser.getEmail())).getPassword();
             if (null != hashedPassword) {

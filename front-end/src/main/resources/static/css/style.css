@@ -1,3 +1,12 @@
+.flex-container.profile-username {
+    justify-content: center;
+    font-weight: bold;
+}
+
+.profile-username a:hover {
+    text-decoration: none;
+}
+
 #noMorePosts {
     text-align: center;
 }

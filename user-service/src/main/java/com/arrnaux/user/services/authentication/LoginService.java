@@ -24,13 +24,13 @@ public class LoginService {
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public ResponseEntity<SNUser> userLogin(@RequestBody SNUserLoginDTO userDTO) {
-        log.info("User " + userDTO.getEmail() + " is trying to login with: " + userDTO.getPassword());
+        log.info("User " + userDTO.getEmail() + " is trying to login with.");
         SNUser snUser = snUserDAO.findUserByEmailAndPlainPassword(userDTO.getEmail(), userDTO.getPassword());
         if (snUser != null) {
             log.info("User " + userDTO.getEmail() + " has logged in.");
             // Clear the password before sending to next service.
             snUser.obfuscateUserInformation();
-            return new ResponseEntity<SNUser>(snUser, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(snUser, HttpStatus.ACCEPTED);
         }
         log.info("Login attempt failed for with email: " + userDTO.getEmail());
 

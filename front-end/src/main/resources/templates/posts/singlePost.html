@@ -3,7 +3,7 @@
 
 <head th:insert="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
-    <title th:text="${post.content}"></title>
+    <title th:text="${post.owner.getFullName()}"></title>
 </head>
 
 <body>

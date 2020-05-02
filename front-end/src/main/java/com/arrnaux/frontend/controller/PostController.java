@@ -3,6 +3,7 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
+import com.arrnaux.frontend.util.posts.PostsUtilsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
@@ -29,8 +30,7 @@ public class PostController {
         if (currentUser != null) {
             post.setOwnerId(currentUser.getId());
             try {
-                restTemplate.exchange("http://post-service/posts/savePost", HttpMethod.POST,
-                        new HttpEntity<>(post), String.class);
+                PostsUtilsService.createPost(post);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ public class PostController {
                                 .addObject("post", snPost)
                                 .addObject("authorized", true);
                     }
-                    modelAndView.setViewName("singlePost");
+                    modelAndView.setViewName("posts/singlePost");
                     return modelAndView;
                 case PRIVATE:
                     if (null != loggedUser) {
@@ -90,14 +90,14 @@ public class PostController {
                                     .addObject("post", snPost)
                                     .addObject("newComment", new Comment())
                                     .addObject("authorized", true)
-                                    .setViewName("singlePost");
+                                    .setViewName("posts/singlePost");
                             return modelAndView;
                         }
                     }
             }
         }
         modelAndView.addObject("authorized", false);
-        modelAndView.setViewName("singlePost");
+        modelAndView.setViewName("posts/singlePost");
         return modelAndView;
     }
 }

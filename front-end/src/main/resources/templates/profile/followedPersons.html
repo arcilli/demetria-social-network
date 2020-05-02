@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Persons followed by:
+        <th:block th:replace="user/fragments :: userFullName(${profileOwner})">
+        </th:block>
+    </title>
+    <th:block th:replace="fragments/header :: headerIncludes">
+    </th:block>
+</head>
+<body>
+<th:block th:replace="fragments/header :: top-bar">
+</th:block>
+<div class="container custom-container">
+    <div class="row">
+        <th:block th:replace="profile/fragments :: profile-owner-card(${profileOwner})">
+        </th:block>
+        <th:block
+                th:replace="profile/fragments :: profile-rollup(type=${type}, userList=${users})">
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
