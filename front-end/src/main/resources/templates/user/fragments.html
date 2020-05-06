@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="">
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>User's frgaments</title>
 </head>
 <body>
-<span th:fragment="userFullName(user)">
-        <th:block th:text="${user.getFullName()}">
-        </th:block>
-</span>
+<th:block th:fragment="userFullName(user)" th:text="${user.getFullName()}">
+</th:block>
 
 <th:block th:fragment="userPhoto(user)">
     <th:block th:if="${null == user.profileImageBase64}">
