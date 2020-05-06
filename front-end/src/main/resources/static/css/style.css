@@ -101,6 +101,11 @@ body {
     padding-right: 4px;
     text-decoration: none;
     margin: 0;
+    font-size: 0;
+}
+
+.stars a:hover {
+    text-decoration: none;
 }
 
 .stars a:after {
@@ -111,10 +116,6 @@ body {
     content: "\f005";
     color: #9e9e9e;
 }
-
-/*span {*/
-/*    font-size: 0; !* trick to remove inline-element's margin *!*/
-/*}*/
 
 .stars a:hover ~ a:after {
     color: #9e9e9e !important;

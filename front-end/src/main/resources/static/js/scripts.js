@@ -36,7 +36,8 @@ $(function (events, handler) {
 
     let postsWrapper = $(".posts-wrapper");
     // Rating stars
-    postsWrapper.on('click', '.stars a', function () {
+    postsWrapper.on('click', '.stars a', function (event) {
+        event.preventDefault();
         let articleId = -1;
         $(this).parents().map(function () {
             if (this.tagName == "ARTICLE") {
