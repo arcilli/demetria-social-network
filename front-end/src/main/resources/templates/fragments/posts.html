@@ -8,14 +8,10 @@
 
 <body>
 <!--Stars so an user can vote a post-->
-<span th:fragment="rateStarts" class="stars">
-        <!--    Replace this with a for instruction created in Thymleaf-->
-    <!--    TODO: if an user has already voted the post, color the stars corresponding to his vote.-->
-        <a class="star-1" href="#">1</a>
-        <a class="star-2" href="#">2</a>
-        <a class="star-3" href="#">3</a>
-        <a class="star-4" href="#">4</a>
-        <a class="star-5" href="#">5</a>
+<span th:fragment="rateStarts(noStars, noActiveStars)" class="stars">
+    <th:block th:each="i : ${#numbers.sequence(0, noStars-1)}">
+        <a th:class="'star-'+${i+1} +' '+|${i<noActiveStars ? 'active' : ''}|" href="#" th:text="${i+1}"></a>
+    </th:block>
     </span>
 
 <td th:fragment=createComment(postId) th:if="${newComment != null}">
@@ -52,11 +48,17 @@
             </th:block>
         </div>
         <div class="postContent" th:text="${post.content}"></div>
-        <!--    TODO: if the user has already voted the post, color the stars corresponding to its vote.-->
         <th:block th:if="${null != session.user}">
-            <td>
-                <span th:replace="fragments/posts :: rateStarts"></span>
-            </td>
+            <th:block th:if="${null != post.voteList AND post.voteList.get(0).ownerId == session.user.id}">
+                <td>
+                    <span th:replace="fragments/posts :: rateStarts(5, ${post.voteList.get(0).value})"></span>
+                </td>
+            </th:block>
+            <th:block th:unless="${null !=post.voteList AND post.voteList.get(0).ownerId== session.user.id}">
+                <td>
+                    <span th:replace="fragments/posts :: rateStarts(5, 0)"></span>
+                </td>
+            </th:block>
             <br/>
             <div class="postComments">
                 <div class="postComment " th:each="comment : ${post.commentList}">

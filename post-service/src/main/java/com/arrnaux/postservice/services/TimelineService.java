@@ -71,6 +71,7 @@ public class TimelineService {
             for (SNPost snPost : postsToBeDisplayed) {
                 snPost.setOwner(users.get(snPost.getOwnerId()));
                 UserAsOwnerOperations.addOwnerToComment(snPost);
+                UserAsOwnerOperations.extractUserVoteFromPost(loggedUser.getId(), snPost);
             }
             return postsToBeDisplayed;
         }
@@ -101,7 +102,8 @@ public class TimelineService {
         if (null != postsToBeDisplayed) {
             for (SNPost snPost : postsToBeDisplayed) {
                 snPost.setOwner(targetUser);
-                userAsOwnerOperations.addOwnerToComment(snPost);
+                UserAsOwnerOperations.addOwnerToComment(snPost);
+                UserAsOwnerOperations.extractUserVoteFromPost(targetUser.getId(), snPost);
             }
         }
         return postsToBeDisplayed;

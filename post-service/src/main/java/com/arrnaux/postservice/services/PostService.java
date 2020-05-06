@@ -41,7 +41,6 @@ public class PostService {
         this.userAsOwnerOperations = userAsOwnerOperations;
     }
 
-
     /**
      * @param snPost
      * @return the id of the saved post or null
@@ -127,7 +126,8 @@ public class PostService {
                 // Add for every post the owner with obfuscated details.
                 for (SNPost snPost : posts) {
                     snPost.setOwner(snUser);
-                    userAsOwnerOperations.addOwnerToComment(snPost);
+                    UserAsOwnerOperations.addOwnerToComment(snPost);
+                    UserAsOwnerOperations.extractUserVoteFromPost(userId, snPost);
                 }
                 return posts;
             }
