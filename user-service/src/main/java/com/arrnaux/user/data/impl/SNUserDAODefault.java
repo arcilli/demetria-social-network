@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -116,20 +117,42 @@ public class SNUserDAODefault implements SNUserDAO {
     @Nullable
     public List<SNUser> findUserByInsensitiveQuery(String[] queryTerms) {
         if (null != queryTerms) {
-            StringBuilder regexBuilder = new StringBuilder();
-            if (1 != queryTerms.length) {
-                for (int i = 0; i < queryTerms.length - 1; ++i) {
-                    regexBuilder.append(queryTerms[i]).append("|");
-                }
-            }
-            regexBuilder.append(queryTerms[queryTerms.length - 1]);
+            String regex = getRegexFromQueryTerms(queryTerms);
             Query query = new Query();
             query
-                    .addCriteria(Criteria.where("lastName").regex(regexBuilder.toString(), "i"))
-                    .addCriteria(Criteria.where("firstName").regex(regexBuilder.toString(), "i"));
+                    .addCriteria(Criteria.where("lastName").regex(regex, "i"))
+                    .addCriteria(Criteria.where("firstName").regex(regex, "i"))
+                    .fields().exclude("password");
             return mongoOperations.find(query, SNUser.class);
         }
         return null;
     }
 
+    @Override
+    @Nullable
+    public List<SNUser> findUserByPartialInsensitiveQuery(String[] queryTerms) {
+        if (null != queryTerms) {
+            String regex = getRegexFromQueryTerms(queryTerms);
+            Criteria criteria = new Criteria();
+            criteria.orOperator(
+                    Criteria.where("lastName").regex(regex, "i"),
+                    Criteria.where("firstName").regex(regex, "i")
+            );
+            Query query = new Query(criteria);
+            query.fields().exclude("password");
+            return mongoOperations.find(query, SNUser.class);
+        }
+        return null;
+    }
+
+    private String getRegexFromQueryTerms(String[] queryTerms) {
+        StringBuilder regexBuilder = new StringBuilder();
+        if (1 != queryTerms.length) {
+            for (int i = 0; i < queryTerms.length - 1; ++i) {
+                regexBuilder.append(queryTerms[i]).append("|");
+            }
+        }
+        regexBuilder.append(queryTerms[queryTerms.length - 1]);
+        return regexBuilder.toString();
+    }
 }

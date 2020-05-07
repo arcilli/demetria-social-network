@@ -1,4 +1,4 @@
-package com.arrnaux.user.services.info.provider;
+package com.arrnaux.user.services.provider;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
@@ -23,8 +23,13 @@ public class SearchUser {
         return snUserDAO.findUserByNameQuery(queryTerms);
     }
 
-    @RequestMapping(value = "caseInsensitive/user", method = RequestMethod.POST)
+    @RequestMapping(value = "user/caseInsensitive/", method = RequestMethod.POST)
     public List<SNUser> getCaseInsensitiveUsersForQuery(@RequestBody String[] queryTerms) {
         return snUserDAO.findUserByInsensitiveQuery(queryTerms);
+    }
+
+    @RequestMapping(value = "/user/caseInsensitive/partial/", method = RequestMethod.POST)
+    public List<SNUser> getUsersByPartialCaseInsensitiveName(@RequestBody String[] queryTerms) {
+        return snUserDAO.findUserByPartialInsensitiveQuery(queryTerms);
     }
 }
