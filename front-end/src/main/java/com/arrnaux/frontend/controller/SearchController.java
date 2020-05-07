@@ -10,7 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("search")
@@ -35,9 +37,9 @@ public class SearchController {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
             String query = request.getParameter("queryBoxContent");
-            List<SNUser> users = SearchUtilsService.getUsersByQuery(query);
-            if (null != users) {
-                modelAndView.addObject("foundUsers", users);
+            List<SNUser> foundUsers = SearchUtilsService.getUsersByQuery(query);
+            if (null != foundUsers) {
+                modelAndView.addObject("foundUsers", new HashSet<>(foundUsers));
                 modelAndView.setViewName("search/results");
             }
         } else {

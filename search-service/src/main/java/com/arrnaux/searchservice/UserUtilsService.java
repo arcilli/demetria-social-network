@@ -29,8 +29,24 @@ public class UserUtilsService {
 
     @Nullable
     public static List<SNUser> getUserWithInsensitiveNames(String[] queryTerms) {
-        String targetURL = "http://user-service/search/caseInsensitive/user";
-        return restTemplate.exchange(targetURL, HttpMethod.POST, new HttpEntity<>(queryTerms),
+        String targetUrl = "http://user-service/search/user/caseInsensitive/";
+        return getUsersWithQueryTerms(targetUrl, queryTerms);
+    }
+
+    @Nullable
+    public static List<SNUser> getUsersWithPartialInsensitiveNames(String[] queryTerms) {
+        String targetUrl = "http://user-service/search/user/caseInsensitive/partial/";
+        return getUsersWithQueryTerms(targetUrl, queryTerms);
+    }
+
+    /**
+     * @param targetUrl
+     * @param queryTerms
+     * @return a list of obfuscated users
+     */
+    @Nullable
+    public static List<SNUser> getUsersWithQueryTerms(String targetUrl, String[] queryTerms) {
+        return restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(queryTerms),
                 new ParameterizedTypeReference<List<SNUser>>() {
                 }).getBody();
     }

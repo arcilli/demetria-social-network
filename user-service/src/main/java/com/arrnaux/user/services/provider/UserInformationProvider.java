@@ -1,4 +1,4 @@
-package com.arrnaux.user.services.info.provider;
+package com.arrnaux.user.services.provider;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "users")
 @Log4j
-public class InformationProvider {
+public class UserInformationProvider {
 
     final
     SNUserDAO snUserDAO;
 
-    public InformationProvider(SNUserDAO snUserDAO) {
+    public UserInformationProvider(SNUserDAO snUserDAO) {
         this.snUserDAO = snUserDAO;
     }
 
@@ -28,7 +28,11 @@ public class InformationProvider {
     @Nullable
     @RequestMapping(value = "/info/user/{username}", method = RequestMethod.GET)
     public SNUser getUserWithObfuscatedInfo(@PathVariable("username") String userName) {
-        return getObfuscatedUserByUsername(userName);
+        SNUser snUser = snUserDAO.findUserByUsername(userName);
+        if (null != snUser) {
+            snUser.obfuscateUserInformation();
+        }
+        return snUser;
     }
 
     @Nullable
@@ -39,14 +43,5 @@ public class InformationProvider {
             return snUser.obfuscateUserInformation();
         }
         return null;
-    }
-
-    @Nullable
-    private SNUser getObfuscatedUserByUsername(String username) {
-        SNUser snUser = snUserDAO.findUserByUsername(username);
-        if (null != snUser) {
-            snUser.obfuscateUserInformation();
-        }
-        return snUser;
     }
 }

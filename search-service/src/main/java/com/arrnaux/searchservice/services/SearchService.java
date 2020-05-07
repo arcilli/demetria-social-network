@@ -38,14 +38,10 @@ public class SearchService {
         log.info("Searching user with: " + Arrays.toString(queryTerms));
 
         // Retrieve a list with persons that correspond to the search criteria.
-        List<SNUser> exactMatchedUsers = UserUtilsService.getUserWithInsensitiveNames(queryTerms);
-        if (null != exactMatchedUsers) {
-            for (SNUser user : exactMatchedUsers) {
-                user.obfuscateUserInformation();
-            }
-        } else {
-            // TODO: return a partial result  & change the description of the method.
+        List<SNUser> users = UserUtilsService.getUserWithInsensitiveNames(queryTerms);
+        if (null == users || 0 == users.size()) {
+            users = UserUtilsService.getUsersWithPartialInsensitiveNames(queryTerms);
         }
-        return exactMatchedUsers;
+        return users;
     }
 }

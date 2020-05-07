@@ -34,5 +34,7 @@ public class SearchUtilsService {
         return restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(query),
                 new ParameterizedTypeReference<List<SNUser>>() {
                 }).getBody();
+
+        // TODO: add some fof suggestions
     }
 }
