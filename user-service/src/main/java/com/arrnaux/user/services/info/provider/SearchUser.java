@@ -22,4 +22,9 @@ public class SearchUser {
     public List<SNUser> getUsersForQuery(@RequestBody String[] queryTerms) {
         return snUserDAO.findUserByNameQuery(queryTerms);
     }
+
+    @RequestMapping(value = "caseInsensitive/user", method = RequestMethod.POST)
+    public List<SNUser> getCaseInsensitiveUsersForQuery(@RequestBody String[] queryTerms) {
+        return snUserDAO.findUserByInsensitiveQuery(queryTerms);
+    }
 }

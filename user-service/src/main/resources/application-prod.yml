@@ -10,8 +10,7 @@ spring:
       host: mongo
       port: 27017
       repositories:
-        #        TODO: this is deprecated, use something else.
-        enabled: true
+        type: auto
 
 eureka:
   instance:

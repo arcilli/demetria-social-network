@@ -111,4 +111,25 @@ public class SNUserDAODefault implements SNUserDAO {
         }
         return null;
     }
+
+    @Override
+    @Nullable
+    public List<SNUser> findUserByInsensitiveQuery(String[] queryTerms) {
+        if (null != queryTerms) {
+            StringBuilder regexBuilder = new StringBuilder();
+            if (1 != queryTerms.length) {
+                for (int i = 0; i < queryTerms.length - 1; ++i) {
+                    regexBuilder.append(queryTerms[i]).append("|");
+                }
+            }
+            regexBuilder.append(queryTerms[queryTerms.length - 1]);
+            Query query = new Query();
+            query
+                    .addCriteria(Criteria.where("lastName").regex(regexBuilder.toString(), "i"))
+                    .addCriteria(Criteria.where("firstName").regex(regexBuilder.toString(), "i"));
+            return mongoOperations.find(query, SNUser.class);
+        }
+        return null;
+    }
+
 }

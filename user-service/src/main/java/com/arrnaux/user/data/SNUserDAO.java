@@ -32,5 +32,8 @@ public interface SNUserDAO {
     List<SNUser> findUserByNameQuery(String[] namesTerms);
 
     @Nullable
+    List<SNUser> findUserByInsensitiveQuery(String[] queryTerms);
+
+    @Nullable
     SNUser replaceProfileImage(SNUser snUser, String encodedProfileImage);
 }
