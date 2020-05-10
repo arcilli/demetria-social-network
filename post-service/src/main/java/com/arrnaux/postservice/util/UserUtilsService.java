@@ -1,6 +1,6 @@
 package com.arrnaux.postservice.util;
 
-import com.arrnaux.demetria.core.interaction.UserUtils;
+import com.arrnaux.demetria.core.interaction.BasicUserUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,10 +23,10 @@ public class UserUtilsService {
     }
 
     public static SNUser getObfuscatedUserById(String userId) {
-        return UserUtils.getObfuscatedUserById(restTemplate, userId);
+        return BasicUserUtils.getObfuscatedUserById(restTemplate, userId);
     }
 
     public static SNUser getObfuscatedUserByUserName(String userName) {
-        return UserUtils.getObfuscatedUserByUserName(restTemplate, userName);
+        return BasicUserUtils.getObfuscatedUserByUserName(restTemplate, userName);
     }
 }

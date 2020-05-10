@@ -28,7 +28,7 @@ public class SearchUtilsService {
     }
 
     public static List<SNUser> getUsersByQuery(String query) {
-        String targetUrl = "http://search-service/search/user";
+        String targetUrl = "http://search-service:8085/search/user";
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(query),

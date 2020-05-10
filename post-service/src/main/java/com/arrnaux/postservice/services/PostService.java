@@ -14,7 +14,6 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.List;
@@ -30,14 +29,11 @@ public class PostService {
 
     private SNPostDAO snPostDAO;
 
-    private RestTemplate restTemplate;
-
     private UserAsOwnerOperations userAsOwnerOperations;
 
     @Autowired
-    public PostService(SNPostDAO snPostDAO, RestTemplate restTemplate, UserAsOwnerOperations userAsOwnerOperations) {
+    public PostService(SNPostDAO snPostDAO, UserAsOwnerOperations userAsOwnerOperations) {
         this.snPostDAO = snPostDAO;
-        this.restTemplate = restTemplate;
         this.userAsOwnerOperations = userAsOwnerOperations;
     }
 
@@ -156,7 +152,7 @@ public class PostService {
                 if (null != snUser) {
                     snUser.obfuscateUserInformation();
                     snPost.setOwner(snUser);
-                    userAsOwnerOperations.addOwnerToComment(snPost);
+                    UserAsOwnerOperations.addOwnerToComment(snPost);
                     return snPost;
                 }
             }
@@ -193,7 +189,7 @@ public class PostService {
                 if (null != posts) {
                     for (SNPost post : posts) {
                         post.setOwner(snUser);
-                        userAsOwnerOperations.addOwnerToComment(post);
+                        UserAsOwnerOperations.addOwnerToComment(post);
                     }
                 }
                 return posts;

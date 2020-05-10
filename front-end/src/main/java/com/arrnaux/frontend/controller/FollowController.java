@@ -2,22 +2,13 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("follow")
 public class FollowController {
-
-    final
-    RestTemplate restTemplate;
-
-    public FollowController(@LoadBalanced RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * @param httpServletRequest
@@ -31,7 +22,7 @@ public class FollowController {
                               @PathVariable("userNameToBeFollowed") String userNameToBeFollowed) {
         SNUser loggedUser = (SNUser) httpServletRequest.getSession().getAttribute("user");
         if (null != loggedUser) {
-            return FriendshipUtilsService.followUser(loggedUser, userNameToBeFollowed);
+            return FriendshipUtilsService.executeFollowUserRequest(loggedUser, userNameToBeFollowed);
         }
         return false;
     }

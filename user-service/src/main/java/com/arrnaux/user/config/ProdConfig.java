@@ -4,17 +4,18 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 
 import java.util.Objects;
 
 @Configuration
-public class Config {
+@Profile("prod")
+public class ProdConfig {
 
-    final
-    Environment environment;
+    private final Environment environment;
 
-    public Config(Environment environment) {
+    public ProdConfig(Environment environment) {
         this.environment = environment;
     }
 
@@ -22,8 +23,7 @@ public class Config {
     public MongoClient mongoClient() {
         if (null != environment.getProperty("spring.data.mongodb.uri")) {
             return new MongoClient(new MongoClientURI(Objects.requireNonNull(environment.getProperty("spring.data.mongodb.uri"))));
-        } else {
-            return new MongoClient("localhost");
         }
+        return null;
     }
 }

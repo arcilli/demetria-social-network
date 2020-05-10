@@ -2,9 +2,7 @@ package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Vote;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import com.arrnaux.frontend.util.posts.PostsUtilsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,11 +41,7 @@ public class VoteController {
                         .ownerId(currentUser.getId())
                         .value(voteValue)
                         .build();
-                ResponseEntity<Double> voteRankValue = restTemplate.exchange("http://post-service/posts/vote/",
-                        HttpMethod.POST, new HttpEntity<>(newVote), Double.class);
-                if (null != voteRankValue.getBody()) {
-                    return voteRankValue.getBody();
-                }
+                return PostsUtilsService.voteAPost(newVote);
             } catch (Exception e) {
                 e.printStackTrace();
             }

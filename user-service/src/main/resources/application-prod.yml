@@ -18,6 +18,7 @@ eureka:
     hostname: user-service
     preferIpAddress: false
   client:
+    enabled: false
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:

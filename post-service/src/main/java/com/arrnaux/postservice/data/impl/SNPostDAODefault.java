@@ -1,6 +1,5 @@
 package com.arrnaux.postservice.data.impl;
 
-import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
@@ -45,13 +44,6 @@ public class SNPostDAODefault implements SNPostDAO {
     @Nullable
     public SNPost getPostById(String postId) {
         return snPostRepository.findById(postId).orElse(null);
-    }
-
-    @Override
-    @Nullable
-    public List<SNPost> getUserPosts(SNUser snUser) {
-        log.info("Retrieve posts for user: " + snUser);
-        return snPostRepository.findByOwnerId(snUser.getId()).orElse(null);
     }
 
     @Override

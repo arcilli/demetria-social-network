@@ -1,6 +1,6 @@
 package com.arrnaux.postservice.services;
 
-import com.arrnaux.demetria.core.interaction.FriendshipUtils;
+import com.arrnaux.demetria.core.interaction.BasicFriendshipUtils;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
@@ -115,7 +115,7 @@ public class TimelineService {
      */
     @Nullable
     private List<String> getFollowedPersons(GraphPersonEntity graphPersonEntity) {
-        return FriendshipUtils.getFollowedUsersIds(restTemplate,
+        return BasicFriendshipUtils.getFollowedUsersIds(restTemplate,
                 SNUser.builder()
                         .id(graphPersonEntity.getStoredId())
                         .userName(graphPersonEntity.getUserName())

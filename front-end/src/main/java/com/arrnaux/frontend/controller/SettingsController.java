@@ -7,7 +7,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,13 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("settings")
 @Log
 public class SettingsController {
-
-    final
-    RestTemplate restTemplate;
-
-    public SettingsController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     @RequestMapping(value = "profile", method = RequestMethod.GET)
     public ModelAndView displayUserInformation(HttpServletRequest request) {
@@ -55,8 +47,7 @@ public class SettingsController {
             log.info("User: " + loggedUser.toString() + "is changing his information.");
             loggedUser.updateObjectWithNotNullValues(modifiedUser);
             try {
-                ResponseEntity<SNUser> responseEntity = restTemplate.exchange("http://user-service/settings/profile",
-                        HttpMethod.POST, new HttpEntity<>(loggedUser), SNUser.class);
+                UserUtilsService.executeUserSettingsChangeRequest(loggedUser);
                 // Invalidate current attribute from session since user settings was changed.
                 request.getSession().removeAttribute("user");
                 request.getSession().setAttribute("user", loggedUser);
@@ -86,10 +77,12 @@ public class SettingsController {
         if (null != loggedUser) {
             try {
                 // Send the image to user service.
-                String targetUrl = "http://user-service/settings/changeProfileImage/" + loggedUser.getId();
-                ResponseEntity<String> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
-                        new HttpEntity<>(profilePicture.getBytes()), String.class);
+                ResponseEntity<String> responseEntity = UserUtilsService.executeChangePhotoRequest(profilePicture, loggedUser);
                 if (null != responseEntity.getBody()) {
+                    // Invalidate current session attribute.
+                    loggedUser.setProfileImageBase64(responseEntity.getBody());
+                    request.getSession().removeAttribute("user");
+                    request.getSession().setAttribute("user", loggedUser);
                     return responseEntity.getBody();
                 }
             } catch (Exception e) {
@@ -99,13 +92,5 @@ public class SettingsController {
         return null;
     }
 
-    // TODO: maybe receive only 2 objects (a SNUser - corresponding to oldPass) and a newUser (like the registration form
-    // - with newPass and newPassMatch
-    // TODO: To be implemented.
-    @RequestMapping(value = "changePassword", method = RequestMethod.POST)
-    public ModelAndView changePassword(HttpServletRequest request, @ModelAttribute String oldPassword,
-                                       @ModelAttribute String newPassword, @ModelAttribute String newPasswordMatch) {
-        ModelAndView modelAndView = new ModelAndView();
-        return modelAndView;
-    }
+    // TODO: implement password change
 }

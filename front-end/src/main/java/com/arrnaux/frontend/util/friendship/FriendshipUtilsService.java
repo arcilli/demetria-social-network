@@ -1,6 +1,6 @@
 package com.arrnaux.frontend.util.friendship;
 
-import com.arrnaux.demetria.core.interaction.FriendshipUtils;
+import com.arrnaux.demetria.core.interaction.BasicFriendshipUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpEntity;
@@ -29,71 +29,37 @@ public class FriendshipUtilsService {
         restTemplate = this.autowiredComponent;
     }
 
-    public static boolean followUser(SNUser loggedUser, String userNameToBeFollowed) {
-        String targetUrl = "http://friendship-relation-service/follow/" + userNameToBeFollowed;
-        ResponseEntity<Boolean> responseEntity =
-                restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(loggedUser.getUserName()),
-                        Boolean.class);
-        if (null != responseEntity.getBody()) {
-            return responseEntity.getBody();
-        }
-        return false;
+    public static boolean executeFollowUserRequest(SNUser loggedUser, String userNameToBeFollowed) {
+        return BasicFriendshipUtils.followUser(restTemplate, loggedUser, userNameToBeFollowed);
     }
 
     public static boolean unfollowUser(SNUser loggedUser, String usernameToBeUnfollowed) {
-        String targetUrl = "http://friendship-relation-service/unfollow/" + usernameToBeUnfollowed;
-        ResponseEntity<Boolean> responseEntity =
-                restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(loggedUser.getUserName()),
-                        Boolean.class);
-        if (null != responseEntity.getBody()) {
-            return responseEntity.getBody();
-        }
-        return false;
+        return BasicFriendshipUtils.unfollowUser(restTemplate, loggedUser, usernameToBeUnfollowed);
     }
 
     public static int getNoFollowedUsers(SNUser snUser) {
-        if (null == snUser || null == snUser.getId()) {
-            return -1;
-        }
-
-        try {
-            String targetUrl = "http://friendship-relation-service/graphOperations/noFollowedPersons/" + snUser.getId();
-            ResponseEntity<Integer> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.GET,
-                    HttpEntity.EMPTY, Integer.class);
-            if (null != responseEntity.getBody()) {
-                return responseEntity.getBody();
-            }
-        } catch (Exception e) {
-            log.severe(e.toString());
-        }
-        return -1;
+        return BasicFriendshipUtils.getNoFollowedUsers(restTemplate, log, snUser);
     }
 
     public static int getNoFollowers(SNUser snUser) {
-        if (null == snUser || null == snUser.getId()) {
-            return -1;
-        }
-        try {
-            String targetUrl = "http://friendship-relation-service/graphOperations/noFollowers/" + snUser.getId();
-            ResponseEntity<Integer> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.GET,
-                    HttpEntity.EMPTY, Integer.class);
-            if (null != responseEntity.getBody()) {
-                return responseEntity.getBody();
-            }
-        } catch (Exception e) {
-            log.severe(e.toString());
-        }
-        return -1;
+        return BasicFriendshipUtils.getNoFollowers(restTemplate, log, snUser);
     }
 
     @Nullable
-    public static List<SNUser> findFollowedUsers(@Nullable SNUser snUser) {
-        return FriendshipUtils.getFollowedPersons(restTemplate, snUser);
+    public static List<SNUser> getFollowedUsers(@Nullable SNUser snUser) {
+        return BasicFriendshipUtils.getFollowedPersons(restTemplate, snUser);
     }
 
     @Nullable
     public static List<SNUser> findFollowersUsers(@Nullable SNUser snUser) {
-        return FriendshipUtils.getFollowers(restTemplate, snUser);
+        return BasicFriendshipUtils.getFollowers(restTemplate, snUser);
     }
 
+    public static boolean checkFollowRelation(SNUser snUser1, SNUser snUser2) {
+        return BasicFriendshipUtils.checkFollowRelation(restTemplate, snUser1, snUser2);
+    }
+
+    public static boolean deleteUserFromGraph(SNUser snUser) {
+        return BasicFriendshipUtils.deletePersonFromGraph(restTemplate, snUser);
+    }
 }

@@ -4,24 +4,15 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.frontend.util.posts.PostsUtilsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class PostController {
-
-    @Autowired
-    @LoadBalanced
-    RestTemplate restTemplate;
 
     @PostMapping("createAPost")
     public ModelAndView processPost(HttpServletRequest request, @ModelAttribute SNPost post) {
@@ -41,16 +32,13 @@ public class PostController {
         return modelAndView;
     }
 
-    // TODO: add a validation (current user should be the owner of the post)
     @RequestMapping(value = "/deletePost", consumes = "application/json", method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> processPostDelete(HttpServletRequest request, @RequestBody SNPost post) {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (null != currentUser) {
             try {
                 // TODO: ensure that currentUser is the owner of the post
-                String url = "http://post-service/posts/deletePost/";
-                return restTemplate.exchange(url,
-                        HttpMethod.DELETE, new HttpEntity<>(post), Boolean.class);
+                return PostsUtilsService.deletePost(post);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -62,10 +50,7 @@ public class PostController {
     public ModelAndView displayPost(HttpServletRequest request, @PathVariable String postId) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        String requestURL = "http://post-service/posts/id/" + postId;
-        ResponseEntity<SNPost> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, HttpEntity.EMPTY,
-                SNPost.class);
-        SNPost snPost = responseEntity.getBody();
+        SNPost snPost = PostsUtilsService.displayPost(postId).getBody();
         if (null != snPost) {
             switch (snPost.getVisibility()) {
                 case PUBLIC:

@@ -1,9 +1,7 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import com.arrnaux.frontend.util.users.UserUtilsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +20,7 @@ public class RegisterController {
     final
     RestTemplate restTemplate;
 
-    public RegisterController(@LoadBalanced RestTemplate restTemplate) {
+    public RegisterController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -35,10 +33,8 @@ public class RegisterController {
     @PostMapping("/signup")
     public ModelAndView processSignupRequest(@ModelAttribute SNUserRegistrationDTO user) {
         ModelAndView modelAndView = new ModelAndView();
-        HttpEntity<SNUserRegistrationDTO> httpEntity = new HttpEntity<>(user);
         try {
-            ResponseEntity<Boolean> responseEntity =
-                    restTemplate.exchange("http://user-service/register", HttpMethod.POST, httpEntity, Boolean.class);
+            ResponseEntity<Boolean> responseEntity = UserUtilsService.executeRegisterRequest(user);
             if (responseEntity.getStatusCode() == HttpStatus.CREATED && null != responseEntity.getBody()) {
                 modelAndView.addObject("userCreated", true);
             } else {
@@ -55,13 +51,5 @@ public class RegisterController {
         modelAndView.setViewName("signup");
         return modelAndView;
     }
-//    // TODO: an ajax request should be made at this
-//    @RequestMapping(value = "/usernameAvailability/", method = RequestMethod.POST)
-//    public boolean checkUsernameAvailability(@RequestBody String username) {
-//        // make a request to BE
-//        HttpEntity<String> httpEntity = new HttpEntity<>(username);
-//        ResponseEntity<Boolean> responseEntity = restTemplate.exchange("http://user-service/register/usernameAvailability",
-//                HttpMethod.GET, httpEntity, Boolean.class);
-//        return responseEntity.getStatusCode() == HttpStatus.OK && responseEntity.getBody().equals(true);
-//    }
+    // TODO: add a checking for unique username.
 }

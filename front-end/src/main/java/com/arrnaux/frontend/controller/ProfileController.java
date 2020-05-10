@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@RestController
 @Log
+@RestController
 @RequestMapping(value = "/profiles")
 public class ProfileController {
 
@@ -77,7 +77,7 @@ public class ProfileController {
         if (null != loggedUser) {
             SNUser profileOwner = UserUtilsService.getObfuscatedUserByUserName(userName);
             if (null != profileOwner) {
-                List<SNUser> users = FriendshipUtilsService.findFollowedUsers(
+                List<SNUser> users = FriendshipUtilsService.getFollowedUsers(
                         SNUser.builder()
                                 .id(profileOwner.getId())
                                 .build()
@@ -123,14 +123,7 @@ public class ProfileController {
                 // An user cannot follow himself.
                 return false;
             }
-
-            String targetUrl = "http://friendship-relation-service/follow/check/" + user.getUserName() +
-                    "/" + profileOwner.getUserName();
-            ResponseEntity<Boolean> loggedUserFollowsProfileOwner = restTemplate.exchange(targetUrl, HttpMethod.GET,
-                    HttpEntity.EMPTY, Boolean.class);
-            if (null != loggedUserFollowsProfileOwner.getBody()) {
-                return loggedUserFollowsProfileOwner.getBody();
-            }
+            return FriendshipUtilsService.checkFollowRelation(user, profileOwner);
         }
         return false;
     }
@@ -141,17 +134,9 @@ public class ProfileController {
 
     private boolean userWasDeletedFromGraphAndDocDB(SNUser user) {
         // Delete the account from graph & after that delete it from document-oriented database.
-        String targetURL = "http://friendship-relation-service/graphOperations/deletePersonFromGraph";
-        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(targetURL, HttpMethod.POST,
-                new HttpEntity<>(user), Boolean.class);
-        if (null != responseEntity.getBody() && responseEntity.getBody()) {
+        if (FriendshipUtilsService.deleteUserFromGraph(user)) {
             // Continue deleting the user from document-oriented DB.
-            targetURL = "http://user-service/settings/deleteAccount";
-            responseEntity = restTemplate.exchange(targetURL, HttpMethod.DELETE,
-                    new HttpEntity<>(user), Boolean.class);
-            if (null != responseEntity.getBody()) {
-                return responseEntity.getBody();
-            }
+            return UserUtilsService.deleteUser(user);
         }
         return false;
     }

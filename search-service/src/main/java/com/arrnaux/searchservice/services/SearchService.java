@@ -1,7 +1,7 @@
 package com.arrnaux.searchservice.services;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
-import com.arrnaux.searchservice.UserUtilsService;
+import com.arrnaux.searchservice.util.UserUtilsService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

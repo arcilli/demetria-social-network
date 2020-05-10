@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: front-end
+  profiles:
+    active: dev
 
 eureka:
   instance:
@@ -10,6 +12,7 @@ eureka:
     hostname: front-end
     preferIpAddress: false
   client:
+    enabled: false
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:

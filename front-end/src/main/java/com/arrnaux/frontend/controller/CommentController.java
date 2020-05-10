@@ -10,19 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class CommentController {
-
-    final
-    RestTemplate restTemplate;
-
-    public CommentController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * @param request

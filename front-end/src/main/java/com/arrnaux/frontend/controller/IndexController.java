@@ -22,7 +22,7 @@ public class IndexController {
             modelAndView.addObject("newUser", new SNUserRegistrationDTO());
             modelAndView.setViewName("home/homeNotSignedIn");
         } else {
-            // TODO: rename attribute to "newPost"
+            // rename attribute to "newPost"?
             modelAndView.addObject("post", new SNPost());
             modelAndView.setViewName("home/homeSignedIn");
         }

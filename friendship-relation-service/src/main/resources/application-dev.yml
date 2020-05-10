@@ -2,7 +2,7 @@ server:
   port: 8082
 spring:
   application:
-    name: friendship-relation-service
+    name: friendship-relation
 
 eureka:
   instance:

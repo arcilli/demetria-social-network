@@ -18,12 +18,6 @@ public interface SNPostDAO {
     SNPost getPostById(String postId);
 
     /**
-     * @param snUser
-     * @return a list of posts owned by user
-     */
-    List<SNPost> getUserPosts(SNUser snUser);
-
-    /**
      * @param ownerId
      * @return
      */

@@ -1,20 +1,24 @@
 package com.arrnaux.frontend.util.posts;
 
+import com.arrnaux.demetria.core.interaction.BasicPostsUtils;
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
+import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import com.arrnaux.demetria.core.models.userPost.Vote;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 public class PostsUtilsService {
     private static RestTemplate restTemplate;
 
     private final RestTemplate autowiredComponent;
+
 
     public PostsUtilsService(RestTemplate autowiredComponent) {
         this.autowiredComponent = autowiredComponent;
@@ -26,13 +30,31 @@ public class PostsUtilsService {
     }
 
     public static void createPost(SNPost post) {
-        restTemplate.exchange("http://post-service/posts/savePost", HttpMethod.POST,
-                new HttpEntity<>(post), String.class);
+        BasicPostsUtils.createPost(restTemplate, post);
     }
 
     public static ResponseEntity<Comment> createComment(SNPost post) {
-        String targetUrl = "http://post-service/posts/createComment";
-        return restTemplate.exchange(targetUrl, HttpMethod.POST,
-                new HttpEntity<>(post), Comment.class);
+        return BasicPostsUtils.createComment(restTemplate, post);
+    }
+
+    public static ResponseEntity<Boolean> deletePost(SNPost post) {
+        return BasicPostsUtils.deletePost(restTemplate, post);
+    }
+
+    public static ResponseEntity<SNPost> displayPost(String postId) {
+        return BasicPostsUtils.getPost(restTemplate, postId);
+    }
+
+    public static List<SNPost> getPostsForUser(String lastShowedId, SNUser user) {
+        return BasicPostsUtils.getPostsForUser(restTemplate, lastShowedId, user);
+    }
+
+    public static List<SNPost> getPostsFromUserFromUrl(String lastShowedId, String userName,
+                                                       PostVisibility postVisibility) {
+        return BasicPostsUtils.getPostsFromUserFromUrl(restTemplate, lastShowedId, userName, postVisibility);
+    }
+
+    public static Double voteAPost(Vote vote) {
+        return BasicPostsUtils.voteAPost(restTemplate, vote);
     }
 }

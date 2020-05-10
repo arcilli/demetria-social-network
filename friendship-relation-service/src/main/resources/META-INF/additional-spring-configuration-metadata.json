@@ -1,18 +1,14 @@
 {
   "properties": [
     {
-      "name": "orientdb.connection.uri",
+      "name": "orientdb.connectionServiceName",
       "type": "java.lang.String",
-      "description": "Connection  URI orientdb.connection.uri."
+      "description": "Description for orientdb.connectionServiceName."
     },
     {
-      "name": "orientdb.connection.service.name",
+      "name": "orientdb.rootPassword",
       "type": "java.lang.String",
-      "description": "Description for orientdb.connection.service.name."
-    },
-    {
-      "name": "orientdb.connection.service.name",
-      "type": "java.lang.String",
-      "description": "Description for orientdb.connection.service.name."
+      "description": "Description for orientdb.rootPassword."
     }
-  ] }
+  ]
+}

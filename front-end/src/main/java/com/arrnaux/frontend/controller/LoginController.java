@@ -21,8 +21,8 @@ public class LoginController {
         HttpSession session = httpServletRequest.getSession();
         ModelAndView modelAndView = new ModelAndView();
         if (null == session.getAttribute("user")) {
-            // the user not already logged in
-            // display login form
+            // The user not already logged in.
+            // Display login form.
             modelAndView.addObject("userLoginDTO", new SNUserLoginDTO());
             modelAndView.setViewName("login");
         } else {
@@ -37,7 +37,7 @@ public class LoginController {
         HttpSession session = request.getSession();
         if (null == session.getAttribute("user")) {
             try {
-                SNUser loggedUser = UserUtilsService.loginRequest(userLoginDTO);
+                SNUser loggedUser = UserUtilsService.executeLoginRequest(userLoginDTO);
                 if (null != loggedUser) {
                     session.setAttribute("user", loggedUser.obfuscateUserInformation());
                 }
