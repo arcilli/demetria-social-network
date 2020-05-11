@@ -2,31 +2,31 @@ version: '3.7'
 
 services:
   user-service:
-    image: arcilli/demetria-user-service:2.3-SNAPSHOT
+    image: arcilli/demetria-user-service:2.4-SNAPSHOT
     ports:
       - "8080:8080"
     networks:
       - my-overlay
   post-service:
-    image: arcilli/demetria-post-service:2.3-SNAPSHOT
+    image: arcilli/demetria-post-service:2.4-SNAPSHOT
     ports:
       - "8083:8083"
     networks:
       - my-overlay
   front-end:
-    image: arcilli/demetria-front-end:2.3-SNAPSHOT
+    image: arcilli/demetria-front-end:2.4-SNAPSHOT
     ports:
       - "8081:8081"
     networks:
       - my-overlay
   friendship-relation:
-    image: arcilli/demetria-friendship-relation-service:2.3-SNAPSHOT
+    image: arcilli/demetria-friendship-relation-service:2.4-SNAPSHOT
     ports:
       - "8082:8082"
     networks:
       - my-overlay
   search-service:
-    image: arcilli/demetria-search-service:2.3-SNAPSHOT
+    image: arcilli/demetria-search-service:2.4-SNAPSHOT
     ports:
       - "8085:8085"
     networks:
