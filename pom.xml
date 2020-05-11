@@ -69,4 +69,11 @@
         <url>https://github.com/arcilli/demetria-social-network</url>
         <tag>{project.version}</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>com.arrnaux</id>
+            <name>localhost</name>
+            <url>file:///home/arcilli/.m2/repos/demetria/${project.artifactId}/</url>
+        </repository>
+    </distributionManagement>
 </project>
