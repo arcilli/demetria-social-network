@@ -65,7 +65,7 @@
     </build>
     <scm>
         <connection>scm:git:git@github.com:arcilli/demetria-social-network.git</connection>
-        <developerConnection>scm:git:git@github.com/arcilli/demetria-social-network.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:arcilli/demetria-social-network.git</developerConnection>
         <url>https://github.com/arcilli/demetria-social-network</url>
         <tag>{project.version}</tag>
     </scm>
