@@ -1,6 +1,8 @@
 package com.arrnaux.frontend.controller;
 
+import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
+import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
 import com.arrnaux.frontend.util.users.UserUtilsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,10 @@ public class RegisterController {
         try {
             ResponseEntity<Boolean> responseEntity = UserUtilsService.executeRegisterRequest(user);
             if (responseEntity.getStatusCode() == HttpStatus.CREATED && null != responseEntity.getBody()) {
-                modelAndView.addObject("userCreated", true);
+                SNUser persistedUser = UserUtilsService.getObfuscatedUserByUserName(user.getUserName());
+                if (FriendshipUtilsService.createPersonVertex(restTemplate, persistedUser)) {
+                    modelAndView.addObject("userCreated", true);
+                }
             } else {
                 if (responseEntity.getStatusCode() == HttpStatus.IM_USED && null == responseEntity.getBody()) {
                     modelAndView.addObject("newUser", user);

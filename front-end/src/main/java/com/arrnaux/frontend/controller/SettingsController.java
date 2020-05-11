@@ -3,8 +3,6 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.frontend.util.users.UserUtilsService;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -41,7 +41,7 @@ public class TimelineService {
      */
     @RequestMapping(value = "showMorePosts/{lastShowedId}", method = RequestMethod.POST)
     public List<SNPost> showMorePosts(@RequestBody SNUser loggedUser, @PathVariable("lastShowedId") String lastShowedId) {
-        List<String> ids = getFollowedPersons(
+        List<String> ids = getFollowedPersonsIds(
                 GraphPersonEntity.builder()
                         .storedId(loggedUser.getId())
                         .userName(loggedUser.getUserName())
@@ -114,8 +114,8 @@ public class TimelineService {
      * @return the ids of followed person from friendship-service.
      */
     @Nullable
-    private List<String> getFollowedPersons(GraphPersonEntity graphPersonEntity) {
-        return BasicFriendshipUtils.getFollowedUsersIds(restTemplate,
+    private List<String> getFollowedPersonsIds(GraphPersonEntity graphPersonEntity) {
+        return BasicFriendshipUtils.getFollowedPersonsIds(restTemplate,
                 SNUser.builder()
                         .id(graphPersonEntity.getStoredId())
                         .userName(graphPersonEntity.getUserName())

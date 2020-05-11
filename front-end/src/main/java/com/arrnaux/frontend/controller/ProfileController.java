@@ -4,9 +4,6 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
 import com.arrnaux.frontend.util.users.UserUtilsService;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,9 +60,21 @@ public class ProfileController {
     @RequestMapping(value = "{userName}/followers")
     public ModelAndView showFollowers(HttpServletRequest request, @PathVariable("userName") String userName) {
         // Only logged persons will be able to see the followers.
+        SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("");
-        modelAndView.setViewName("redirect:/");
+        if (null != loggedUser) {
+            SNUser profileOwner = UserUtilsService.getObfuscatedUserByUserName(userName);
+            if (null != profileOwner) {
+                List<SNUser> followers = FriendshipUtilsService.getFollowers(profileOwner);
+                modelAndView
+                        .addObject("profileOwner", profileOwner)
+                        .addObject("type", "Followers")
+                        .addObject("users", followers)
+                        .setViewName("profile/followers");
+            }
+        } else {
+            modelAndView.setViewName("redirect:/");
+        }
         return modelAndView;
     }
 

@@ -2,7 +2,6 @@ package com.arrnaux.friendshiprelationservice.services;
 
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
-import com.orientechnologies.orient.core.record.OEdge;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +18,8 @@ public class UnfollowService {
     @RequestMapping(value = "{usernameToBeUnfollowed}", method = RequestMethod.POST)
     public Boolean unfollowUser(@PathVariable("usernameToBeUnfollowed") String usernameToBeUnfollowed,
                                 @RequestBody String loggedUsername) {
-        OEdge edge = followRelationDAO.invalidateFollowingEdge(
+        return followRelationDAO.deleteFollowingEdge(
                 GraphPersonEntity.builder().userName(loggedUsername).build(),
                 GraphPersonEntity.builder().userName(usernameToBeUnfollowed).build());
-        return null != edge;
     }
 }

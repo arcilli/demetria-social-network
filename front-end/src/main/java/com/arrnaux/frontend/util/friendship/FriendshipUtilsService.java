@@ -3,9 +3,6 @@ package com.arrnaux.frontend.util.friendship;
 import com.arrnaux.demetria.core.interaction.BasicFriendshipUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,6 +24,10 @@ public class FriendshipUtilsService {
     @PostConstruct
     private void init() {
         restTemplate = this.autowiredComponent;
+    }
+
+    public static boolean createPersonVertex(RestTemplate restTemplate, SNUser snUser) {
+        return BasicFriendshipUtils.createPersonVertex(restTemplate, snUser);
     }
 
     public static boolean executeFollowUserRequest(SNUser loggedUser, String userNameToBeFollowed) {
@@ -51,7 +52,7 @@ public class FriendshipUtilsService {
     }
 
     @Nullable
-    public static List<SNUser> findFollowersUsers(@Nullable SNUser snUser) {
+    public static List<SNUser> getFollowers(@Nullable SNUser snUser) {
         return BasicFriendshipUtils.getFollowers(restTemplate, snUser);
     }
 

@@ -1,12 +1,12 @@
 package com.arrnaux.friendshiprelationservice.services;
 
-import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.util.user.UserUtilsService;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +38,7 @@ public class FollowService {
             targetVertex = followRelationDAO.storePerson(new GraphPersonEntity(targetUser));
         }
         if (null != sourceVertex && null != targetVertex) {
-            return null != followRelationDAO.storeValidFollowingRelation(sourceVertex, targetVertex);
+            return null != followRelationDAO.storeFollowsEdge(sourceVertex, targetVertex);
         }
         return false;
     }
@@ -51,10 +51,14 @@ public class FollowService {
     @RequestMapping(value = "/check/{user1}/{user2}", method = RequestMethod.GET)
     public Boolean checkFollowRelation(@PathVariable("user1") String source,
                                        @PathVariable("user2") String target) {
-        OEdge edge = followRelationDAO.findFollowingEdge(
-                GraphPersonEntity.builder().userName(source).build(),
-                GraphPersonEntity.builder().userName(target).build(),
-                FollowRelationValidity.VALID);
-        return null != edge;
+        try {
+            OEdge edge = followRelationDAO.findFollowingEdge(
+                    GraphPersonEntity.builder().userName(source).build(),
+                    GraphPersonEntity.builder().userName(target).build());
+            return null != edge;
+        } catch (NullArgumentException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

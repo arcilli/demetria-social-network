@@ -1,6 +1,5 @@
 package com.arrnaux.friendshiprelationservice.data;
 
-import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
@@ -30,7 +29,7 @@ public interface FollowRelationDAO {
      * @param destination
      * @return
      */
-    OEdge storeValidFollowingRelation(OVertex source, OVertex destination);
+    OEdge storeFollowsEdge(OVertex source, OVertex destination);
 
     /**
      * @param graphPersonEntity
@@ -40,17 +39,21 @@ public interface FollowRelationDAO {
      * will retrieve only the edge having that value.
      */
     @Nullable
-    OEdge findFollowingEdge(GraphPersonEntity graphPersonEntity, GraphPersonEntity destination, FollowRelationValidity... followRelationValidity);
+    OEdge findFollowingEdge(GraphPersonEntity graphPersonEntity, GraphPersonEntity destination) throws NullArgumentException;
 
-    @Nullable
-    OEdge invalidateFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination);
+    boolean deleteFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination);
 
     /**
      * @param snUser is an incomplete object.
-     * @return a list o ids corresponding to the user that @snUser is following.
+     * @return a list of ids corresponding to the users followed by @snUser.
      */
-    @Nullable
     List<String> getFollowedUsersIds(GraphPersonEntity snUser);
+
+    /**
+     * @param snUser is an incomplete object.
+     * @return a list of ids corresponding to the users who are following @snUser
+     */
+    List<String> getFollowersIds(GraphPersonEntity snUser);
 
     /**
      * Delete the vertex represented by a GraphPersonalityEntity and its vertices (in & out).
@@ -61,7 +64,6 @@ public interface FollowRelationDAO {
     boolean deletePersonEntityFromGraph(GraphPersonEntity snUser);
 
     /**
-     *
      * @param snUser
      * @return the number of persons who are followed by @snUSer.
      */

@@ -1,3 +1,10 @@
+.profile-card-flat {
+    display: flex;
+    flex-flow: row;
+    flex: auto;
+    justify-content: space-between;
+}
+
 .flex-container.profile-username {
     justify-content: center;
     font-weight: bold;

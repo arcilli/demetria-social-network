@@ -2,7 +2,10 @@ package com.arrnaux.friendshiprelationservice.dbConnection;
 
 import com.arrnaux.friendshiprelationservice.config.ProdOrientConfig;
 import com.orientechnologies.common.concur.OOfflineNodeException;
-import com.orientechnologies.orient.core.db.*;
+import com.orientechnologies.orient.core.db.ODatabaseSession;
+import com.orientechnologies.orient.core.db.ODatabaseType;
+import com.orientechnologies.orient.core.db.OrientDB;
+import com.orientechnologies.orient.core.db.OrientDBConfig;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import lombok.extern.java.Log;
@@ -38,6 +41,7 @@ public class DatabaseConnector {
         try {
             log.info("Creating OrientDB database");
             orientDB.createIfNotExists("test", ODatabaseType.PLOCAL, OrientDBConfig.defaultConfig());
+            setupVerticesAndEdgeClasses();
         } catch (OOfflineNodeException e) {
             log.info("Offline node exception");
             e.printStackTrace();

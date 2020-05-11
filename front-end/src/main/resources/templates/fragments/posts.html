@@ -31,7 +31,9 @@
                 <th:block th:replace="user/fragments :: userPhoto(${post.owner})">
                 </th:block>
                 </span>
-                <span th:replace="user/fragments :: userFullName(${post.owner})"></span>
+                <a th:href="@{'/profiles/'+ ${post.owner.userName}}">
+                    <span th:replace="user/fragments :: userFullName(${post.owner})"></span>
+                </a>
             </div>
             <!--        TODO: better display time from the post (hours, day, m, years), with the same structure of the link-->
             <div class="postCreationDate">
@@ -39,7 +41,11 @@
                     <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM yyyy')}+': '">
                     </td>
                 </a>
-                <span class="postRanking">Post rank: <span th:text="${post.averageRank}"></span></span>
+                <span class="postRanking">
+                    Post rank:
+                    <th:block th:text="${#numbers.formatDecimal(post.averageRank, 1, 1)}">
+                    </th:block>
+                </span>
             </div>
             <th:block th:if="${session.user != null and session.user.id == post.ownerId}">
                 <button type="button" class="btn btn-link btn-sm deletePostButton">Delete
@@ -64,7 +70,7 @@
                 <div class="postComment " th:each="comment : ${post.commentList}">
                     <div>
                         <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
-                           th:text="${post.owner.firstName}+' '+${post.owner.lastName}"></a>
+                           th:text="${comment.owner.getFullName()}"></a>
                         <span th:text="': '+${comment.content}"></span>
                     </div>
                 </div>

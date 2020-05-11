@@ -38,6 +38,10 @@ services:
       - my-overlay
     volumes:
       - mongo-rs1:/data/db
+    ports:
+      - "27017:27017"
+      - "27018:27018"
+      - "27019:27019"
   rs2:
     image: mongo
     command: mongod --replSet "rs0"
@@ -56,10 +60,6 @@ services:
     image: arcilli/demetria-mongo-replicas:2.2
     networks:
       - my-overlay
-    ports:
-      - "27017:27017"
-      - "27018:27018"
-      - "27019:27019"
     deploy:
       restart_policy:
         condition: on-failure

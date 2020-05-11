@@ -24,7 +24,7 @@ $(function (events, handler) {
 
     $("#confirmAccountDeleteButton").on("click", function () {
         $.ajax({
-            url: "/deleteAccount",
+            url: "/profiles/deleteAccount",
             type: 'DELETE',
             contentType: 'application/json',
             // an error needs to be treated as a success case (since a redirect header is returned)
@@ -164,6 +164,12 @@ $(function (events, handler) {
                 console.log(data);
             }
         });
+    });
+
+    $('.top-search-form').on('submit', function (event) {
+        if ("" === this[0].value) {
+            event.preventDefault();
+        }
     });
 });
 

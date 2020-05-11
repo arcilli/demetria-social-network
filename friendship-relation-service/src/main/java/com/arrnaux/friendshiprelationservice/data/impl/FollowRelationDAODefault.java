@@ -1,6 +1,5 @@
 package com.arrnaux.friendshiprelationservice.data.impl;
 
-import com.arrnaux.demetria.core.models.followRelation.FollowRelationValidity;
 import com.arrnaux.demetria.core.models.followRelation.GraphPersonEntity;
 import com.arrnaux.friendshiprelationservice.config.ProdOrientConfig;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
@@ -18,16 +17,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log
 public class FollowRelationDAODefault implements FollowRelationDAO {
     private final DatabaseConnector databaseConnector;
-//    private final ProdOrientConfig prodOrientConfig;
 
     public FollowRelationDAODefault(ProdOrientConfig prodOrientConfig) {
         log.info("FollowRelationDAO constructor");
-        log.info("FollowRelationDAO db pool provider" + prodOrientConfig);
+        log.info("FollowRelationDAO DB config:" + prodOrientConfig);
         this.databaseConnector = new DatabaseConnector(prodOrientConfig);
     }
 
@@ -47,7 +46,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
             vertexPerson = session.newVertex("Person");
             vertexPerson.setProperty("userName", graphPersonEntity.getUserName());
             vertexPerson.setProperty("storedId", graphPersonEntity.getStoredId());
-            vertexPerson.save();
+            session.save(vertexPerson);
 
             session.close();
         }
@@ -55,9 +54,9 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     }
 
     @Override
-    public OVertex findByUserName(GraphPersonEntity graphPersonEntity) throws NullArgumentException {
+    public OVertex findByUserName(GraphPersonEntity graphPersonEntity) {
         if (null == graphPersonEntity || null == graphPersonEntity.getUserName()) {
-            throw new NullArgumentException("Person object is null.");
+            return null;
         }
         String statement = "SELECT FROM Person WHERE userName = ?";
         ODatabaseSession session = getSession();
@@ -78,40 +77,37 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     }
 
     @Override
-    public OEdge storeValidFollowingRelation(OVertex source, OVertex destination) {
-        // This call is needed because the DB instance should be active on current thread.
-        OEdge edge = findFollowingEdge(
-                GraphPersonEntity.builder().userName(source.getProperty("userName")).build(),
-                GraphPersonEntity.builder().userName(destination.getProperty("userName")).build()
-        );
-        ODatabaseSession session = getSession();
-        if (null == edge) {
-            edge = source.addEdge(destination, "follows");
+    public OEdge storeFollowsEdge(OVertex source, OVertex destination) {
+        try {
+            OEdge edge = findFollowingEdge(
+                    GraphPersonEntity.builder().userName(source.getProperty("userName")).build(),
+                    GraphPersonEntity.builder().userName(destination.getProperty("userName")).build()
+            );
+            ODatabaseSession session = getSession();
+            if (null == edge) {
+                edge = source.addEdge(destination, "follows");
+            }
+            session.save(edge);
+            return edge;
+        } catch (NullArgumentException e) {
+            e.printStackTrace();
         }
-        edge.setProperty("valid", true);
-        session.save(edge);
-        return edge;
+        return null;
     }
 
     @Nullable
     @Override
-    public OEdge findFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination, FollowRelationValidity... followRelationValidity)
+    public OEdge findFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination)
             throws NullArgumentException {
         if (null == source || null == destination) {
+            log.severe("Source or destination null when creating following relation edge");
             throw new NullArgumentException("Source or destination null.");
         }
         String statement;
-        OResultSet rs;
         ODatabaseSession session = getSession();
         // For an edge, the input is where the arrow is (destinationPerson) and the out is the source of the edge.
-        if (0 == followRelationValidity.length) {
-            statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ?)";
-            rs = session.query(statement, destination.getUserName(), source.getUserName());
-        } else {
-            statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ? and valid= ?)";
-            rs = session.query(statement, destination.getUserName(), source.getUserName(),
-                    followRelationValidity[0].getValue());
-        }
+        statement = "SELECT * FROM follows WHERE (in.userName= ? and out.userName= ?)";
+        OResultSet rs = session.query(statement, destination.getUserName(), source.getUserName());
         // Only 1 result is expected.
         if (rs.hasNext()) {
             Optional<OEdge> edge = rs.next().getEdge();
@@ -121,19 +117,19 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         return null;
     }
 
-    @Nullable
     @Override
-    public OEdge invalidateFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination) {
-        OEdge edge = findFollowingEdge(source, destination);
-        if (null != edge) {
-            edge.setProperty("valid", false);
-            edge.save();
-            return edge;
+    public boolean deleteFollowingEdge(GraphPersonEntity source, GraphPersonEntity destination) {
+        try {
+            OEdge edge = findFollowingEdge(source, destination);
+            ODatabaseSession session = getSession();
+            session.delete(edge);
+            return true;
+        } catch (NullArgumentException e) {
+            log.severe("Source or destination null when deleting following edge");
         }
-        return null;
+        return false;
     }
 
-    @Nullable
     @Override
     public List<String> getFollowedUsersIds(GraphPersonEntity snUser) {
         ODatabaseSession session = getSession();
@@ -156,6 +152,30 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         }
         session.close();
         return followedPersons;
+    }
+
+    @Override
+    public List<String> getFollowersIds(GraphPersonEntity snUser) {
+        ODatabaseSession session = getSession();
+        OResultSet rs = null;
+        StringBuilder query = new StringBuilder("SELECT storedId FROM (SELECT EXPAND(IN()) FROM person WHERE ");
+        if (null != snUser) {
+            if (null != snUser.getStoredId()) {
+                query.append("storedId = ?)");
+                rs = session.query(query.toString(), snUser.getStoredId());
+            } else if (null != snUser.getUserName()) {
+                query.append("userName = ?)");
+                rs = session.query(query.toString(), snUser.getUserName());
+            }
+            if (null != rs) {
+                return rs.stream()
+                        .map(k -> (String) k.getProperty("storedId"))
+                        .collect(Collectors.toList());
+            }
+        }
+        session.close();
+        // Return an empty list.
+        return new ArrayList<>();
     }
 
     @Override

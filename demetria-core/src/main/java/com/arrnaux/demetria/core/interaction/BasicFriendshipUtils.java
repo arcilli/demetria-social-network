@@ -8,48 +8,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class BasicFriendshipUtils {
     private static final String serviceBaseUrl = "http://friendship-relation:8082/";
 
+    public static boolean createPersonVertex(RestTemplate restTemplate, @Nullable SNUser snUser) {
+        if (null != snUser && null != snUser.getUserName() && null != snUser.getId()) {
+            String targetUrl = serviceBaseUrl + "graphOperations/createVertexRepresentation";
+            try {
+                ResponseEntity<Boolean> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.POST,
+                        new HttpEntity<>(snUser), Boolean.class);
+                return (null != responseEntity.getBody()) && (responseEntity.getBody());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public static List<SNUser> getFollowedPersons(RestTemplate restTemplate, @Nullable SNUser snUser) {
-        List<String> userIds = getFollowedUsersIds(restTemplate, snUser);
+        List<String> userIds = getFollowedPersonsIds(restTemplate, snUser);
         if (null != userIds) {
-            List<SNUser> users = new ArrayList<>();
-            for (String userId : userIds) {
-                // Make a request.
-                SNUser user = BasicUserUtils.getObfuscatedUserById(restTemplate, userId);
-                users.add(user);
-            }
-            return users;
+            return getObfuscatedUsersForIds(restTemplate, userIds);
         }
         return null;
     }
 
     @Nullable
     public static List<SNUser> getFollowers(RestTemplate restTemplate, @Nullable SNUser snUser) {
-        if (null != snUser && null != snUser.getId()) {
-            String targetUrl = serviceBaseUrl + "graphOperations/noFollowers/" + snUser.getId();
-            ResponseEntity<List<SNUser>> responseEntity = (restTemplate.exchange(targetUrl, HttpMethod.GET,
-                    HttpEntity.EMPTY, new ParameterizedTypeReference<List<SNUser>>() {
-                    }));
-            return responseEntity.getBody();
-        }
-        return null;
-    }
-
-    @Nullable
-    public static List<String> getFollowedUsersIds(RestTemplate restTemplate, @Nullable SNUser snUser) {
-        if (null != snUser) {
-            String targetUrl = serviceBaseUrl + "graphOperations/followedPersons/" + snUser.getId();
-            ResponseEntity<List<String>> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
-                    new ParameterizedTypeReference<List<String>>() {
-                    });
-            return responseEntity.getBody();
+        List<String> userIds = getFollowersIds(restTemplate, snUser);
+        if (null != userIds) {
+            return getObfuscatedUsersForIds(restTemplate, userIds);
         }
         return null;
     }
@@ -136,5 +129,46 @@ public class BasicFriendshipUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Used for building the timeline.
+     *
+     * @param restTemplate
+     * @param snUser
+     * @return
+     */
+    @Nullable
+    public static List<String> getFollowedPersonsIds(RestTemplate restTemplate, @Nullable SNUser snUser) {
+        if (null != snUser && null != snUser.getId()) {
+            String targetUrl = serviceBaseUrl + "graphOperations/followedPersons/" + snUser.getId();
+            ResponseEntity<List<String>> responseEntity = restTemplate.exchange(targetUrl, HttpMethod.GET,
+                    HttpEntity.EMPTY, new ParameterizedTypeReference<List<String>>() {
+                    });
+            return responseEntity.getBody();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static List<String> getFollowersIds(RestTemplate restTemplate, @Nullable SNUser snUser) {
+        if (null != snUser && null != snUser.getId()) {
+            String targetUrl = serviceBaseUrl + "graphOperations/followers/" + snUser.getId();
+            ResponseEntity<List<String>> responseEntity = (restTemplate.exchange(targetUrl, HttpMethod.GET,
+                    HttpEntity.EMPTY, new ParameterizedTypeReference<List<String>>() {
+                    }));
+            return responseEntity.getBody();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static List<SNUser> getObfuscatedUsersForIds(RestTemplate restTemplate, List<String> userIds) {
+        if (null != userIds) {
+            return userIds.stream()
+                    .map(id -> BasicUserUtils.getObfuscatedUserById(restTemplate, id))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

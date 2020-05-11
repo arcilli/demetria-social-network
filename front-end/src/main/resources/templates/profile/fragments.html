@@ -50,16 +50,25 @@
 
 <th:block th:fragment="profile-card-flat(owner)">
     <div class="flex-container">
-        <div class="postOwner">
-            <div class="image-post" th:include="user/fragments :: userPhoto(${owner})">
-            </div>
-            <a th:href="@{'/profiles/' + ${user.userName}}">
-                <div th:include="user/fragments :: userFullName(${owner})"></div>
-            </a>
-            <div th:replace="profile/fragments :: followButton(${owner})">
-            </div>
-            <hr/>
+        <div class="profile-card-flat">
+            <span>
+                <span class="image-post">
+                    <th:block th:replace="user/fragments :: userPhoto(${owner})">
+                    </th:block>
+                </span>
+                <span>
+                <a th:href="@{'/profiles/' + ${user.userName}}">
+                    <th:block th:replace="user/fragments :: userFullName(${owner})">
+                    </th:block>
+                </a>
+                </span>
+                </span>
+            <span>
+                    <th:block th:replace="profile/fragments :: followButton(${owner})">
+                    </th:block>
+             </span>
         </div>
+        <hr/>
     </div>
 </th:block>
 
