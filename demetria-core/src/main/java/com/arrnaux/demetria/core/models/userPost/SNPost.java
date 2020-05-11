@@ -2,7 +2,6 @@ package com.arrnaux.demetria.core.models.userPost;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import lombok.*;
-import lombok.extern.log4j.Log4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Log4j
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

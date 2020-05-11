@@ -7,7 +7,7 @@ import com.arrnaux.demetria.core.models.userPost.Vote;
 import com.arrnaux.postservice.data.SNPostDAO;
 import com.arrnaux.postservice.data.SNPostRepository;
 import com.mongodb.client.result.UpdateResult;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.bson.Document;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -27,7 +27,7 @@ import java.util.Optional;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-@Log4j
+@Log
 @Repository
 public class SNPostDAODefault implements SNPostDAO {
 
@@ -118,7 +118,7 @@ public class SNPostDAODefault implements SNPostDAO {
                 return (Integer) (Objects.requireNonNull(results.getUniqueMappedResult())).get("count");
             }
         } catch (Exception e) {
-            log.trace(e.toString());
+            log.severe(e.toString());
         }
         return 0;
     }

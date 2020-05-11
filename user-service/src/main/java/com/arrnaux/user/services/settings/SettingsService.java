@@ -3,7 +3,7 @@ package com.arrnaux.user.services.settings;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
 import com.arrnaux.user.utils.Base64Handler;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Base64;
 import java.util.Objects;
 
+@Log
 @RestController
-@Log4j
 @RequestMapping("settings")
 public class SettingsService {
 

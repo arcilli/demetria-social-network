@@ -3,7 +3,7 @@ package com.arrnaux.user.services.authentication;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userAccount.SNUserLoginDTO;
 import com.arrnaux.user.data.SNUserDAO;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "login")
-@Log4j
+@Log
 public class LoginService {
 
     private final SNUserDAO snUserDAO;

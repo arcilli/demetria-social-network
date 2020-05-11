@@ -2,12 +2,10 @@ package com.arrnaux.demetria.core.models.userPost;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import lombok.*;
-import lombok.extern.log4j.Log4j;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-@Log4j
 @Getter
 @Setter
 @NoArgsConstructor

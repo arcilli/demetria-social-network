@@ -2,7 +2,7 @@ package com.arrnaux.user.services.provider;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "users")
-@Log4j
+@Log
 public class UserInformationProvider {
 
     final

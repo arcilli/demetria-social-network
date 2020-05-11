@@ -1,6 +1,5 @@
 package com.arrnaux.postservice.data;
 
-import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;

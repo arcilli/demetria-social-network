@@ -4,7 +4,7 @@ import com.arrnaux.demetria.core.models.userAccount.PasswordUtils;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userAccount.SNUserRegistrationDTO;
 import com.arrnaux.user.data.SNUserDAO;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@Log4j
+@Log
 @RestController
 @RequestMapping("/register")
 public class RegisterService {
@@ -33,7 +33,7 @@ public class RegisterService {
         if (!snUserRegistrationDTO.registrationFormIncomplete()) {
             SNUser user = snUserDAO.findUserByEmail(snUserRegistrationDTO.getEmail());
             if (null != user) {
-                log.error("An user with same email already exists");
+                log.severe("An user with same email already exists");
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             } else {
                 // throw an error for this case
