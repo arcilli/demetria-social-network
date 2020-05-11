@@ -100,12 +100,4 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>arcilli.repos</id>
-            <name>localhost</name>
-            <url>file:///home/arcilli/repos/demetria/${project.artifactId}/</url>
-        </repository>
-    </distributionManagement>
-
 </project>
