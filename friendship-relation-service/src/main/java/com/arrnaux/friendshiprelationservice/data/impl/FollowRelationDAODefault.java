@@ -77,8 +77,13 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
     }
 
     @Override
+    @Nullable
     public OEdge storeFollowsEdge(OVertex source, OVertex destination) {
         try {
+            if (source.equals(destination)) {
+                log.info(source + " is trying to follow itself.");
+                return null;
+            }
             OEdge edge = findFollowingEdge(
                     GraphPersonEntity.builder().userName(source.getProperty("userName")).build(),
                     GraphPersonEntity.builder().userName(destination.getProperty("userName")).build()

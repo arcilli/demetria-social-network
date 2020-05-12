@@ -13,7 +13,7 @@ import java.util.List;
 public interface FollowRelationDAO {
     /**
      * @param graphPersonEntity
-     * @return
+     * @return a stored vertex representing the graphPersonEntity.
      */
     OVertex storePerson(GraphPersonEntity graphPersonEntity);
 
@@ -27,16 +27,15 @@ public interface FollowRelationDAO {
     /**
      * @param source
      * @param destination
-     * @return
+     * @return the edge representing the follow relation.
      */
+    @Nullable
     OEdge storeFollowsEdge(OVertex source, OVertex destination);
 
     /**
      * @param graphPersonEntity
      * @param destination
-     * @param followRelationValidity enum (boolean). If it is not passed, then parameter is not used in query.
-     * @return the edge between source & destination, in this direction. If a @followRelationValidity parameter is passed,
-     * will retrieve only the edge having that value.
+     * @return the edge between source & destination, in this direction.
      */
     @Nullable
     OEdge findFollowingEdge(GraphPersonEntity graphPersonEntity, GraphPersonEntity destination) throws NullArgumentException;
@@ -51,7 +50,7 @@ public interface FollowRelationDAO {
 
     /**
      * @param snUser is an incomplete object.
-     * @return a list of ids corresponding to the users who are following @snUser
+     * @return a list of ids corresponding to the users who are following @snUser.
      */
     List<String> getFollowersIds(GraphPersonEntity snUser);
 

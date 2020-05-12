@@ -224,8 +224,14 @@ let getLastShowedPostId = function getLastShowedPostId() {
 };
 
 let extractUsernameFromLocationPath = function () {
-    let pathname = window.location.pathname.split("/");
-    return pathname[pathname.length - 1];
+    let pathElements = window.location.pathname.split("/");
+    let userName = "";
+    pathElements.forEach(function (element, i) {
+        if (element === "profiles") {
+            userName = pathElements[i + 1];
+        }
+    });
+    return userName;
 };
 
 let followUser = function () {

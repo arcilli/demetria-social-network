@@ -57,7 +57,7 @@
                     </th:block>
                 </span>
                 <span>
-                <a th:href="@{'/profiles/' + ${user.userName}}">
+                <a th:href="@{'/profiles/' + ${owner.userName}}">
                     <th:block th:replace="user/fragments :: userFullName(${owner})">
                     </th:block>
                 </a>

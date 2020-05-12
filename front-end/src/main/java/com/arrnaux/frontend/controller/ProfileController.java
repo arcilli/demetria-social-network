@@ -70,6 +70,7 @@ public class ProfileController {
                         .addObject("profileOwner", profileOwner)
                         .addObject("type", "Followers")
                         .addObject("users", followers)
+                        .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser))
                         .setViewName("profile/followers");
             }
         } else {
@@ -95,6 +96,7 @@ public class ProfileController {
                         .addObject("profileOwner", profileOwner)
                         .addObject("type", "Followed persons")
                         .addObject("users", users)
+                        .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser))
                         .setViewName("profile/followedPersons");
             }
         } else {
