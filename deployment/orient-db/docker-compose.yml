@@ -1,0 +1,14 @@
+#This was created to test the initial setup image.
+version: "3.3"
+services:
+
+  orient-db:
+    image: orientdb:latest
+    ports:
+      - "2424:2424"
+      - "2480:2480"
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd
+
+  orient-db-initial-setup:
+    image: arcilli/demetria-orient-init-setup:2.4-SNAPSHOT
