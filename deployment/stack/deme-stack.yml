@@ -57,7 +57,7 @@ services:
     volumes:
       - mongo-rs3:/data/db
   rs-setup:
-    image: arcilli/demetria-mongo-replicas:2.2
+    image: arcilli/demetria-mongo-replicas:2.4-SNAPSHOT
     networks:
       - my-overlay
     deploy:
