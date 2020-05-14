@@ -78,7 +78,15 @@ services:
       - orient-backup:/orientdb/backup
     networks:
       - my-overlay
-## Add a service that setup the initial data for orientdb.
+  orient-db-initial-setup:
+    image: arcilli/demetria-orient-init-setup:2.4-SNAPSHOT
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+    networks:
+      - my-overlay
 
 networks:
   my-overlay:
