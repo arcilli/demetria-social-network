@@ -23,7 +23,9 @@
                                 </th:block>
                             </span>
                         </span>
-                    <span th:replace="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)"></span>
+                    <span th:class="profile-follow-unfollow-button-wrapper"
+                          th:include="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)">
+                    </span>
                 </div>
             </div>
         </div>
