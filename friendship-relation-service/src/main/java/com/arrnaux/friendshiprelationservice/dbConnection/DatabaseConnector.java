@@ -62,7 +62,6 @@ public class DatabaseConnector {
 //            person.createIndex("PersonUserNameIndex", OClass.INDEX_TYPE.UNIQUE, OClass.VERTEX_CLASS_NAME);
 //        }
         OClass followRelation = session.createEdgeClass("follows");
-        followRelation.createProperty("valid", OType.BOOLEAN);
         session.close();
     }
 }

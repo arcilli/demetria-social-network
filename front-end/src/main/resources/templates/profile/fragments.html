@@ -23,7 +23,7 @@
                                 </th:block>
                             </span>
                         </span>
-                    <span th:replace="profile/fragments :: followButton(${profileOwner})"></span>
+                    <span th:replace="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)"></span>
                 </div>
             </div>
         </div>
@@ -38,8 +38,9 @@
             </div>
             <div class="card-body">
                 <div class="user-list-wrapper">
-                    <th:block th:each="user : ${userList}">
-                        <th:block th:replace="profile/fragments :: profile-card-flat(${user})">
+                    <th:block th:each="mapEntry : ${userList}">
+                        <th:block
+                                th:replace="profile/fragments :: profile-card-flat(${mapEntry.key}, ${mapEntry.value})">
                         </th:block>
                     </th:block>
                 </div>
@@ -48,7 +49,7 @@
     </div>
 </th:block>
 
-<th:block th:fragment="profile-card-flat(owner)">
+<th:block th:fragment="profile-card-flat(owner, isFollowed)">
     <div class="flex-container">
         <div class="profile-card-flat">
             <span>
@@ -64,7 +65,7 @@
                 </span>
                 </span>
             <span>
-                    <th:block th:replace="profile/fragments :: followButton(${owner})">
+                    <th:block th:replace="profile/fragments :: followButton(${owner}, ${isFollowed}, false)">
                     </th:block>
              </span>
         </div>
@@ -72,24 +73,30 @@
     </div>
 </th:block>
 
-<th:block th:fragment="followButton(user)" th:if="${session.user} != null" }>
+<th:block th:fragment="followButton(user, isFollowed, targetIsInUrl)" th:if="${session.user} != null" }>
     <th:block th:if="${user.userName} != ${session.user.userName}">
-        <th:block th:if="${userIsFollowed == true}">
-            <button class="unfollow-button btn btn-outline-primary my-2 my-sm-0 active">Unfollow</button>
+        <th:block th:if="${true == isFollowed}">
+            <button class="unfollow-button btn btn-outline-primary my-2 my-sm-0 active"
+                    th:classappend="${targetIsInUrl == true} ? '' : 'notSelf'">
+                Unfollow
+            </button>
         </th:block>
-        <th:block th:if="${null == userIsFollowed} OR ${false == userIsFollowed}">
-            <button class="follow-button btn btn-outline-primary my-2 my-sm-0">Follow</button>
+        <th:block th:if="${null == isFollowed} OR ${false == isFollowed}">
+            <button class="follow-button btn btn-outline-primary my-2 my-sm-0"
+                    th:classappend="${targetIsInUrl == true} ? '' : 'notSelf'">
+                Follow
+            </button>
         </th:block>
     </th:block>
 </th:block>
 
-
-<th:block th:fragment="displayFollowersButton(user, noFollowers)">
+<th:block th:fragment="displayNoFollowersButton(user, noFollowers)">
     <a th:href="@{${user.userName} +'/followers'}">
         <button class="btn btn-outline-primary" th:text="${noFollowers +' followers'}"></button>
     </a>
 </th:block>
 
+<!--TODO: display 0/-1 when noFollowedPersons is null.-->
 <th:block th:fragment="displayNoFollowingUsersButton(user, noFollowedPersons)">
     <a th:href="@{${user.userName} +'/following'}">
         <button class="btn btn-outline-primary" th:text="${noFollowedUsers +' followed persons'}"></button>

@@ -33,7 +33,7 @@
                             </span>
                             <span>
                                 <th:block th:if="${-1 != noFollowers}"
-                                          th:replace="profile/fragments :: displayFollowersButton(${profileOwner}, ${noFollowers})">
+                                          th:replace="profile/fragments :: displayNoFollowersButton(${profileOwner}, ${noFollowers})">
                                 </th:block>
                             </span>
                             <span>
@@ -42,7 +42,9 @@
                                 </th:block>
                             </span>
                         </span>
-                        <span th:replace="profile/fragments :: followButton(${profileOwner})"></span>
+                        <span th:class="profile-follow-unfollow-button-wrapper"
+                              th:include="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)">
+                        </span>
                     </div>
                 </div>
             </div>

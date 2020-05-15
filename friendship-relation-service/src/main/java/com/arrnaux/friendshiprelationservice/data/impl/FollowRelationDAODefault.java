@@ -127,7 +127,7 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         try {
             OEdge edge = findFollowingEdge(source, destination);
             ODatabaseSession session = getSession();
-            session.delete(edge);
+            session.delete(edge).commit();
             return true;
         } catch (NullArgumentException e) {
             log.severe("Source or destination null when deleting following edge");
@@ -140,7 +140,6 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
         ODatabaseSession session = getSession();
         String query;
         OResultSet rs = null;
-        // TODO: add a condition for checking that the relation is valid.
         if (null != snUser.getUserName()) {
             query = "SELECT in.storedId FROM follows where out.userName = ?";
             rs = session.query(query, snUser.getUserName());

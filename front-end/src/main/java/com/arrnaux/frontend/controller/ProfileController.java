@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 @Log
@@ -56,7 +57,6 @@ public class ProfileController {
         return modelAndView;
     }
 
-    // TODO
     @RequestMapping(value = "{userName}/followers")
     public ModelAndView showFollowers(HttpServletRequest request, @PathVariable("userName") String userName) {
         // Only logged persons will be able to see the followers.
@@ -66,10 +66,14 @@ public class ProfileController {
             SNUser profileOwner = UserUtilsService.getObfuscatedUserByUserName(userName);
             if (null != profileOwner) {
                 List<SNUser> followers = FriendshipUtilsService.getFollowers(profileOwner);
+                HashMap<SNUser, Boolean> usersAndFollowedValue = null;
+                if (null != followers) {
+                    usersAndFollowedValue = getUsersAndFollowValue(loggedUser, followers);
+                }
                 modelAndView
                         .addObject("profileOwner", profileOwner)
                         .addObject("type", "Followers")
-                        .addObject("users", followers)
+                        .addObject("users", usersAndFollowedValue)
                         .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser))
                         .setViewName("profile/followers");
             }
@@ -92,10 +96,14 @@ public class ProfileController {
                                 .id(profileOwner.getId())
                                 .build()
                 );
+                HashMap<SNUser, Boolean> usersAndFollowedValue = null;
+                if (null != users) {
+                    usersAndFollowedValue = getUsersAndFollowValue(loggedUser, users);
+                }
                 modelAndView
                         .addObject("profileOwner", profileOwner)
                         .addObject("type", "Followed persons")
-                        .addObject("users", users)
+                        .addObject("users", usersAndFollowedValue)
                         .addObject("userIsFollowed", profileIsFollowedByUser(profileOwner, loggedUser))
                         .setViewName("profile/followedPersons");
             }
@@ -150,5 +158,21 @@ public class ProfileController {
             return UserUtilsService.deleteUser(user);
         }
         return false;
+    }
+
+    /**
+     * @param currentOwner
+     * @param users
+     * @return a hashmap with the user as a key and a follow relation status (true if the user is followed, otherwise
+     * false
+     */
+    private HashMap<SNUser, Boolean> getUsersAndFollowValue(SNUser currentOwner, List<SNUser> users) {
+        HashMap<SNUser, Boolean> usersAndFollowValue = new HashMap<>();
+        for (SNUser snUser : users) {
+            if (null != snUser) {
+                usersAndFollowValue.put(snUser, FriendshipUtilsService.checkFollowRelation(currentOwner, snUser));
+            }
+        }
+        return usersAndFollowValue;
     }
 }

@@ -135,11 +135,13 @@ $(function (events, handler) {
         })
     });
 
-    $('.follow-button').on('click', followUser);
-    $('.user-list-wrapper').on('click', '.follow-button', followUser);
+    $('.profile-follow-unfollow-button-wrapper')
+        .on('click', '.follow-button', followUser)
+        .on('click', '.unfollow-button', unfollowUser);
 
-    $('.unfollow-button').on('click', unfollowUser);
-    $('.user-list-wrapper').on('click', '.unfollow-button', unfollowUser);
+    $('.user-list-wrapper')
+        .on('click', '.follow-button', followUser)
+        .on('click', '.unfollow-button', unfollowUser);
 
     $('.show-more-button').on('click', showMoreFromNewsFeed);
     $('.profile-show-more-button').on('click', showMoreFromUserProfile);
@@ -208,6 +210,7 @@ let showMoreFromUserProfile = function (doneCallback, ...doneCallbacks) {
         },
         error: function (result) {
             console.log("Error at retrieving more posts: " + result);
+            console.log("Result: " + result.responseText);
         }
     }).then(r => {
     });
@@ -224,7 +227,11 @@ let getLastShowedPostId = function getLastShowedPostId() {
 };
 
 let extractUsernameFromLocationPath = function () {
-    let pathElements = window.location.pathname.split("/");
+    return extractUsernameFromPath(window.location.pathname);
+};
+
+let extractUsernameFromPath = function (path) {
+    let pathElements = path.split("/");
     let userName = "";
     pathElements.forEach(function (element, i) {
         if (element === "profiles") {
@@ -232,12 +239,18 @@ let extractUsernameFromLocationPath = function () {
         }
     });
     return userName;
-};
+}
 
 let followUser = function () {
-    let userNameToFollow = extractUsernameFromLocationPath();
-    let targetUrl = "/follow/user/" + userNameToFollow;
+    let userNameToFollow = "";
     let sourceButton = this;
+    if (this.classList.contains('notSelf')) {
+        let userSpan = sourceButton.parentNode.previousElementSibling.children[1].firstElementChild;
+        userNameToFollow = extractUsernameFromPath(userSpan.attributes.href.nodeValue);
+    } else {
+        userNameToFollow = extractUsernameFromLocationPath();
+    }
+    let targetUrl = "/follow/user/" + userNameToFollow + "/";
     $.ajax({
         url: targetUrl,
         type: 'GET',
@@ -248,22 +261,28 @@ let followUser = function () {
         }, error: function (result) {
             console.log("Error at following: " + result);
         }
-    })
+    });
 };
 
 let unfollowUser = function () {
-    let userNameToUnfollow = extractUsernameFromLocationPath();
-    let targetUrl = "/follow/cancel/" + userNameToUnfollow;
+    let userNameToUnfollow = "";
     let sourceButton = this;
+    if (this.classList.contains('notSelf')) {
+        let userSpan = sourceButton.parentNode.previousElementSibling.children[1].firstElementChild;
+        userNameToUnfollow = extractUsernameFromPath(userSpan.attributes.href.nodeValue);
+    } else {
+        userNameToUnfollow = extractUsernameFromLocationPath();
+    }
+    let targetUrl = "/follow/cancel/" + userNameToUnfollow + "/";
     $.ajax({
         url: targetUrl,
         type: 'POST',
-        success: function (result) {
+        success: function () {
             sourceButton.innerText = "Follow";
             sourceButton.classList.add("follow-button");
-            sourceButton.classList.remove("active", "unfollow-button");
+            sourceButton.classList.remove("active", "selected", "unfollow-button");
         }, error: function (result) {
             console.log("Error at unfollowing: " + result);
         }
-    })
+    });
 };
