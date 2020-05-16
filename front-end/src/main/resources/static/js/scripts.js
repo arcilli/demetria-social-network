@@ -124,8 +124,10 @@ $(function (events, handler) {
                     let name = result.owner.firstName + " " + result.owner.lastName;
                     let profileURL = "/profiles/" + result.owner.userName;
                     let commentContent = result.content;
-                    let element = "<a href=\"" + profileURL + "\">" + name + "</a>: " + commentContent;
-                    form.before(element);
+                    let parentDiv = '<div class="postComment"><div>';
+                    let formattedContent = "<a href=\"" + profileURL + "\">" + name + "</a>: " + commentContent;
+                    formattedContent = parentDiv + formattedContent + "</div></div>";
+                    $(formattedContent).insertBefore('#' + formId);
                     form[0][0].value = "";
                 }
             }, error: function (result) {

@@ -67,7 +67,7 @@
             </th:block>
             <br/>
             <div class="postComments">
-                <div class="postComment " th:each="comment : ${post.commentList}">
+                <div class="postComment" th:each="comment : ${post.commentList}">
                     <div>
                         <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
                            th:text="${comment.owner.getFullName()}"></a>
