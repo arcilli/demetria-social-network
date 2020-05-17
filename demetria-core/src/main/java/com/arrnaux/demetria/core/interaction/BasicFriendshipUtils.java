@@ -171,4 +171,26 @@ public class BasicFriendshipUtils {
         }
         return null;
     }
+
+    @Nullable
+    public static List<String> getSuggestedIdsToFollow(RestTemplate restTemplate, @Nullable SNUser snUser) {
+        if (null == snUser || null == snUser.getId()) {
+            return null;
+        }
+        String targetUrl = serviceBaseUrl + "suggestions/user/" + snUser.getId();
+        return restTemplate.exchange(targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<List<String>>() {
+                }).getBody();
+    }
+
+    @Nullable
+    public static List<String> getMostPopularWhoAreNotAlreadyFollowed(RestTemplate restTemplate, @Nullable SNUser snUser) {
+        if (null == snUser || null == snUser.getId()) {
+            return null;
+        }
+        String targetUrl = serviceBaseUrl + "suggestions/popular/user/" + snUser.getId();
+        return restTemplate.exchange(targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<List<String>>() {
+                }).getBody();
+    }
 }

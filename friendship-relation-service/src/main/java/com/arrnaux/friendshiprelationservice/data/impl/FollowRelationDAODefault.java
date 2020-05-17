@@ -5,6 +5,7 @@ import com.arrnaux.friendshiprelationservice.config.ProdOrientConfig;
 import com.arrnaux.friendshiprelationservice.data.FollowRelationDAO;
 import com.arrnaux.friendshiprelationservice.dbConnection.DatabaseConnector;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
+import com.orientechnologies.orient.core.id.ORecordId;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.sql.executor.OResult;
@@ -14,6 +15,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -240,5 +242,68 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
             return val;
         }
         return (long) -1.0;
+    }
+
+    @Nullable
+    public List<String> getSuggestionsFromGraph(GraphPersonEntity snUser) {
+        OVertex currentUser = getVertexForPerson(snUser);
+        if (null != currentUser) {
+            ORecordId recordId = currentUser.getProperty("@rid");
+            if (null != recordId) {
+                String query = "SELECT FROM (TRAVERSE OUT(\"follows\") FROM ? MAXDEPTH 3) WHERE $depth >1";
+                ODatabaseSession session = getSession();
+                OResultSet resultSet = session.query(query, recordId);
+                List<String> recommendedUserIds = resultSet.stream()
+                        .map(k -> (String) k.getProperty("storedId"))
+                        .collect(Collectors.toList());
+                return recommendedUserIds;
+            }
+        }
+        return null;
+    }
+
+    @NotNull
+    public List<String> getMostPopularPersons(GraphPersonEntity currentUser, int maxSuggestions) {
+        if (null == currentUser) {
+            return null;
+        }
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("select storedId, in().size() as size FROM person WHERE storedId NOT IN ");
+        queryBuilder.append("(select OUT().storedId FROM Person where storedId= ?)")
+                .append("ORDER BY size DESC LIMIT ?");
+        ODatabaseSession session = getSession();
+        OResultSet resultSet = session.query(queryBuilder.toString(), currentUser.getStoredId(), maxSuggestions);
+        List<String> mostPopularPersons = resultSet.stream()
+                .map(k -> (String) k.getProperty("storedId"))
+                .collect(Collectors.toList());
+        return mostPopularPersons;
+    }
+
+    @Nullable
+    public OVertex getVertexForPerson(GraphPersonEntity snUser) {
+        if (null == snUser) {
+            return null;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("SELECT from Person WHERE ");
+        OResultSet resultSet = null;
+        ODatabaseSession session = getSession();
+        if (null != snUser.getStoredId()) {
+            stringBuilder.append("storedId = ?");
+            resultSet = session.query(stringBuilder.toString(), snUser.getStoredId());
+        } else if (null != snUser.getUserName()) {
+            stringBuilder.append("userName = ?");
+            resultSet = session.query(stringBuilder.toString(), snUser.getUserName());
+        }
+        Optional<OVertex> result = Optional.empty();
+        int count = 0;
+        while (null != resultSet && resultSet.hasNext()) {
+            result = resultSet.next().getVertex();
+            ++count;
+        }
+        if (1 == count) {
+            return result.orElse(null);
+        }
+        return null;
     }
 }

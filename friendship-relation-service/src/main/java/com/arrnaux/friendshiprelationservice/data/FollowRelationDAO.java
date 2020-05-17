@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public interface FollowRelationDAO {
+
     /**
      * @param graphPersonEntity
      * @return a stored vertex representing the graphPersonEntity.
@@ -73,4 +74,13 @@ public interface FollowRelationDAO {
      * @return the number of person who are following @snUser.
      */
     long countNumberOfFollowers(GraphPersonEntity snUser);
+
+    @Nullable
+    List<String> getSuggestionsFromGraph(GraphPersonEntity snUser);
+
+    @Nullable
+    List<String> getMostPopularPersons(GraphPersonEntity currentUser, int maxSuggestions);
+
+    @Nullable
+    OVertex getVertexForPerson(GraphPersonEntity snUser);
 }

@@ -63,4 +63,13 @@ public class FriendshipUtilsService {
     public static boolean deleteUserFromGraph(SNUser snUser) {
         return BasicFriendshipUtils.deletePersonFromGraph(restTemplate, snUser);
     }
+
+    public static List<String> getSuggestedIds(SNUser snUser) {
+        return BasicFriendshipUtils.getSuggestedIdsToFollow(restTemplate, snUser);
+    }
+
+    @Nullable
+    public static List<String> getMostPopularWhoAreNotAlreadyFollowed(SNUser snUser) {
+        return BasicFriendshipUtils.getMostPopularWhoAreNotAlreadyFollowed(restTemplate, snUser);
+    }
 }
