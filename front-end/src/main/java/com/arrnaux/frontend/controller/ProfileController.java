@@ -1,6 +1,7 @@
 package com.arrnaux.frontend.controller;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
+import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
 import com.arrnaux.frontend.util.users.UserUtilsService;
 import lombok.extern.java.Log;
@@ -48,6 +49,10 @@ public class ProfileController {
             if (-1 != FriendshipUtilsService.getNoFollowers(profileOwner)) {
                 modelAndView.addObject("noFollowers", FriendshipUtilsService.getNoFollowers(profileOwner));
             }
+            if (null != loggedUser && userName.equals(loggedUser.getUserName())) {
+                modelAndView.addObject("post", new SNPost());
+            }
+
             modelAndView.setViewName("profile");
         } else {
             // The user does not exist.

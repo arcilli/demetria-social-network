@@ -155,10 +155,10 @@
 </div>
 
 <div th:fragment="createAPost">
-    <div class="card text-center">
+    <div class="text-center">
         <div class="card-body">
             <h5>Create a post</h5>
-            <form action="#" method="post" th:action="createAPost" th:object="${post}">
+            <form action="#" method="post" th:action="@{/createAPost}" th:object="${post}">
                 <textarea class="custom-textarea" th:field="*{content}"></textarea><br/>
                 <label for="visibility">Visibility</label>
                 <select name="visibilityOption" id="visibility" th:field="*{visibility}">
