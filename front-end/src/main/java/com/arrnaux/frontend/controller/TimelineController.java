@@ -5,10 +5,6 @@ import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.frontend.util.posts.PostsUtilsService;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 

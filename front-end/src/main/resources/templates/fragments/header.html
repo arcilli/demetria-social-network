@@ -52,22 +52,17 @@
 </nav>
 
 <th:block th:fragment="headerIncludes">
-    <!--    Bootstrap css-->
+    <!--    Bootstrap font-awesome.min.css-->
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}"/>
-    <!--    Used for star rating-->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/js/jquery/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/scripts.js}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </th:block>
 
 <!--A header element (instead of a nav) for a visitor that is not logged-->

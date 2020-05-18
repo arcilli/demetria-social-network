@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -69,5 +70,19 @@ public class SNUser extends SNUserLoginDTO {
             }
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SNUser snUser = (SNUser) o;
+        return Objects.equals(id, snUser.id) &&
+                Objects.equals(userName, snUser.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName);
     }
 }

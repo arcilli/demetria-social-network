@@ -10,19 +10,48 @@
 
 <body>
 <nav th:replace="fragments/header :: top-bar"></nav>
+
 <div class="container custom-container">
     <div class="row">
-        <div class="col-12 custom-box">
-            <div th:replace="fragments/forms :: createAPost"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card text-center">
+        <div class="col-sm-3">
+            <div class="card custom-box">
+                <th:block th:replace="user/fragments :: userPhoto(${session.user})">
+                </th:block>
                 <div class="card-body">
-                    <h5>Timeline from friends</h5>
-                    <div class="posts-wrapper">
-                        <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts</button>
+                    <div class="profile-information">
+                        <span>
+                            <h3>
+                            <th:block th:replace="user/fragments :: userFullName(${session.user})">
+                            </th:block>
+                        </h3>
+                            <span>
+                                <th:block th:replace="user/fragments :: displayUserName(${session.user})">
+                                </th:block>
+                            </span>
+                        </span>
+                        <div class="user-list-wrapper">
+                            <h6>Suggested persons to follow:</h6>
+                            <th:block th:each="person : ${suggestedPersons}">
+                                <th:block th:replace="profile/fragments :: profile-card-flat(${person}, false)">
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
+            <div class="card custom-box">
+                <div class="text-center my-posts">
+                    <h3 class="card-header">Timeline</h3>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="posts-wrapper">
+                            <button class="show-more-button btn btn-outline-primary my-2 my-sm-0">Show more posts
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,5 +62,4 @@
     showMoreFromNewsFeed();
 </script>
 </body>
-
 </html>

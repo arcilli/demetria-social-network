@@ -273,10 +273,9 @@ public class FollowRelationDAODefault implements FollowRelationDAO {
                 .append("ORDER BY size DESC LIMIT ?");
         ODatabaseSession session = getSession();
         OResultSet resultSet = session.query(queryBuilder.toString(), currentUser.getStoredId(), maxSuggestions);
-        List<String> mostPopularPersons = resultSet.stream()
+        return resultSet.stream()
                 .map(k -> (String) k.getProperty("storedId"))
                 .collect(Collectors.toList());
-        return mostPopularPersons;
     }
 
     @Nullable

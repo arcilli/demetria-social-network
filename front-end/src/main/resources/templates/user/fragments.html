@@ -9,14 +9,16 @@
 </th:block>
 
 <th:block th:fragment="userPhoto(user)">
-    <th:block th:if="${null == user.profileImageBase64}">
-        <img class="img-fluid"
-             src="https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-7.png"
-             th:alt="${user.getFullName()}" th:id="${'pp-'+user.id}"/>
-    </th:block>
-    <th:block th:if="${null != user.profileImageBase64}">
-        <img class="img-fluid"
-             th:src="${user.profileImageBase64}" th:alt="${user.fullName}" th:id="${'pp-'+user.id}"/>
+    <th:block th:if="${null != user}">
+        <th:block th:if="${null == user.profileImageBase64}">
+            <img class="img-fluid"
+                 src="https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-7.png"
+                 th:alt="${user.getFullName()}" th:id="${'pp-'+user.id}"/>
+        </th:block>
+        <th:block th:if="${null != user.profileImageBase64}">
+            <img class="img-fluid"
+                 th:src="${user.profileImageBase64}" th:alt="${user.fullName}" th:id="${'pp-'+user.id}"/>
+        </th:block>
     </th:block>
 </th:block>
 

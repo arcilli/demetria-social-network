@@ -64,6 +64,7 @@ public class FriendshipUtilsService {
         return BasicFriendshipUtils.deletePersonFromGraph(restTemplate, snUser);
     }
 
+    @Nullable
     public static List<String> getSuggestedIds(SNUser snUser) {
         return BasicFriendshipUtils.getSuggestedIdsToFollow(restTemplate, snUser);
     }
