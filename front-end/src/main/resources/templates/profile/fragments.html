@@ -76,7 +76,7 @@
 </th:block>
 
 <th:block th:fragment="followButton(user, isFollowed, targetIsInUrl)">
-    <th:block th:if="${session.user} != null AND ${user.userName} != ${session.user.userName}">
+    <th:block th:if="null != ${session.user} AND ${user.userName} != ${session.user.userName}">
         <th:block th:if="${true == isFollowed}">
             <button class="unfollow-button btn btn-outline-primary my-2 my-sm-0 active"
                     th:classappend="${targetIsInUrl == true} ? '' : 'notSelf'">
