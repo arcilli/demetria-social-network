@@ -4,6 +4,7 @@ import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.frontend.util.posts.PostsUtilsService;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@Log
 public class PostController {
 
     @PostMapping("createAPost")
@@ -21,6 +23,7 @@ public class PostController {
         if (currentUser != null) {
             post.setOwnerId(currentUser.getId());
             try {
+                log.info("User: " + currentUser.getId() + " is creating a post: " + post);
                 PostsUtilsService.createPost(post);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -37,8 +40,11 @@ public class PostController {
         SNUser currentUser = (SNUser) request.getSession().getAttribute("user");
         if (null != currentUser) {
             try {
-                // TODO: ensure that currentUser is the owner of the post
-                return PostsUtilsService.deletePost(post);
+                log.info("User " + currentUser.getId() + " is attempting to delete the post" + post.getId());
+                SNPost currentPost = PostsUtilsService.getPost(post.getId());
+                // The logged user should be the owner of the post.
+                if (null != currentPost && currentUser.getId().equals(currentPost.getOwnerId()))
+                    return PostsUtilsService.deletePost(post);
             } catch (Exception e) {
                 e.printStackTrace();
             }

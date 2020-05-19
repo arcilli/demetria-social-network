@@ -7,6 +7,7 @@ import com.arrnaux.demetria.core.models.userPost.PostVisibility;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.demetria.core.models.userPost.Vote;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,5 +57,13 @@ public class PostsUtilsService {
 
     public static Double voteAPost(Vote vote) {
         return BasicPostsUtils.voteAPost(restTemplate, vote);
+    }
+
+    @Nullable
+    public static SNPost getPost(String postId) {
+        if (null != postId) {
+            return BasicPostsUtils.getPost(restTemplate, postId).getBody();
+        }
+        return null;
     }
 }

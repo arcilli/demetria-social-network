@@ -88,7 +88,8 @@ $(function (events, handler) {
                             $('#' + arr.id).remove();
                         }
                     },
-                    error: function () {
+                    error: function (result) {
+                        console.log(result);
                         alert("Something went wrong");
                     }
                 });
