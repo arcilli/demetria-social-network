@@ -9,7 +9,6 @@ logs/
 *.aux
 *.blg
 *.idx
-*.gz
 *.toc
 
 
