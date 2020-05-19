@@ -38,7 +38,7 @@
             <!--        TODO: better display time from the post (hours, day, m, years), with the same structure of the link-->
             <div class="postCreationDate">
                 <a th:href="@{'/posts/' + ${post.id}}">
-                    <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM yyyy')}+': '">
+                    <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM')}+': '">
                     </td>
                 </a>
                 <span class="postRanking">
@@ -71,7 +71,8 @@
                     <div>
                         <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
                            th:text="${comment.owner.getFullName()}"></a>
-                        <span th:text="': '+${comment.content}"></span>
+                        <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM hh:mm')} + ': '+${comment.content}">
+                        </span>
                     </div>
                 </div>
                 <div>

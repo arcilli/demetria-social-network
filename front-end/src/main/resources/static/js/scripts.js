@@ -126,7 +126,13 @@ $(function (events, handler) {
                     let profileURL = "/profiles/" + result.owner.userName;
                     let commentContent = result.content;
                     let parentDiv = '<div class="postComment"><div>';
-                    let formattedContent = "<a href=\"" + profileURL + "\">" + name + "</a>: " + commentContent;
+                    let date = new Date();
+                    const monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                    ];
+                    let formattedDate = date.getDay() + " " + monthNames[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes()
+                    formattedDate += ": ";
+                    let formattedContent = "<a href=\"" + profileURL + "\">" + name + "</a> on " + formattedDate + commentContent;
                     formattedContent = parentDiv + formattedContent + "</div></div>";
                     $(formattedContent).insertBefore('#' + formId);
                     form[0][0].value = "";
