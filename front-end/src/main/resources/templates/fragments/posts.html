@@ -16,10 +16,13 @@
 
 <td th:fragment=createComment(postId) th:if="${newComment != null}">
     <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
-        <input type="text" class="form-control" th:field="*{content}" placeholder="Add comment"/>
-        <input type="hidden" name="id" th:value="${postId}"/>
-        <br/>
-        <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment</button>
+        <div class="form-group">
+            <textarea type="text" class="form-control" th:field="*{content}" placeholder="Add comment" rows="2">
+            </textarea>
+            <input type="hidden" name="id" th:value="${postId}"/>
+            <br/>
+            <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment</button>
+        </div>
     </form>
 </td>
 

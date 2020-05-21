@@ -159,18 +159,21 @@
         <div class="card-body">
             <h5>Create a post</h5>
             <form action="#" method="post" th:action="@{/createAPost}" th:object="${post}">
-                <textarea class="custom-textarea" th:field="*{content}"></textarea><br/>
-                <label for="visibility">Visibility</label>
-                <select name="visibilityOption" id="visibility" th:field="*{visibility}">
-                    <th:block
-                            th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.models.userPost.PostVisibility).reversedValues()}">
-                        <th:block th:if="${visibilityOpt.displayValue !=''}">
-                            <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+                <div class="form-group">
+                    <label for="post-content">Post content</label>
+                    <textarea class="form-control" id="post-content" th:field="*{content}"></textarea><br/>
+                    <label for="visibility">Visibility</label>
+                    <select name="visibilityOption" id="visibility" th:field="*{visibility}">
+                        <th:block
+                                th:each="visibilityOpt : ${T(com.arrnaux.demetria.core.models.userPost.PostVisibility).reversedValues()}">
+                            <th:block th:if="${visibilityOpt.displayValue !=''}">
+                                <option th:value="${visibilityOpt}" th:text="${visibilityOpt.displayValue}"></option>
+                            </th:block>
                         </th:block>
-                    </th:block>
-                </select>
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
-                <br/>
+                    </select>
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Post</button>
+                    <br/>
+                </div>
             </form>
         </div>
     </div>
