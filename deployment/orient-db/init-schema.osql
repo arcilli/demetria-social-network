@@ -1,0 +1,10 @@
+CREATE CLASS Person EXTENDS V;
+CREATE PROPERTY Person.storedId STRING;
+CREATE PROPERTY Person.userName STRING;
+CREATE INDEX person_storedID_UK ON Person(storedId) UNIQUE;
+CREATE INDEX person_userName_UK ON Person(userName) UNIQUE;
+
+CREATE CLASS follows EXTENDS E;
+CREATE PROPERTY follows.out LINK Person;
+CREATE PROPERTY follows.in LINK Person;
+CREATE INDEX follows_out_in_UK on follows(out, in) UNIQUE;
