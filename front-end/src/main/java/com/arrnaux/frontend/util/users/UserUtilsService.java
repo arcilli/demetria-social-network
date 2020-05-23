@@ -15,10 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class UserUtilsService {
     private static final String baseTargetUrl = "http://user-service:8080/";
+
     private static RestTemplate restTemplate;
 
     private final RestTemplate autowiredComponent;
@@ -69,5 +71,9 @@ public class UserUtilsService {
 
     public static boolean deleteUser(SNUser snUser) {
         return BasicUserUtils.deleteUser(restTemplate, snUser);
+    }
+
+    public static ResponseEntity<Boolean> changeUserPassword(Map<String, Object> oldUserAndNewPassword) {
+        return BasicUserUtils.changePassword(restTemplate, oldUserAndNewPassword);
     }
 }

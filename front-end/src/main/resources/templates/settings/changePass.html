@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Change password | Demetria</title>
+    <th:block th:replace="fragments/header :: headerIncludes">
+    </th:block>
+</head>
+<body>
+<body>
+<nav th:replace="fragments/header :: top-bar"></nav>
+<!--Make this representation consistent with the rest of the pages.-->
+<th:block th:fragment="changePass(userRegistrationDTO)">
+    <form action="/settings/changePassword" th:action="@{/settings/changePassword}" method="POST">
+        <div class="form-group">
+            <label for="oldPassword">Old password</label>
+            <input type="password" id="oldPassword" required="required" name="oldPassword"/><br/>
+            <label for="newPassword">New password</label>
+            <input type="password" id="newPassword" required="required"
+                   th:field="${userRegistrationDTO.password}"/><br/>
+            <label for="newPasswordMatch">Confirm new password</label>
+            <input type="password" id="newPasswordMatch" required="required"
+                   th:field="${userRegistrationDTO.passwordMatch}"/>
+            <button type="submit" class="btn btn-outline-primary">Submit</button>
+        </div>
+    </form>
+</th:block>
+<th:block>
+    <th:block th:if="null != ${passWasChanged} AND true == ${passWasChanged}">
+        <div class="acknowledge-message">The password was changed.</div>
+    </th:block>
+    <th:block th:if="null != ${wrongPassword} AND true==${wrongPassword}">
+        <div class="error-message">Your account password is wrong.</div>
+    </th:block>
+    <th:block th:if="null != ${minimumOnePasswordIsMissing} AND true==${minimumOnePasswordIsMissing}">
+        <div class="error-message">Error at processing the form. Complete all the fields in order to change your
+            password.
+        </div>
+    </th:block>
+</th:block>
+</body>
+</html>

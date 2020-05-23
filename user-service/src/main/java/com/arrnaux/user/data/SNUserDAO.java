@@ -21,7 +21,7 @@ public interface SNUserDAO {
     SNUser saveSNUser(SNUser snUser);
 
     @Nullable
-    SNUser findUserByEmailAndPlainPassword(String email, String plainPassword);
+    SNUser findUserByEmailAndPlainPassword(@Nullable String email, @Nullable String plainPassword);
 
     Boolean removeUserAccount(String email);
 
@@ -39,4 +39,7 @@ public interface SNUserDAO {
 
     @Nullable
     SNUser replaceProfileImage(SNUser snUser, String encodedProfileImage);
+
+    @Nullable
+    SNUser updateUserPassword(SNUser snUser, String newPlainPassword);
 }

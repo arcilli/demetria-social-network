@@ -142,25 +142,12 @@
     </div>
 </div>
 
-<!--TODO: populate with an object or find a solution-->
-<div th:fragment="changePass">
-    <form action="#" th:action="@{/settings/changePassword}" th:object="${}">
-        <label for="oldPassword">Old password</label>
-        <input type="password" id="oldPassword" required="required" th:field="${oldPassword}"/><br/>
-        <label for="newPassword">New password</label>
-        <input type="password" id="newPassword" required="required" th:field="${newPassword}"/><br/>
-        <label for="newPasswordMatch">Confirm new password</label>
-        <input type="password" id="newPasswordMatch" required="required" th:field="${newPasswordMatch}"/>
-    </form>
-</div>
-
 <div th:fragment="createAPost">
     <div class="text-center">
         <div class="card-body">
             <h5>Create a post</h5>
             <form action="#" method="post" th:action="@{/createAPost}" th:object="${post}">
                 <div class="form-group">
-                    <label for="post-content">Post content</label>
                     <textarea class="form-control" id="post-content" th:field="*{content}"></textarea><br/>
                     <label for="visibility">Visibility</label>
                     <select name="visibilityOption" id="visibility" th:field="*{visibility}">

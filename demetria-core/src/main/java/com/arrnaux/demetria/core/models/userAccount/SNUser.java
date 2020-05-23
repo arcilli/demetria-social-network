@@ -1,5 +1,6 @@
 package com.arrnaux.demetria.core.models.userAccount;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.lang.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -61,6 +62,7 @@ public class SNUser extends SNUserLoginDTO {
      *
      * @return a full name of an user.
      */
+    @JsonIgnore
     public String getFullName() {
         StringBuilder stringBuilder = new StringBuilder();
         if (null != firstName) {

@@ -34,34 +34,23 @@ public class PasswordUtils {
 
     public static Optional<String> hashPassword(String password, String salt) {
 
-        // delete this after generate a global salt
+        // TODO: delete this after generate a global salt.
         if (salt == null) salt = TEMPORARY_SALT;
 
         char[] chars = password.toCharArray();
-
         byte[] bytes = salt.getBytes();
 
         PBEKeySpec spec = new PBEKeySpec(chars, bytes, ITERATIONS, KEY_LENGTH);
-
         Arrays.fill(chars, Character.MIN_VALUE);
-
         try {
             SecretKeyFactory fac = SecretKeyFactory.getInstance(ALGORITHM);
             byte[] securePassword = fac.generateSecret(spec).getEncoded();
             return Optional.of(Base64.getEncoder().encodeToString(securePassword));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            System.err.println("Exception encountered in hashPassword");
+            System.err.println("Exception encountered while hashing the password.");
             return Optional.empty();
         } finally {
             spec.clearPassword();
         }
-    }
-
-    public static boolean verifyPassword(String password, String salt, String key) {
-        // delete this after generate a global salt
-        if (salt == null) salt = TEMPORARY_SALT;
-
-        Optional<String> optEncrypted = hashPassword(password, salt);
-        return optEncrypted.map(s -> s.equals(key)).orElse(false);
     }
 }

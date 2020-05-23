@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 public class BasicUserUtils {
 
     private static final String serviceBaseUrl = "http://user-service:8080/";
@@ -47,5 +49,11 @@ public class BasicUserUtils {
             return responseEntity.getBody();
         }
         return false;
+    }
+
+    public static ResponseEntity<Boolean> changePassword(RestTemplate restTemplate, Map<String, Object> parameters) {
+        String targetUrl = serviceBaseUrl + "settings/changePassword";
+        return restTemplate.exchange(targetUrl, HttpMethod.PATCH,
+                new HttpEntity<>(parameters), Boolean.class);
     }
 }

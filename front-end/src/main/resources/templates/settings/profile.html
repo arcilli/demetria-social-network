@@ -27,7 +27,9 @@
         <div class="col-sm-9">
             <div class="profile">
                 <div th:replace="fragments/forms :: userSettings"></div>
-                <!--<div th:replace="fragments/forms :: changePass"></div>-->
+                <a href="/settings/changePassword">
+                    <button type="button" class="btn btn-outline-primary">Change password</button>
+                </a>
             </div>
         </div>
     </div>

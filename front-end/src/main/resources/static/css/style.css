@@ -1,3 +1,11 @@
+.acknowledge-message {
+    color: #28a745;
+}
+
+.error-message {
+    color: #dc3545;;
+}
+
 .profile-card-flat {
     display: flex;
     flex-flow: row;

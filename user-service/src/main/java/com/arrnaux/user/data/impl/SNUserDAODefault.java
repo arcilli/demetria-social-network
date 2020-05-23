@@ -8,7 +8,6 @@ import com.mongodb.client.result.UpdateResult;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -23,12 +22,15 @@ import java.util.Optional;
 @Repository
 
 public class SNUserDAODefault implements SNUserDAO {
-
-    @Autowired
     private SNUserRepository snUserRepository;
 
-    @Autowired
     private MongoOperations mongoOperations;
+
+    @Autowired
+    public SNUserDAODefault(SNUserRepository snUserRepository, MongoOperations mongoOperations) {
+        this.snUserRepository = snUserRepository;
+        this.mongoOperations = mongoOperations;
+    }
 
     @Nullable
     @Override
@@ -57,7 +59,10 @@ public class SNUserDAODefault implements SNUserDAO {
 
     @Nullable
     @Override
-    public SNUser findUserByEmailAndPlainPassword(String email, String plainPassword) {
+    public SNUser findUserByEmailAndPlainPassword(@Nullable String email, @Nullable String plainPassword) {
+        if (null == email || null == plainPassword) {
+            return null;
+        }
         Optional<String> hashedPassword = PasswordUtils.hashPassword(plainPassword, null);
         return hashedPassword.map(s -> findUserByEmailAndPassword(email, s)).orElse(null);
     }
@@ -134,6 +139,7 @@ public class SNUserDAODefault implements SNUserDAO {
         if (null != queryTerms) {
             String regex = getRegexFromQueryTerms(queryTerms);
             Criteria criteria = new Criteria();
+            // i parameter is for case-insensitive match.
             criteria.orOperator(
                     Criteria.where("lastName").regex(regex, "i"),
                     Criteria.where("firstName").regex(regex, "i")
@@ -141,6 +147,28 @@ public class SNUserDAODefault implements SNUserDAO {
             Query query = new Query(criteria);
             query.fields().exclude("password");
             return mongoOperations.find(query, SNUser.class);
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SNUser updateUserPassword(SNUser snUser, String newPlainPassword) {
+        Optional<String> hashedPasswordOpt = PasswordUtils.hashPassword(newPlainPassword, null);
+        if (!hashedPasswordOpt.isPresent() || null == snUser.getEmail()) {
+            return null;
+        }
+        String hashedPassword = hashedPasswordOpt.get();
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(snUser.getEmail()));
+        UpdateResult updateResult = mongoOperations.updateMulti(
+                query,
+                Update.update("password", hashedPassword),
+                SNUser.class
+        );
+        // Use matched count since the new password can be equal to the oldest one.
+        if (1 == updateResult.getMatchedCount()) {
+            return findUserByEmail(snUser.getEmail());
         }
         return null;
     }
@@ -155,4 +183,5 @@ public class SNUserDAODefault implements SNUserDAO {
         regexBuilder.append(queryTerms[queryTerms.length - 1]);
         return regexBuilder.toString();
     }
+
 }

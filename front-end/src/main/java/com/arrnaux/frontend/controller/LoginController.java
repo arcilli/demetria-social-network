@@ -3,17 +3,19 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userAccount.SNUserLoginDTO;
 import com.arrnaux.frontend.util.users.UserUtilsService;
-import org.springframework.stereotype.Controller;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
+@Log
 public class LoginController {
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
@@ -37,6 +39,7 @@ public class LoginController {
         HttpSession session = request.getSession();
         if (null == session.getAttribute("user")) {
             try {
+                log.info("User " + userLoginDTO + " is trying to login.");
                 SNUser loggedUser = UserUtilsService.executeLoginRequest(userLoginDTO);
                 if (null != loggedUser) {
                     session.setAttribute("user", loggedUser.obfuscateUserInformation());

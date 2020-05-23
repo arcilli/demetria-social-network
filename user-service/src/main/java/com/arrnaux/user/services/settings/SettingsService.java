@@ -3,12 +3,14 @@ package com.arrnaux.user.services.settings;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
 import com.arrnaux.user.utils.Base64Handler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
+import java.util.Map;
 import java.util.Objects;
 
 @Log
@@ -71,5 +73,23 @@ public class SettingsService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @RequestMapping(value = "changePassword", method = RequestMethod.PATCH)
+    public ResponseEntity<Boolean> changePassword(@RequestBody Map<String, Object> parameters) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        SNUser oldUser = objectMapper.convertValue(parameters.get("oldUser"), SNUser.class);
+        String newPass = objectMapper.convertValue(parameters.get("newPassword"), String.class);
+        if (null != oldUser && null != newPass) {
+            SNUser targetUser = snUserDAO.findUserByEmailAndPlainPassword(oldUser.getEmail(), oldUser.getPassword());
+            if (null == targetUser) {
+                return new ResponseEntity<>(false, HttpStatus.ACCEPTED);
+            }
+            targetUser.obfuscateUserInformation();
+            if (null != snUserDAO.updateUserPassword(targetUser, newPass)) {
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(false, HttpStatus.NO_CONTENT);
     }
 }
