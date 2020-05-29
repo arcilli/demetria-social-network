@@ -27,12 +27,17 @@
         <div class="col-sm-9">
             <div class="profile">
                 <div th:replace="fragments/forms :: userSettings"></div>
-                <a href="/settings/changePassword">
-                    <button type="button" class="btn btn-outline-primary">Change password</button>
-                </a>
+                <div class="card card-body">
+                    <th:block th:class="password-change-form"
+                              th:replace="settings/changePass :: changePass(${modifiedUser})">
+                    </th:block>
+                    <th:block
+                            th:replace="settings/changePass :: changePassMessages(${passWasChanged},
+                            ${wrongPassword}, ${minimumOnePasswordIsMissing})">
+                    </th:block>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

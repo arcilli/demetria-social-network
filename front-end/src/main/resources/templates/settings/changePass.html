@@ -9,7 +9,6 @@
 <body>
 <body>
 <nav th:replace="fragments/header :: top-bar"></nav>
-<!--Make this representation consistent with the rest of the pages.-->
 <th:block th:fragment="changePass(userRegistrationDTO)">
     <form action="/settings/changePassword" th:action="@{/settings/changePassword}" method="POST">
         <div class="form-group">
@@ -25,7 +24,7 @@
         </div>
     </form>
 </th:block>
-<th:block>
+<th:block th:fragment="changePassMessages(passWasChanged, wrongPassword, minimumOnePasswordIsMissing)">
     <th:block th:if="null != ${passWasChanged} AND true == ${passWasChanged}">
         <div class="acknowledge-message">The password was changed.</div>
     </th:block>

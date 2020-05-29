@@ -24,8 +24,7 @@ import java.util.Map;
 public class SettingsController {
 
     @RequestMapping(value = "profile", method = RequestMethod.GET)
-    public ModelAndView displayUserInformation(HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
+    public String displayChangeSettingsForm(Model model, HttpServletRequest request) {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
             // Fetch the user to ensure that it contains the newest profile picture.
@@ -37,12 +36,11 @@ public class SettingsController {
             }
 
             // The modifiedUser is initialized with loggedUser.
-            modelAndView.addObject("modifiedUser", loggedUser);
-            modelAndView.setViewName("settings/profile");
-        } else {
-            modelAndView.setViewName("redirect:/");
+            model.addAttribute("modifiedUser", loggedUser);
+            model.addAttribute("userRegistrationDTO", new SNUserRegistrationDTO());
+            return "settings/profile";
         }
-        return modelAndView;
+        return "redirect:/";
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.POST)
@@ -98,16 +96,6 @@ public class SettingsController {
         return null;
     }
 
-    @RequestMapping(value = "changePassword", method = RequestMethod.GET)
-    public String displayChangePropertyForm(Model model, HttpServletRequest request) {
-        SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        if (null != loggedUser) {
-            model.addAttribute("userRegistrationDTO", new SNUserRegistrationDTO());
-            return "settings/changePass";
-        }
-        return ("redirect:/");
-    }
-
     /**
      * @param request
      * @param snUserRegistrationDTO is a partial populated object. It contains only password and passwordMatch fields.
@@ -122,7 +110,7 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser && null != snUserRegistrationDTO) {
-            log.info("User " + loggedUser + "is changing the password");
+            log.info("User: " + loggedUser.getUserName() + " is changing the password.");
             if (snUserRegistrationDTO.getPassword().equals(snUserRegistrationDTO.getPasswordMatch())) {
                 Map<String, Object> parameters = new HashMap<>();
                 loggedUser.setPassword(oldPassword);
@@ -132,12 +120,13 @@ public class SettingsController {
                 if (null != result.getBody()) {
                     if (result.getBody()) {
                         redirectAttributes.addFlashAttribute("passWasChanged", true);
+                        log.info("User: " + loggedUser.getUserName() + " has changed his password.");
                     } else if (HttpStatus.ACCEPTED == result.getStatusCode()) {
                         redirectAttributes.addFlashAttribute("wrongPassword", true);
                     } else if (HttpStatus.NO_CONTENT == result.getStatusCode()) {
                         redirectAttributes.addFlashAttribute("minimumOnePasswordIsMissing", true);
                     }
-                    modelAndView.setViewName("redirect:/settings/changePassword");
+                    modelAndView.setViewName("redirect:/settings/profile");
                     return modelAndView;
                 }
             }
