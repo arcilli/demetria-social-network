@@ -58,7 +58,6 @@
                                 Please enter valid values.
                             </div>
                         </div>
-                        <!--TODO: Uncomment this only after implement unique usernames-->
                         <div class="col-md-4 mb-3">
                             <label for="userNameRegistrationForm">Username</label>
                             <div class="input-group">
@@ -72,7 +71,7 @@
                                 <div class="invalid-feedback">
                                     Please choose a username.
                                 </div>
-                                <div class="username-already-exists" th:if="${usernameAlreadyExists != null}">An
+                                <div class="error-message username-already-exists" th:if="${null != usernameAlreadyExists}">An
                                     account associated with this username is already created.
                                 </div>
                             </div>

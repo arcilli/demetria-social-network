@@ -50,7 +50,7 @@ public class RegisterController {
                     redirectAttributes.addFlashAttribute("userCreated", true);
                 }
             } else {
-                if (responseEntity.getStatusCode() == HttpStatus.IM_USED && null == responseEntity.getBody()) {
+                if (responseEntity.getStatusCode() == HttpStatus.IM_USED && null != responseEntity.getBody()) {
                     redirectAttributes.addFlashAttribute("newUser", user);
                     redirectAttributes.addFlashAttribute("usernameAlreadyExists", true);
                 }
@@ -63,5 +63,4 @@ public class RegisterController {
         modelAndView.setViewName("redirect:/signup");
         return modelAndView;
     }
-    // TODO: add a checking for unique username.
 }
