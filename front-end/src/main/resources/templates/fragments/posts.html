@@ -27,7 +27,9 @@
 </td>
 
 <div th:fragment="displayPost(post)">
-    <i class="fa fa-lock" aria-hidden="true" style="font-size:60px;color:red;"></i>
+    <th:block th:if="${post.visibility == T(com.arrnaux.demetria.core.models.userPost.PostVisibility).PRIVATE}">
+        <i class="fa fa-lock" aria-hidden="true" style="font-size:60px;color:red;"></i>
+    </th:block>
     <article class="userPost" th:id="${post.id}">
         <div class="postHeader flex-container">
             <div class="postOwner">
