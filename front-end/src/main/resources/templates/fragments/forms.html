@@ -131,7 +131,6 @@
                 <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
             </form>
             <br/>
-            <!--    TODO: add a confirmation message-->
             <div th:replace="fragments/forms :: deleteAccountButton"></div>
             <span id="updateFailed" th:if="${settingsUpdated == false}">Could not save the settings.</span>
             <span id="settingsUpdated" th:if="${settingsUpdated == true}">Saved.</span>

@@ -5,18 +5,31 @@
     <meta charset="UTF-8">
     <title>Sign up</title>
 </head>
-
 <body>
-<!--display this only if user has not successfully registered, else display a button that redirects on login-->
-<!--th:object will be the object that will be populated with data when the form is submitted-->
-<div th:if="${userCreated == true}">
-    <span>The account has been created.</span>
-    <a href="/login">
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
-    </a>
-</div>
-<div th:replace="fragments/forms :: registerFragment">
 
+<div th:if="${userCreated == true}">
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            $('#confirmCreatedAccount').modal('show');
+        });
+    </script>
+    <div class="modal fade" id="confirmCreatedAccount" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    The account has been created.
+                </div>
+                <div class="modal-footer">
+                    <a href="/login">
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--TODO: use if-else here, do not put the logic in register fragment-->
+<div th:replace="fragments/forms :: registerFragment">
 </div>
 </body>
 
