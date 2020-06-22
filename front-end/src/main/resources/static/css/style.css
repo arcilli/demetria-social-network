@@ -85,7 +85,7 @@ body {
     height: 30px;
 }
 
-.my-posts {
+.my-posts, .column-card-header {
     background: #343a40;
     color: white;
 }
