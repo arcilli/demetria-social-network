@@ -1,3 +1,8 @@
+.not-logged-top-menu {
+    color: white;
+    margin: auto;
+}
+
 #submit-pass-change-form {
     margin: auto;
 }
@@ -82,10 +87,6 @@ body {
 
 .my-posts {
     background: #343a40;
-    color: white;
-}
-
-.not-logged {
     color: white;
 }
 

@@ -57,7 +57,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}"/>
-    <link rel="stylesheet" th:href="@{/css/fontawesome-free-5.13.1-web/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fontawesome/font-awesome.min.css}"/>
     <script th:src="@{/js/jquery/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
@@ -68,11 +68,11 @@
 <!--A header element (instead of a nav) for a visitor that is not logged-->
 <th:block th:fragment="header-user-not-logged" th:if="${session.user == null}">
     <nav class="navbar navbar-dark bg-dark">
-        <div class="not-logged">
-            <span class="nav-text">You are not logged in.
+        <div class="not-logged-top-menu">
+            <span class="nav-text">You are not logged in. Please
             <a href="/login"><button class="btn btn-primary btn-sm">Login</button></a>
              or
-                <a href="/"><button class="btn btn-primary btn-sm">Register</button></a>
+                <a href="/"><button class="btn btn-primary btn-sm">Register</button></a>.
             </span>
         </div>
     </nav>
