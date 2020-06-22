@@ -103,35 +103,38 @@ public class SettingsController {
      * @return
      */
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
-    public ModelAndView changePassword(HttpServletRequest request,
-                                       @ModelAttribute("snUserRegistrationDTO") SNUserRegistrationDTO snUserRegistrationDTO,
-                                       @RequestParam("oldPassword") String oldPassword,
-                                       RedirectAttributes redirectAttributes) {
+    public ModelAndView processPasswordChange(HttpServletRequest request,
+                                              @ModelAttribute("snUserRegistrationDTO") SNUserRegistrationDTO snUserRegistrationDTO,
+                                              @RequestParam("oldPassword") String oldPassword,
+                                              RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser && null != snUserRegistrationDTO) {
-            log.info("User: " + loggedUser.getUserName() + " is changing the password.");
+            log.info("User: " + loggedUser.getUserName() + " is requested the change of its password.");
             if (snUserRegistrationDTO.getPassword().equals(snUserRegistrationDTO.getPasswordMatch())) {
                 Map<String, Object> parameters = new HashMap<>();
                 loggedUser.setPassword(oldPassword);
                 parameters.put("oldUser", loggedUser);
                 parameters.put("newPassword", snUserRegistrationDTO.getPassword());
-                ResponseEntity<Boolean> result = UserUtilsService.changeUserPassword(parameters);
-                if (null != result.getBody()) {
-                    if (result.getBody()) {
+                ResponseEntity<Boolean> passwordWasChangedResponse = UserUtilsService.changeUserPassword(parameters);
+                if (null != passwordWasChangedResponse.getBody()) {
+                    if (passwordWasChangedResponse.getBody()) {
                         redirectAttributes.addFlashAttribute("passWasChanged", true);
                         log.info("User: " + loggedUser.getUserName() + " has changed his password.");
-                    } else if (HttpStatus.ACCEPTED == result.getStatusCode()) {
+                    } else if (HttpStatus.ACCEPTED == passwordWasChangedResponse.getStatusCode()) {
                         redirectAttributes.addFlashAttribute("wrongPassword", true);
-                    } else if (HttpStatus.NO_CONTENT == result.getStatusCode()) {
+                    } else if (HttpStatus.NO_CONTENT == passwordWasChangedResponse.getStatusCode()) {
                         redirectAttributes.addFlashAttribute("minimumOnePasswordIsMissing", true);
                     }
-                    modelAndView.setViewName("redirect:/settings/profile");
-                    return modelAndView;
                 }
+            } else {
+                // The new password and the confirmation new password does not match.
+                redirectAttributes.addFlashAttribute("mismatchPassword", true);
             }
+            modelAndView.setViewName("redirect:/settings/profile");
+        } else {
+            modelAndView.setViewName("redirect:/");
         }
-        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 }

@@ -91,8 +91,7 @@
                                 <div class="invalid-feedback">
                                     Please enter a valid email.
                                 </div>
-                                <!--                        TODO: set a style for this-->
-                                <div class="email-already-exists" th:if="${emailAlreadyExists != null}">An
+                                <div class="error-message email-already-exists" th:if="${emailAlreadyExists != null}">An
                                     account associated with this email is already created.
                                 </div>
                             </div>

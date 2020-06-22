@@ -7,34 +7,51 @@
     </th:block>
 </head>
 <body>
-<body>
 <nav th:replace="fragments/header :: top-bar"></nav>
 <th:block th:fragment="changePass(userRegistrationDTO)">
-    <form action="/settings/changePassword" th:action="@{/settings/changePassword}" method="POST">
+    <form class="needs-validation" id="change-password-form" th:action="@{/settings/changePassword}" method="POST"
+          oninput='newPasswordMatch
+                  .setCustomValidity(newPassword.value !== newPasswordMatch.value ?
+                   "Passwords do not match." : "")'>
         <div class="form-group">
-            <label for="oldPassword">Old password</label>
-            <input type="password" id="oldPassword" required="required" name="oldPassword"/><br/>
-            <label for="newPassword">New password</label>
-            <input type="password" id="newPassword" required="required"
-                   th:field="${userRegistrationDTO.password}"/><br/>
-            <label for="newPasswordMatch">Confirm new password</label>
-            <input type="password" id="newPasswordMatch" required="required"
-                   th:field="${userRegistrationDTO.passwordMatch}"/>
-            <button type="submit" class="btn btn-outline-primary">Submit</button>
+            <div class="form-row">
+                <label for="oldPassword">Old password</label>
+                <input type="password" id="oldPassword" required="required" name="oldPassword"/><br/>
+            </div>
+            <div class="form-row">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" required="required" minlength="8"
+                       th:field="${userRegistrationDTO.password}"/>
+                <div class="invalid-feedback">
+                    Please enter a password that is at least 8 characters long.
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="newPasswordMatch">Confirm new password</label>
+                <input type="password" id="newPasswordMatch" required="required"
+                       th:field="${userRegistrationDTO.passwordMatch}"/>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
+            </div>
         </div>
     </form>
 </th:block>
-<th:block th:fragment="changePassMessages(passWasChanged, wrongPassword, minimumOnePasswordIsMissing)">
+<th:block
+        th:fragment="changePassMessages(passWasChanged, wrongPassword, minimumOnePasswordIsMissing, mismatchPassword)">
     <th:block th:if="null != ${passWasChanged} AND true == ${passWasChanged}">
         <div class="acknowledge-message">The password was changed.</div>
     </th:block>
     <th:block th:if="null != ${wrongPassword} AND true==${wrongPassword}">
         <div class="error-message">Your account password is wrong.</div>
     </th:block>
-    <th:block th:if="null != ${minimumOnePasswordIsMissing} AND true==${minimumOnePasswordIsMissing}">
+    <th:block th:if="null != ${minimumOnePasswordIsMissing} AND true == ${minimumOnePasswordIsMissing}">
         <div class="error-message">Error at processing the form. Complete all the fields in order to change your
             password.
         </div>
+    </th:block>
+    <th:block th:if="null != ${mismatchPassword} AND true == ${mismatchPassword}">
+        <div class="error-message">Password and confirm password does not match.</div>
     </th:block>
 </th:block>
 </body>
