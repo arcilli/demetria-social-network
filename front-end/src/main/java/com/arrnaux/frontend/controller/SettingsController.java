@@ -44,7 +44,8 @@ public class SettingsController {
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.POST)
-    public ModelAndView processUserInformationUpdate(HttpServletRequest request, @ModelAttribute SNUser modifiedUser) {
+    public ModelAndView processUserInformationUpdate(HttpServletRequest request, @ModelAttribute SNUser modifiedUser,
+                                                     RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
@@ -53,15 +54,15 @@ public class SettingsController {
             try {
                 UserUtilsService.executeUserSettingsChangeRequest(loggedUser);
                 // Invalidate current attribute from session since user settings was changed.
-                request.getSession().removeAttribute("user");
+                // The loggedUser object is now updated with desired changes.
                 request.getSession().setAttribute("user", loggedUser);
-                modelAndView.addObject("settingsUpdated", true);
-                modelAndView.addObject("modifiedUser", loggedUser);
+                redirectAttributes.addFlashAttribute("settingsUpdated", true);
+                redirectAttributes.addFlashAttribute("modifiedUser", loggedUser);
             } catch (Exception e) {
                 e.printStackTrace();
-                modelAndView.addObject("settingsUpdated", false);
+                redirectAttributes.addFlashAttribute("settingsUpdated", false);
             }
-            modelAndView.setViewName("settings/profile");
+            modelAndView.setViewName("redirect:/settings/profile");
         } else {
             modelAndView.setViewName("redirect:/");
         }
