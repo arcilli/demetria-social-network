@@ -7,29 +7,33 @@
 </head>
 <body>
 
-<div th:if="${userCreated == true}">
-    <script type="text/javascript">
-        $(window).on('load', function () {
-            $('#confirmCreatedAccount').modal('show');
-        });
-    </script>
-    <div class="modal fade" id="confirmCreatedAccount" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    The account has been created.
-                </div>
-                <div class="modal-footer">
-                    <a href="/login">
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
-                    </a>
+<div class="container custom-container">
+    <div class="row justify-content-center">
+        <div class="col-sm-8 custom-box">
+            <div th:if="${userCreated == true}">
+                <script type="text/javascript">
+                    $(window).on('load', function () {
+                        $('#confirmCreatedAccount').modal('show');
+                    });
+                </script>
+                <div class="modal fade" id="confirmCreatedAccount" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                The account has been created.
+                            </div>
+                            <div class="modal-footer">
+                                <a href="/login">
+                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Login</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div th:unless="${true == userCreated}" th:replace="fragments/forms :: registerFragment"></div>
         </div>
     </div>
-</div>
-<!--TODO: use if-else here, do not put the logic in register fragment-->
-<div th:replace="fragments/forms :: registerFragment">
 </div>
 </body>
 

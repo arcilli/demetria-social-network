@@ -32,86 +32,84 @@
 </div>
 
 <div th:fragment="registerFragment">
-    <div id="signupForm" th:if="${userCreated == null}">
-        <div class="card text-center">
-            <div class="card-body">
-                <h1>Register to Demetria!</h1>
-                <br/>
-                <div>
-                    <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${newUser}"
-                          oninput='passwordMatchRegistrationForm
+    <div id="signupForm" class="card text-center">
+        <div class="card-body">
+            <h1>Register to Demetria!</h1>
+            <br/>
+            <div>
+                <form class="needs-validation" novalidate th:action="@{signup}" method="post" th:object="${newUser}"
+                      oninput='passwordMatchRegistrationForm
                   .setCustomValidity(passwordMatchRegistrationForm.value != passwordRegistrationForm.value ?
                    "Passwords do not match." : "")'>
-                        <div class="form-row">
-                            <div class="col-md-4 mb-3">
-                                <label for="firstNameRegistrationForm">First name</label>
-                                <input type="text" class="form-control" id="firstNameRegistrationForm"
-                                       placeholder="First name" th:field="*{firstName}" required minlength="2">
-                                <div class="invalid-feedback">
-                                    Please enter valid values.
-                                </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="firstNameRegistrationForm">First name</label>
+                            <input type="text" class="form-control" id="firstNameRegistrationForm"
+                                   placeholder="First name" th:field="*{firstName}" required minlength="2">
+                            <div class="invalid-feedback">
+                                Please enter valid values.
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="lastNameRegistrationForm">Last name</label>
-                                <input type="text" class="form-control" id="lastNameRegistrationForm"
-                                       placeholder="Last name" th:field="*{lastName}" required minlength="2">
-                                <div class="invalid-feedback">
-                                    Please enter valid values.
-                                </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="lastNameRegistrationForm">Last name</label>
+                            <input type="text" class="form-control" id="lastNameRegistrationForm"
+                                   placeholder="Last name" th:field="*{lastName}" required minlength="2">
+                            <div class="invalid-feedback">
+                                Please enter valid values.
                             </div>
-                            <!--                    TODO: Uncomment this only after implement unique usernames-->
-                            <div class="col-md-4 mb-3">
-                                <label for="userNameRegistrationForm">Username</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                    </div>
-                                    <input type="text" class="form-control" id="userNameRegistrationForm"
-                                           placeholder="Username" aria-describedby="inputGroupPrepend"
-                                           th:field="*{userName}"
-                                           required>
-                                    <div class="invalid-feedback">
-                                        Please choose a username.
-                                    </div>
-                                    <div class="username-already-exists" th:if="${usernameAlreadyExists != null}">An
-                                        account associated with this username is already created.
-                                    </div>
+                        </div>
+                        <!--TODO: Uncomment this only after implement unique usernames-->
+                        <div class="col-md-4 mb-3">
+                            <label for="userNameRegistrationForm">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                </div>
+                                <input type="text" class="form-control" id="userNameRegistrationForm"
+                                       placeholder="Username" aria-describedby="inputGroupPrepend"
+                                       th:field="*{userName}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please choose a username.
+                                </div>
+                                <div class="username-already-exists" th:if="${usernameAlreadyExists != null}">An
+                                    account associated with this username is already created.
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-4 mb-3">
-                                <label for="emailRegistrationForm">Email</label>
-                                <input type="email" class="form-control" id="emailRegistrationForm" placeholder="Email"
-                                       th:field="*{email}" pattern="[^@]+@[^\.]+\..+" required>
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with
-                                    anyone
-                                    else.
-                                </small>
-                                <div class="invalid-feedback">
-                                    Please enter a valid email.
-                                </div>
-                                <div class="error-message email-already-exists" th:if="${emailAlreadyExists != null}">An
-                                    account associated with this email is already created.
-                                </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="emailRegistrationForm">Email</label>
+                            <input type="email" class="form-control" id="emailRegistrationForm" placeholder="Email"
+                                   th:field="*{email}" pattern="[^@]+@[^\.]+\..+" required>
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with
+                                anyone
+                                else.
+                            </small>
+                            <div class="invalid-feedback">
+                                Please enter a valid email.
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="passwordRegistrationForm">Password</label>
-                                <input type="password" class="form-control" id="passwordRegistrationForm"
-                                       placeholder="Password" th:field="*{password}" required minlength="8">
-                                <div class="invalid-feedback">
-                                    Please enter a password that is at least 8 characters long.
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="passwordMatchRegistrationForm">Retype password</label>
-                                <input type="password" class="form-control" id="passwordMatchRegistrationForm"
-                                       placeholder="Retype password" th:field="*{passwordMatch}" required>
+                            <div class="error-message email-already-exists" th:if="${emailAlreadyExists != null}">An
+                                account associated with this email is already created.
                             </div>
                         </div>
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
-                    </form>
-                </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="passwordRegistrationForm">Password</label>
+                            <input type="password" class="form-control" id="passwordRegistrationForm"
+                                   placeholder="Password" th:field="*{password}" required minlength="8">
+                            <div class="invalid-feedback">
+                                Please enter a password that is at least 8 characters long.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="passwordMatchRegistrationForm">Retype password</label>
+                            <input type="password" class="form-control" id="passwordMatchRegistrationForm"
+                                   placeholder="Retype password" th:field="*{passwordMatch}" required>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Register</button>
+                </form>
             </div>
         </div>
     </div>

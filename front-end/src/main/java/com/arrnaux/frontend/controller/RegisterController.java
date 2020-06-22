@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegisterController {
@@ -27,33 +28,39 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public String displaySignupForm(Model model) {
-        model.addAttribute("newUser", new SNUserRegistrationDTO());
+    public String displaySignUpForm(Model model) {
+        // If the request comes as a redirect from a signupRequest processing, then the field is already filled with
+        // the email. Otherwise, the current request will simply display the form, so a new object is needed.
+        if (null == model.getAttribute("newUser")) {
+            model.addAttribute("newUser", new SNUserRegistrationDTO());
+        }
         return "signup";
     }
 
     @PostMapping("/signup")
-    public ModelAndView processSignupRequest(@ModelAttribute SNUserRegistrationDTO user) {
+    public ModelAndView processSignUpRequest(@ModelAttribute SNUserRegistrationDTO user,
+                                             RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView();
         try {
             ResponseEntity<Boolean> responseEntity = UserUtilsService.executeRegisterRequest(user);
             if (responseEntity.getStatusCode() == HttpStatus.CREATED && null != responseEntity.getBody()) {
                 SNUser persistedUser = UserUtilsService.getObfuscatedUserByUserName(user.getUserName());
+                // Do not use a ribbon client here.
                 if (FriendshipUtilsService.createPersonVertex(restTemplate, persistedUser)) {
-                    modelAndView.addObject("userCreated", true);
+                    redirectAttributes.addFlashAttribute("userCreated", true);
                 }
             } else {
                 if (responseEntity.getStatusCode() == HttpStatus.IM_USED && null == responseEntity.getBody()) {
-                    modelAndView.addObject("newUser", user);
-                    modelAndView.addObject("usernameAlreadyExists", true);
+                    redirectAttributes.addFlashAttribute("newUser", user);
+                    redirectAttributes.addFlashAttribute("usernameAlreadyExists", true);
                 }
             }
         } catch (HttpClientErrorException e) {
             System.out.println(e.toString());
-            modelAndView.addObject("newUser", user);
-            modelAndView.addObject("emailAlreadyExists", true);
+            redirectAttributes.addFlashAttribute("newUser", user);
+            redirectAttributes.addFlashAttribute("emailAlreadyExists", true);
         }
-        modelAndView.setViewName("signup");
+        modelAndView.setViewName("redirect:/signup");
         return modelAndView;
     }
     // TODO: add a checking for unique username.
