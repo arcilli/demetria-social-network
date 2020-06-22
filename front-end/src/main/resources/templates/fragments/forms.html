@@ -21,9 +21,9 @@
                         <input type="password" class="form-control" id="loginFormPassword" th:field="*{password}"
                                placeholder="Password">
                     </div>
-                    <!--                        TODO: set a style for this-->
-                    <!--            TODO: See what's wrong here-->
-                    <div class="form-group" id="badCredentials" th:if="${badCredentials != null}">Bad credentials</div>
+                    <div class="error-message form-group" id="badCredentials" th:if="${badCredentials != null}">Bad
+                        credentials
+                    </div>
                     <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Login</button>
                 </form>
             </div>
