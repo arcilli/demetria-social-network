@@ -13,27 +13,31 @@
           oninput='newPasswordMatch
                   .setCustomValidity(newPassword.value !== newPasswordMatch.value ?
                    "Passwords do not match." : "")'>
-        <div class="form-group">
-            <div class="form-row">
-                <label for="oldPassword">Old password</label>
+        <div class="form-group row">
+            <label for="oldPassword" class="col-sm-3 col-form-label">Old password</label>
+            <div class="col-sm-9">
                 <input type="password" id="oldPassword" required="required" name="oldPassword"/><br/>
             </div>
-            <div class="form-row">
-                <label for="newPassword">New password</label>
+        </div>
+        <div class="form-group row">
+            <label for="newPassword" class="col-sm-3 col-form-label">New password</label>
+            <div class="col-sm-9">
                 <input type="password" id="newPassword" required="required" minlength="8"
                        th:field="${userRegistrationDTO.password}"/>
                 <div class="invalid-feedback">
                     Please enter a password that is at least 8 characters long.
                 </div>
             </div>
-            <div class="form-row">
-                <label for="newPasswordMatch">Confirm new password</label>
+        </div>
+        <div class="form-group row">
+            <label for="newPasswordMatch" class="col-sm-3 col-form-label">Confirm new password</label>
+            <div class="col-sm-9">
                 <input type="password" id="newPasswordMatch" required="required"
                        th:field="${userRegistrationDTO.passwordMatch}"/>
             </div>
-            <div class="form-row">
-                <button type="submit" class="btn btn-outline-primary">Submit</button>
-            </div>
+        </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-outline-primary" id="submit-pass-change-form">Submit</button>
         </div>
     </form>
 </th:block>
