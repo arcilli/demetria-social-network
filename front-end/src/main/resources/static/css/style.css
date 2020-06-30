@@ -1,3 +1,9 @@
+.error-page {
+    max-width: 100%;
+    text-align: center;
+    margin-top: 10%;
+}
+
 .post-comments {
     width: 100%;
 }
