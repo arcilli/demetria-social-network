@@ -125,7 +125,7 @@ $(function (events, handler) {
                     let name = result.owner.firstName + " " + result.owner.lastName;
                     let profileURL = "/profiles/" + result.owner.userName;
                     let commentContent = result.content;
-                    let parentDiv = '<div class="postComment"><div>';
+                    let parentDiv = '<div class="post-comment"><div>';
                     let date = new Date();
                     const monthNames = ["January", "February", "March", "April", "May", "June",
                         "July", "August", "September", "October", "November", "December"

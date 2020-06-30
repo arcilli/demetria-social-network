@@ -23,17 +23,13 @@
 </th:block>
 
 <th:block th:fragment="displayUserName(user)">
-    <div class="flex-container profile-username">
-        <div class="row">
-            <div class="flex-item">
-                <th:block th:if="${null != user AND null != user.userName}">
-                    <a th:href="@{'/profiles/' + ${user.userName}}">
-                        <th:block th:text="${'@' + user.userName}">
-                        </th:block>
-                    </a>
+    <div class="profile-username">
+        <th:block th:if="${null != user AND null != user.userName}">
+            <a th:href="@{'/profiles/' + ${user.userName}}">
+                <th:block th:text="${'@' + user.userName}">
                 </th:block>
-            </div>
-        </div>
+            </a>
+        </th:block>
     </div>
 </th:block>
 </body>

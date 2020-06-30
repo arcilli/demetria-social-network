@@ -12,10 +12,11 @@
     <th:block th:each="i : ${#numbers.sequence(0, noStars-1)}">
         <a th:class="'star-'+${i+1} +' '+|${i<noActiveStars ? 'active' : ''}|" href="#" th:text="${i+1}"></a>
     </th:block>
-    </span>
+</span>
 
-<td th:fragment=createComment(postId) th:if="${newComment != null}">
-    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}">
+<th:block th:fragment=createNewComment(postId) th:if="${null != newComment}">
+    <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}"
+          class="new-comment-form">
         <div class="form-group">
             <textarea type="text" class="form-control" th:field="*{content}" placeholder="Add comment" rows="2">
             </textarea>
@@ -24,15 +25,12 @@
             <button type="submit" class="btn btn-outline-success btn-sm addCommentButton">Add comment</button>
         </div>
     </form>
-</td>
+</th:block>
 
 <div th:fragment="displayPost(post)">
-    <th:block th:if="${post.visibility == T(com.arrnaux.demetria.core.models.userPost.PostVisibility).PRIVATE}">
-        <i class="fa fa-lock" aria-hidden="true" style="font-size:60px;color:red;"></i>
-    </th:block>
-    <article class="userPost" th:id="${post.id}">
-        <div class="postHeader flex-container">
-            <div class="postOwner">
+    <article class="user-post flex-container" th:id="${post.id}">
+        <div class="post-header flex-item">
+            <span class="post-owner">
                 <span class="image-post">
                 <th:block th:replace="user/fragments :: userPhoto(${post.owner})">
                 </th:block>
@@ -40,9 +38,9 @@
                 <a th:href="@{'/profiles/'+ ${post.owner.userName}}">
                     <span th:replace="user/fragments :: userFullName(${post.owner})"></span>
                 </a>
-            </div>
+            </span>
             <!--        TODO: better display time from the post (hours, day, m, years), with the same structure of the link-->
-            <div class="postCreationDate">
+            <span class="post-creation-date">
                 <a th:href="@{'/posts/' + ${post.id}}">
                     <td th:text="'on ' + ${#dates.format(post.creationDate, 'dd MMM')}+': '">
                     </td>
@@ -52,38 +50,43 @@
                     <th:block th:text="${#numbers.formatDecimal(post.averageRank, 1, 1)}">
                     </th:block>
                 </span>
-            </div>
-            <th:block th:if="${session.user != null and session.user.id == post.ownerId}">
-                <button type="button" class="btn btn-link btn-sm deletePostButton">Delete
-                    post
-                </button>
-            </th:block>
+            </span>
+            <span class="right-frame-post-header">
+                <span>
+                    <th:block th:if="${session.user != null AND session.user.id == post.ownerId}">
+                        <button type="button" class="btn btn-link btn-sm deletePostButton">Delete
+                            post
+                        </button>
+                    </th:block>
+                </span>
+                <span class="private-post-lock">
+                    <th:block
+                            th:if="${T(com.arrnaux.demetria.core.models.userPost.PostVisibility).PRIVATE == post.visibility}">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </th:block>
+                </span>
+            </span>
         </div>
-        <div class="postContent" th:text="${post.content}"></div>
+        <div class="post-content flex-item" th:text="${post.content}"></div>
         <th:block th:if="${null != session.user}">
             <th:block th:if="${null != post.voteList AND post.voteList.get(0).ownerId == session.user.id}">
-                <td>
-                    <span th:replace="fragments/posts :: rateStarts(5, ${post.voteList.get(0).value})"></span>
-                </td>
+                <th:block th:replace="fragments/posts :: rateStarts(5, ${post.voteList.get(0).value})">
+                </th:block>
             </th:block>
             <th:block th:unless="${null !=post.voteList AND post.voteList.get(0).ownerId== session.user.id}">
-                <td>
-                    <span th:replace="fragments/posts :: rateStarts(5, 0)"></span>
-                </td>
+                <th:block th:replace="fragments/posts :: rateStarts(5, 0)">
+                </th:block>
             </th:block>
             <br/>
-            <div class="postComments">
-                <div class="postComment" th:each="comment : ${post.commentList}">
-                    <div>
-                        <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
-                           th:text="${comment.owner.getFullName()}"></a>
-                        <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM hh:mm')} + ': '+${comment.content}">
-                        </span>
-                    </div>
+            <div class="post-comments flex-item">
+                <div class="post-comment" th:each="comment : ${post.commentList}">
+                    <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
+                       th:text="${comment.owner.getFullName()}"></a>
+                    <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM hh:mm')} + ': '+${comment.content}">
+                    </span>
                 </div>
-                <div>
-                    <form th:replace="fragments/posts :: createComment(${post.id})"></form>
-                </div>
+                <th:block th:replace="fragments/posts :: createNewComment(${post.id})">
+                </th:block>
             </div>
         </th:block>
         <hr/>

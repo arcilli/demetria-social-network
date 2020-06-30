@@ -19,16 +19,12 @@
                 </th:block>
                 <div class="card-body">
                     <div class="profile-information">
-                        <span>
-                            <h3>
+                        <h3>
                             <th:block th:replace="user/fragments :: userFullName(${session.user})">
                             </th:block>
                         </h3>
-                            <span>
-                                <th:block th:replace="user/fragments :: displayUserName(${session.user})">
-                                </th:block>
-                            </span>
-                        </span>
+                        <th:block th:replace="user/fragments :: displayUserName(${session.user})">
+                        </th:block>
                         <div class="user-list-wrapper">
                             <h6>Suggested persons to follow:</h6>
                             <th:block th:each="person : ${suggestedPersons}">

@@ -1,3 +1,34 @@
+.post-comments {
+    width: 100%;
+}
+
+.fa.fa-lock {
+    font-size: 25px;
+    color: red;
+}
+
+.profile-information > .profile-username {
+    text-align: center;
+    font-weight: bold;
+}
+
+.right-frame-post-header {
+    float: right;
+}
+
+.post-header, .stars, .post-content {
+    flex: 1 100%;
+}
+
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.flex-item {
+    align-self: center;
+}
+
 .not-logged-top-menu {
     color: white;
     margin: auto;
@@ -20,11 +51,6 @@
     flex-flow: row;
     flex: auto;
     justify-content: space-between;
-}
-
-.flex-container.profile-username {
-    justify-content: center;
-    font-weight: bold;
 }
 
 .profile-username a:hover {
@@ -92,17 +118,6 @@ body {
 
 .deletePostButton {
     margin-bottom: 3px;
-}
-
-.flex-container {
-    display: flex;
-}
-
-.flex-container > div {
-    margin: 10px;
-    /*text-align: center;*/
-    /*line-height: 75px;*/
-    /*font-size: 30px;*/
 }
 
 #loginForm {
