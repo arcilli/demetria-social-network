@@ -18,7 +18,7 @@
     <form th:id="${postId} + 'CommForm'" th:action="@{/createComment}" method="post" th:object="${newComment}"
           class="new-comment-form">
         <div class="form-group">
-            <textarea type="text" class="form-control" th:field="*{content}" placeholder="Add comment" rows="2">
+            <textarea class="form-control" th:field="*{content}" placeholder="Add comment">
             </textarea>
             <input type="hidden" name="id" th:value="${postId}"/>
             <br/>
@@ -78,7 +78,7 @@
                 </th:block>
             </th:block>
             <br/>
-            <div class="post-comments flex-item">
+            <div class="post-comments card-body flex-item">
                 <div class="post-comment" th:each="comment : ${post.commentList}">
                     <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
                        th:text="${comment.owner.getFullName()}"></a>

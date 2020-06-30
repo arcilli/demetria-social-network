@@ -71,7 +71,8 @@
                                 <div class="invalid-feedback">
                                     Please choose a username.
                                 </div>
-                                <div class="error-message username-already-exists" th:if="${null != usernameAlreadyExists}">An
+                                <div class="error-message username-already-exists"
+                                     th:if="${null != usernameAlreadyExists}">An
                                     account associated with this username is already created.
                                 </div>
                             </div>
@@ -141,7 +142,10 @@
             <h5>Create a post</h5>
             <form action="#" method="post" th:action="@{/createAPost}" th:object="${post}">
                 <div class="form-group">
-                    <textarea class="form-control" id="post-content" th:field="*{content}"></textarea><br/>
+                    <textarea class="form-control" id="post-content" th:field="*{content}"
+                              placeholder="Say something...">
+                    </textarea>
+                    <br/>
                     <label for="visibility">Visibility</label>
                     <select name="visibilityOption" id="visibility" th:field="*{visibility}">
                         <th:block

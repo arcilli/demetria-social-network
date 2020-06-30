@@ -44,22 +44,20 @@
 
         <div class="col-sm-9">
             <div class="card custom-box">
-                <div class="text-center my-posts">
-                    <h3 class="card-header">My posts</h3>
+                <div class="text-center column-card-header my-posts">
+                    <h3>My posts</h3>
                 </div>
-                <div class="card text-center">
-                    <div class="card-body posts-wrapper">
-                        <th:block
-                                th:if="${null != session.user AND session.user.userName.equals(profileOwner.userName)}">
-                            <th:block th:replace="fragments/forms :: createAPost">
-                            </th:block>
+                <div class="text-center card-body posts-wrapper">
+                    <th:block
+                            th:if="${null != session.user AND session.user.userName.equals(profileOwner.userName)}">
+                        <th:block th:replace="fragments/forms :: createAPost">
                         </th:block>
-                        <th:block th:replace="fragments/timeline :: timeline-part">
-                        </th:block>
-                        <button class="profile-show-more-button btn btn-outline-primary my-2 my-sm-0">
-                            Show more posts
-                        </button>
-                    </div>
+                    </th:block>
+                    <th:block th:replace="fragments/timeline :: timeline-part">
+                    </th:block>
+                    <button class="profile-show-more-button btn btn-outline-primary my-2 my-sm-0">
+                        Show more posts
+                    </button>
                 </div>
             </div>
         </div>

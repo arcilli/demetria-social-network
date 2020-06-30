@@ -1,3 +1,7 @@
+.posts-wrapper textarea {
+    overflow-y: hidden;
+}
+
 .error-page {
     max-width: 100%;
     text-align: center;

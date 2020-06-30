@@ -144,6 +144,12 @@ $(function (events, handler) {
         })
     });
 
+    // Auto-height for comments.
+    postsWrapper.on('input', 'textarea', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
     $('.profile-follow-unfollow-button-wrapper')
         .on('click', '.follow-button', followUser)
         .on('click', '.unfollow-button', unfollowUser);
