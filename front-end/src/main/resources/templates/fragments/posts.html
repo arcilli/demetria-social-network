@@ -82,7 +82,7 @@
                 <div class="post-comment" th:each="comment : ${post.commentList}">
                     <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
                        th:text="${comment.owner.getFullName()}"></a>
-                    <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM hh:mm')} + ': '+${comment.content}">
+                    <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM HH:mm')} + ': '+${comment.content}">
                     </span>
                 </div>
                 <th:block th:replace="fragments/posts :: createNewComment(${post.id})">

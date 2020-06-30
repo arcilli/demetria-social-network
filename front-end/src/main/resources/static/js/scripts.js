@@ -97,7 +97,7 @@ $(function (events, handler) {
         });
     });
 
-    // Ajax request for adding a comment
+    // Ajax request for adding a comment.
     // The button is a part of a form.
     postsWrapper.on('click', '.addCommentButton', function (event) {
         event.preventDefault();
@@ -130,7 +130,7 @@ $(function (events, handler) {
                     const monthNames = ["January", "February", "March", "April", "May", "June",
                         "July", "August", "September", "October", "November", "December"
                     ];
-                    let formattedDate = date.getDay() + " " + monthNames[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes()
+                    let formattedDate = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes()
                     formattedDate += ": ";
                     let formattedContent = "<a href=\"" + profileURL + "\">" + name + "</a> on " + formattedDate + commentContent;
                     formattedContent = parentDiv + formattedContent + "</div></div>";
