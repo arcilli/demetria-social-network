@@ -5,12 +5,15 @@ import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
 import com.arrnaux.frontend.util.posts.PostsUtilsService;
 import lombok.extern.java.Log;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @Log
@@ -31,7 +34,13 @@ public class PostController {
         }
         // TODO: should return something to FE (display an error if the processing ended with an error).
         // This return should not matter since it will be made with an ajax request.
-        modelAndView.setViewName("redirect:/");
+        try {
+            String requestSource = new URI(request.getHeader(HttpHeaders.REFERER)).getPath();
+            modelAndView.setViewName("redirect:" + requestSource);
+        } catch (URISyntaxException e) {
+            modelAndView.setViewName("redirect:/");
+            log.severe(e.getMessage());
+        }
         return modelAndView;
     }
 
