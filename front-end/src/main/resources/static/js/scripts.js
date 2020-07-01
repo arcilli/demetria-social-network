@@ -183,10 +183,20 @@ $(function (events, handler) {
         });
     });
 
+    // Prevent the user to perform a search with an empty query.
     $('.top-search-form').on('submit', function (event) {
         if ("" === this[0].value) {
             event.preventDefault();
         }
+    });
+
+    // Prevent the user to create a post with empty content.
+    $('.create-post-button').on('click', function (event) {
+        Array.from($('.create-post-button').siblings()).forEach(sibling => {
+            if ("TEXTAREA" === sibling.tagName  && "" === sibling.value) {
+                event.preventDefault();
+            }
+        })
     });
 });
 
