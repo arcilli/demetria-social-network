@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -53,10 +52,10 @@ public class UserUtilsService {
         return restTemplate.exchange(targetUrl, HttpMethod.POST, new HttpEntity<>(updatedUser), SNUser.class);
     }
 
-    public static ResponseEntity<String> executeChangePhotoRequest(MultipartFile profilePicture, SNUser user) throws IOException {
+    public static ResponseEntity<String> executeChangePhotoRequest(String profilePicture, SNUser user) throws IOException {
         String targetUrl = baseTargetUrl + "settings/changeProfileImage/" + user.getId();
         return restTemplate.exchange(targetUrl, HttpMethod.POST,
-                new HttpEntity<>(profilePicture.getBytes()), String.class);
+                new HttpEntity<>(profilePicture), String.class);
     }
 
     @Nullable

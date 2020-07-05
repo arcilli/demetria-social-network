@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -77,7 +76,7 @@ public class SettingsController {
      */
     @ResponseBody
     @RequestMapping(value = "changeProfilePhoto", method = RequestMethod.POST)
-    public String changeProfilePhoto(HttpServletRequest request, @RequestParam("profilePicture") MultipartFile profilePicture) {
+    public String changeProfilePhoto(HttpServletRequest request, @RequestParam("profilePicture") String profilePicture) {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         if (null != loggedUser) {
             try {

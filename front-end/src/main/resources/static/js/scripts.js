@@ -162,24 +162,31 @@ $(function (events, handler) {
     $('.profile-show-more-button').on('click', showMoreFromUserProfile);
 
     $('.profile-picture-uploader').on('change', function () {
-        let form = new FormData();
-        form.append('profilePicture', this.files[0]);
-        let targetUrl = "/settings/changeProfilePhoto";
-        let elements = this.id.split("-");
-        let userId = elements[elements.length - 1];
-        $.ajax({
-            url: targetUrl,
-            type: 'POST',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form,
-            success: function (data) {
-                $("#pp-" + userId)[0].src = data;
-            },
-            error: function (data) {
-                console.log(data);
-            }
+        let pictureUploaderForm = this;
+        readFileAsBase64(this.files[0], function (e) {
+            let base64Image = e.target.result;
+            resizeImage(base64Image, function (result) {
+                let resizedImage = result;
+                let form = new FormData();
+                form.append('profilePicture', resizedImage);
+                let targetUrl = "/settings/changeProfilePhoto";
+                let elements = pictureUploaderForm.id.split("-");
+                let userId = elements[elements.length - 1];
+                $.ajax({
+                    url: targetUrl,
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form,
+                    success: function (data) {
+                        $("#pp-" + userId)[0].src = data;
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
         });
     });
 
@@ -193,7 +200,7 @@ $(function (events, handler) {
     // Prevent the user to create a post with empty content.
     $('.create-post-button').on('click', function (event) {
         Array.from($('.create-post-button').siblings()).forEach(sibling => {
-            if ("TEXTAREA" === sibling.tagName  && "" === sibling.value) {
+            if ("TEXTAREA" === sibling.tagName && "" === sibling.value) {
                 event.preventDefault();
             }
         })
@@ -321,28 +328,23 @@ let readFileAsBase64 = function (file, callbackFunction) {
 const MAX_WIDTH_PROFILE_PICTURE = 3840;
 const MAX_HEIGHT_PROFILE_PICTURE = 2160;
 
-let resizeImage = function (base64Image) {
-    let canvas = document.createElement("canvas");
+let resizeImage = function (base64Image, callbackFunction) {
     let image = new Image();
-    image.src = base64Image;
-    let width = image.width;
-    let height = image.height;
-
-    if (width > height) {
-        if (width > MAX_WIDTH_PROFILE_PICTURE) {
-            height = Math.round(height *= MAX_WIDTH_PROFILE_PICTURE / width);
-            width = MAX_WIDTH_PROFILE_PICTURE;
-        }
-    } else {
-        if (height > MAX_HEIGHT_PROFILE_PICTURE) {
-            width = Math.round(width *= MAX_WIDTH_PROFILE_PICTURE / height);
-            height = MAX_HEIGHT_PROFILE_PICTURE;
-        }
-    }
-    // Resize the canvas and draw the image data into it.
-    canvas.width = width;
-    canvas.height = height;
+    let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
-    ctx.drawImage(image, 0, 0, width, height);
-    return canvas.toDataURL("image/jpeg", 0.7)
+    image.onload = function (e) {
+        let width = this.width;
+        let height = this.height;
+
+        while (width > MAX_WIDTH_PROFILE_PICTURE || height > MAX_HEIGHT_PROFILE_PICTURE) {
+            width = width / 1.618033;
+            height = height / 1.618033;
+        }
+        // Resize the canvas and draw the image data into it.
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(this, 0, 0, width, height);
+        callbackFunction(canvas.toDataURL("image/jpeg", 0.7));
+    }
+    image.src = base64Image;
 }

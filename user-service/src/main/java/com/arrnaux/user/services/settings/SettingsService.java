@@ -2,14 +2,12 @@ package com.arrnaux.user.services.settings;
 
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.user.data.SNUserDAO;
-import com.arrnaux.user.utils.Base64Handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
 
@@ -53,19 +51,13 @@ public class SettingsService {
 
     @RequestMapping(value = "changeProfileImage/{userId}", method = RequestMethod.POST)
     public ResponseEntity<String> changeProfileImage(@PathVariable("userId") String userId,
-                                                     @RequestBody byte[] image) {
+                                                     @RequestBody String base64Image) {
         log.info("User: " + userId + " is changing the profile image.");
-        // Convert profilePicture to Base64.
         try {
-            String encodedImage = Base64.getEncoder().encodeToString(image);
             SNUser snUser = SNUser.builder()
                     .id(userId)
                     .build();
-            String imageType = Base64Handler.getImageType(encodedImage.charAt(0));
-            if (null != imageType) {
-                encodedImage = "data:image/" + imageType + ";base64, " + encodedImage;
-            }
-            snUser = snUserDAO.replaceProfileImage(snUser, encodedImage);
+            snUser = snUserDAO.replaceProfileImage(snUser, base64Image);
             if (null != snUser) {
                 return new ResponseEntity<>(snUser.getProfileImageBase64(), HttpStatus.OK);
             }

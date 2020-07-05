@@ -111,7 +111,8 @@ public class SNUserDAODefault implements SNUserDAO {
             query.addCriteria(Criteria.where("id").is(snUser.getId()));
 
             UpdateResult updateResult = mongoOperations.updateFirst(query, update, SNUser.class);
-            if (1 == updateResult.getModifiedCount()) {
+            // Use matchedCount since an user can change its photo with the actual one.
+            if (1 == updateResult.getMatchedCount()) {
                 return findById(snUser.getId());
             }
         }
