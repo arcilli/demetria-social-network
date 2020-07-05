@@ -311,3 +311,38 @@ let unfollowUser = function () {
         }
     });
 };
+
+let readFileAsBase64 = function (file, callbackFunction) {
+    let reader = new FileReader();
+    reader.onload = callbackFunction;
+    reader.readAsDataURL(file);
+}
+
+const MAX_WIDTH_PROFILE_PICTURE = 3840;
+const MAX_HEIGHT_PROFILE_PICTURE = 2160;
+
+let resizeImage = function (base64Image) {
+    let canvas = document.createElement("canvas");
+    let image = new Image();
+    image.src = base64Image;
+    let width = image.width;
+    let height = image.height;
+
+    if (width > height) {
+        if (width > MAX_WIDTH_PROFILE_PICTURE) {
+            height = Math.round(height *= MAX_WIDTH_PROFILE_PICTURE / width);
+            width = MAX_WIDTH_PROFILE_PICTURE;
+        }
+    } else {
+        if (height > MAX_HEIGHT_PROFILE_PICTURE) {
+            width = Math.round(width *= MAX_WIDTH_PROFILE_PICTURE / height);
+            height = MAX_HEIGHT_PROFILE_PICTURE;
+        }
+    }
+    // Resize the canvas and draw the image data into it.
+    canvas.width = width;
+    canvas.height = height;
+    let ctx = canvas.getContext("2d");
+    ctx.drawImage(image, 0, 0, width, height);
+    return canvas.toDataURL("image/jpeg", 0.7)
+}
