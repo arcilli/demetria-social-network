@@ -7,30 +7,55 @@ services:
       - "8080:8080"
     networks:
       - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
   post-service:
     image: arcilli/demetria-post-service:2.4
     ports:
       - "8083:8083"
     networks:
       - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
   front-end:
     image: arcilli/demetria-front-end:2.4
     ports:
       - "8081:8081"
     networks:
       - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
   friendship-relation:
     image: arcilli/demetria-friendship-relation-service:2.4
     ports:
       - "8082:8082"
     networks:
       - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
   search-service:
     image: arcilli/demetria-search-service:2.4
     ports:
       - "8085:8085"
     networks:
       - my-overlay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
   rs1:
     image: mongo
     command: mongod --replSet "rs0"
