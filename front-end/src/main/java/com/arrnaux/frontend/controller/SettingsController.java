@@ -52,7 +52,7 @@ public class SettingsController {
             loggedUser.updateObjectWithNotNullValues(modifiedUser);
             try {
                 UserUtilsService.executeUserSettingsChangeRequest(loggedUser);
-                // Invalidate current attribute from session since user settings was changed.
+                // Invalidate current attribute from session since user settings were changed.
                 // The loggedUser object is now updated with desired changes.
                 request.getSession().setAttribute("user", loggedUser);
                 redirectAttributes.addFlashAttribute("settingsUpdated", true);

@@ -25,6 +25,7 @@ public class SNPost {
     private String id;
 
     @Transient
+    // The property will not be persisted and not further inspected by the mapping framework.
     public static final String DEFAULT_POST_ID = "0";
 
     private String ownerId;
