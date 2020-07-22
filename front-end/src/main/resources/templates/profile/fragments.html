@@ -68,6 +68,7 @@
                                    th:text="${user.firstName}+' '+${user.lastName}">
                                 </a>
                             </h3>
+                            <hr/>
                         </th:block>
                     </th:block>
                 </div>
@@ -86,19 +87,19 @@
                     </th:block>
                 </span>
                 <span>
-                <a th:href="@{'/profiles/' + ${owner.userName}}">
-                    <th:block th:replace="user/fragments :: userFullName(${owner})">
-                    </th:block>
-                </a>
+                    <a th:href="@{'/profiles/' + ${owner.userName}}">
+                        <th:block th:replace="user/fragments :: userFullName(${owner})">
+                        </th:block>
+                    </a>
                 </span>
-                </span>
+            </span>
             <span>
-                    <th:block th:replace="profile/fragments :: followButton(${owner}, ${isFollowed}, false)">
-                    </th:block>
+                <th:block th:replace="profile/fragments :: followButton(${owner}, ${isFollowed}, false)">
+                </th:block>
              </span>
         </div>
-        <hr/>
     </div>
+    <hr/>
 </th:block>
 
 <th:block th:fragment="followButton(user, isFollowed, targetIsInUrl)">
