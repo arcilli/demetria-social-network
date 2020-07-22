@@ -22,5 +22,5 @@ echo "Number of members: $status."
 if [ "$status" -eq 3 ]; then
   primaryReplica=$(mongo --quiet --host rs1 --eval 'rs.isMaster().primary')
   echo "Primary replica: $primaryReplica"
-  mongorestore --host "$primaryReplica" --archive=/usr/local/mongodump-test-db
+  mongorestore --host "$primaryReplica" /usr/local/dump/
 fi
