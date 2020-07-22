@@ -1,0 +1,3 @@
+1. Export the database using mongodump
+3. Copy dump/ folder locally. It should have a folder inside, containing the exported database
+2. Import the database using mongorestore dump/
