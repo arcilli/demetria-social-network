@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
-<head th:replace="fragments/header :: headerIncludes">
+<head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Search result</title>
+    <th:block th:replace="fragments/header :: headerIncludes">
+    </th:block>
 </head>
 
 <body>
 <nav th:replace="fragments/header :: top-bar"></nav>
-
-<!--TODO: display on the left side my profile and on the right side found users (same as following etc etc).-->
-<th:block th:if="${null != foundUsers}" th:each="user: ${foundUsers}">
-    <!-- insert photo here -->
-    <h3>
-        <a th:href="@{'/profiles/' + ${user.userName}}" th:text="${user.firstName}+' '+${user.lastName}">
-        </a></h3>
-</th:block>
+<div class="container custom-container">
+    <div class="row">
+        <th:block th:replace="profile/fragments :: profile-owner-card(${loggedUser})">
+        </th:block>
+        <th:block
+                th:replace="profile/fragments :: profile-rollupOnlyNames(cardTitle='Found users', userList=${foundUsers})">
+        </th:block>
+    </div>
+</div>
 </body>
 
 </html>

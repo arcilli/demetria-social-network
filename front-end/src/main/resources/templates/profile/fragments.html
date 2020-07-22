@@ -34,9 +34,14 @@
             </div>
             <div class="card-body">
                 <div class="user-list-wrapper">
-                    <th:block th:each="mapEntry : ${userList}">
-                        <th:block
-                                th:replace="profile/fragments :: profile-card-flat(${mapEntry.key}, ${mapEntry.value})">
+                    <th:block th:if="${0 == userList.size()}">
+                        No user to display.
+                    </th:block>
+                    <th:block th:unless="${0 == userList.size()}">
+                        <th:block th:each="mapEntry : ${userList}">
+                            <th:block
+                                    th:replace="profile/fragments :: profile-card-flat(${mapEntry.key}, ${mapEntry.value})">
+                            </th:block>
                         </th:block>
                     </th:block>
                 </div>
@@ -44,6 +49,33 @@
         </div>
     </div>
 </th:block>
+
+<th:block th:fragment="profile-rollupOnlyNames(cardTitle, userList)">
+    <div class="col-sm-9">
+        <div class="card custom-box">
+            <div class="text-center my-posts">
+                <h3 class="card-header" th:text="${cardTitle}"></h3>
+            </div>
+            <div class="card-body">
+                <div class="user-list-wrapper">
+                    <th:block th:if="${0 == userList.size()}">
+                        No user to display.
+                    </th:block>
+                    <th:block th:unless="${0 == userList.size()}">
+                        <th:block th:each="user : ${userList}">
+                            <h3>
+                                <a th:href="@{'/profiles/' + ${user.userName}}"
+                                   th:text="${user.firstName}+' '+${user.lastName}">
+                                </a>
+                            </h3>
+                        </th:block>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
 
 <th:block th:fragment="profile-card-flat(owner, isFollowed)">
     <div class="flex-container">

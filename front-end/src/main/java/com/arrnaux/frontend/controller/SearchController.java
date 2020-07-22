@@ -19,6 +19,7 @@ public class SearchController {
     @RequestMapping(value = "user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView searchUser(HttpServletRequest request) {
+        // TODO: use RedirectAttributes
         ModelAndView modelAndView = new ModelAndView();
         if (null == request.getParameter("queryBoxContent")) {
             modelAndView.setViewName("redirect:/index");
@@ -31,6 +32,7 @@ public class SearchController {
             List<SNUser> foundUsers = SearchUtilsService.getUsersByQuery(query);
             if (null != foundUsers) {
                 modelAndView.addObject("foundUsers", new HashSet<>(foundUsers));
+                modelAndView.addObject("loggedUser", loggedUser);
                 modelAndView.setViewName("search/results");
             }
         } else {
