@@ -11,32 +11,26 @@
         <div class="card custom-box">
             <th:block th:replace="user/fragments :: userPhoto(${profileOwner})">
             </th:block>
-            <div class="card-body">
-                <div class="profile-information">
-                        <span>
-                            <h3>
-                            <th:block th:replace="user/fragments :: userFullName(${profileOwner})">
-                            </th:block>
-                        </h3>
-                            <span>
-                                <th:block th:replace="user/fragments :: displayUserName(${profileOwner})">
-                                </th:block>
-                            </span>
-                        </span>
-                    <span th:class="profile-follow-unfollow-button-wrapper"
-                          th:include="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)">
-                    </span>
-                </div>
+            <div class="card-body profile-information">
+                <h3>
+                    <th:block th:replace="user/fragments :: userFullName(${profileOwner})">
+                    </th:block>
+                </h3>
+                <th:block th:replace="user/fragments :: displayUserName(${profileOwner})">
+                </th:block>
+                <span th:class="profile-follow-unfollow-button-wrapper"
+                      th:include="profile/fragments :: followButton(${profileOwner}, ${userIsFollowed}, true)">
+                </span>
             </div>
         </div>
     </div>
 </th:block>
 
-<th:block th:fragment="profile-rollup(type, userList)">
+<th:block th:fragment="profile-rollup(cardTitle, userList)">
     <div class="col-sm-9">
         <div class="card custom-box">
             <div class="text-center my-posts">
-                <h3 class="card-header" th:text="${type}"></h3>
+                <h3 class="card-header" th:text="${cardTitle}"></h3>
             </div>
             <div class="card-body">
                 <div class="user-list-wrapper">
