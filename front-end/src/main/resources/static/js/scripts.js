@@ -130,7 +130,7 @@ $(function (events, handler) {
                     const monthNames = ["January", "February", "March", "April", "May", "June",
                         "July", "August", "September", "October", "November", "December"
                     ];
-                    let formattedDate = date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes()
+                    let formattedDate = date.getDate() + " " + monthNames[date.getMonth()].substr(0, 3) + " " + date.getHours() + ":" + date.getMinutes()
                     formattedDate += ": ";
                     let formattedContent = "<a href=\"" + profileURL + "\">" + name + "</a> on " + formattedDate + commentContent;
                     formattedContent = parentDiv + formattedContent + "</div></div>";
