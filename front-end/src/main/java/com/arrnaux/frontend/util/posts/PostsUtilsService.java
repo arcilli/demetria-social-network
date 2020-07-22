@@ -42,10 +42,6 @@ public class PostsUtilsService {
         return BasicPostsUtils.deletePost(restTemplate, post);
     }
 
-    public static ResponseEntity<SNPost> displayPost(String postId) {
-        return BasicPostsUtils.getPost(restTemplate, postId);
-    }
-
     public static List<SNPost> getPostsForUser(String lastShowedId, SNUser user) {
         return BasicPostsUtils.getPostsForUser(restTemplate, lastShowedId, user);
     }

@@ -154,6 +154,10 @@ $(function (events, handler) {
         .on('click', '.follow-button', followUser)
         .on('click', '.unfollow-button', unfollowUser);
 
+    $('.single-post.button-wrapper')
+        .on("click", '.follow-button', followUserFromSinglePost)
+        .on("click", '.unfollow-button', unfollowUserFromSinglePost);
+
     $('.user-list-wrapper')
         .on('click', '.follow-button', followUser)
         .on('click', '.unfollow-button', unfollowUser);
@@ -282,6 +286,16 @@ let followUser = function () {
     } else {
         userNameToFollow = extractUsernameFromLocationPath();
     }
+    performFollowUserRequest(sourceButton, userNameToFollow);
+};
+
+let followUserFromSinglePost = function () {
+    let userNameToFollow = $(".profile-username")[0].innerText.substring(1);
+    let sourceButton = this;
+    performFollowUserRequest(sourceButton, userNameToFollow);
+}
+
+let performFollowUserRequest = function (sourceButton, userNameToFollow) {
     let targetUrl = "/follow/user/" + userNameToFollow + "/";
     $.ajax({
         url: targetUrl,
@@ -294,7 +308,7 @@ let followUser = function () {
             console.log("Error at following: " + result);
         }
     });
-};
+}
 
 let unfollowUser = function () {
     let userNameToUnfollow = "";
@@ -305,6 +319,16 @@ let unfollowUser = function () {
     } else {
         userNameToUnfollow = extractUsernameFromLocationPath();
     }
+    performUnfollowUserRequest(sourceButton, userNameToUnfollow);
+};
+
+let unfollowUserFromSinglePost = function () {
+    let userNameToUnfollow = $(".profile-username")[0].innerText.substring(1);
+    let sourceButton = this;
+    performUnfollowUserRequest(sourceButton, userNameToUnfollow);
+}
+
+let performUnfollowUserRequest = function (sourceButton, userNameToUnfollow) {
     let targetUrl = "/follow/cancel/" + userNameToUnfollow + "/";
     $.ajax({
         url: targetUrl,
@@ -317,7 +341,7 @@ let unfollowUser = function () {
             console.log("Error at unfollowing: " + result);
         }
     });
-};
+}
 
 let readFileAsBase64 = function (file, callbackFunction) {
     let reader = new FileReader();

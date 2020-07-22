@@ -3,7 +3,9 @@ package com.arrnaux.frontend.controller;
 import com.arrnaux.demetria.core.models.userAccount.SNUser;
 import com.arrnaux.demetria.core.models.userPost.Comment;
 import com.arrnaux.demetria.core.models.userPost.SNPost;
+import com.arrnaux.frontend.util.friendship.FriendshipUtilsService;
 import com.arrnaux.frontend.util.posts.PostsUtilsService;
+import com.arrnaux.frontend.util.users.UserUtilsService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -65,36 +67,40 @@ public class PostController {
     public ModelAndView displayPost(HttpServletRequest request, @PathVariable String postId) {
         ModelAndView modelAndView = new ModelAndView();
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
-        SNPost snPost = PostsUtilsService.displayPost(postId).getBody();
+        SNPost snPost = PostsUtilsService.getPost(postId);
         if (null != snPost) {
+            // The post exists, so it will be displayed.
+            modelAndView
+                    .addObject("post", snPost)
+                    .addObject("authorized", true);
+            SNUser postOwner = null;
+            if (null != snPost.getOwnerId()) {
+                postOwner = UserUtilsService.getObfuscatedUserById(snPost.getOwnerId());
+                // TODO: if the postOwner is null, an exception should be returned, since that's not possible.
+                // (Each post should have an owner).
+            }
             switch (snPost.getVisibility()) {
                 case PUBLIC:
-                    modelAndView
-                            .addObject("authorized", true)
-                            .addObject("post", snPost);
-                    if (null != loggedUser) {
-                        // Only logged users can comment.
-                        modelAndView.addObject("newComment", new Comment());
-                    } else {
-                        // A guest can see the content, but can't comment.
-                        modelAndView
-                                .addObject("post", snPost)
-                                .addObject("authorized", true);
-                    }
-                    modelAndView.setViewName("posts/singlePost");
-                    return modelAndView;
-                case PRIVATE:
-                    if (null != loggedUser) {
-                        if (loggedUser.getId().equals(snPost.getOwner().getId())) {
-                            modelAndView
-                                    .addObject("post", snPost)
-                                    .addObject("newComment", new Comment())
-                                    .addObject("authorized", true)
-                                    .setViewName("posts/singlePost");
-                            return modelAndView;
+                    if (null != postOwner) {
+                        modelAndView.addObject("postOwner", postOwner);
+                        if (null != loggedUser) {
+                            // Only logged users can comment.
+                            modelAndView.addObject("newComment", new Comment())
+                                    .addObject("userIsFollowed",
+                                            FriendshipUtilsService.checkFollowRelation(loggedUser, postOwner));
                         }
                     }
+                case PRIVATE:
+                    // The logged user is viewing its own (private) post.
+                    if (null != loggedUser && null != postOwner && loggedUser.getId().equals(postOwner.getId())) {
+                        modelAndView
+                                .addObject("newComment", new Comment())
+                                // If the post is private and the user sees it, he's the owner of the post.
+                                .addObject("postOwner", loggedUser);
+                    }
             }
+            modelAndView.setViewName("posts/singlePost");
+            return modelAndView;
         }
         modelAndView.addObject("authorized", false);
         modelAndView.setViewName("posts/singlePost");

@@ -3,17 +3,63 @@
 
 <head th:insert="fragments/header :: headerIncludes">
     <meta charset="UTF-8">
-    <title th:text="${post.owner.getFullName()}"></title>
+    <title>View post | Demetria</title>
+    <th:block th:replace="fragments/header :: headerIncludes">
+    </th:block>
 </head>
 
 <body>
-<td th:replace="fragments/header :: top-bar"></td>
-<td th:if="${authorized == null || authorized == false}">Nothing here for you. :(</td>
-<td th:if="${authorized == true}">
-    <div class="posts-wrapper">
-        <div th:replace="fragments/posts :: displayPost(${post})"></div>
+<nav th:replace="fragments/header :: top-bar"></nav>
+<th:block th:if="${authorized == null || authorized == false}">
+    <div class="error-page">
+        The resource is not available. Maybe it doesn't exist or was moved. :(
     </div>
-</td>
+</th:block>
+<th:block th:if="${authorized == true}">
+    <div class="container custom-container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card custom-box">
+                    <th:block th:replace="user/fragments :: userPhoto(${postOwner})">
+                    </th:block>
+                    <div class="card-body profile-information">
+                        <h3>
+                            <th:block th:replace="user/fragments :: userFullName(${postOwner})">
+                            </th:block>
+                        </h3>
+                        <th:block th:replace="user/fragments :: displayUserName(${postOwner})">
+                        </th:block>
+                        <!--                        TODO: replace with a fragment-->
+                        <span class="single-post button-wrapper">
+                            <th:block
+                                    th:if="null != ${session.user} AND ${postOwner.userName} != ${session.user.userName}">
+                                <th:block th:if="${true == userIsFollowed}">
+                                    <button class="unfollow-button btn btn-outline-primary my-2 my-sm-0 active">
+                                        Unfollow
+                                    </button>
+                                </th:block>
+                                <th:block th:if="${null == userIsFollowed} OR ${false == userIsFollowed}">
+                                    <button class="follow-button btn btn-outline-primary my-2 my-sm-0">
+                                        Follow
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-9 card custom-box">
+                <div class="text-center column-card-header my-posts">
+                    <h3>Post<h3>
+                </div>
+                <div class="text-center card-body posts-wrapper">
+                    <div th:replace="fragments/posts :: displayPost(${post})"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
 </body>
 
 </html>
