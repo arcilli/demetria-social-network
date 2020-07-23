@@ -49,12 +49,14 @@
                 </div>
             </div>
 
-            <div class="col-sm-9 card custom-box">
-                <div class="text-center column-card-header my-posts">
-                    <h3>Post<h3>
-                </div>
-                <div class="text-center card-body posts-wrapper">
-                    <div th:replace="fragments/posts :: displayPost(${post})"></div>
+            <div class="col-sm-9">
+                <div class="card custom-box">
+                    <div class="text-center column-card-header my-posts">
+                        <h3>Post<h3>
+                    </div>
+                    <div class="text-center card-body posts-wrapper">
+                        <div th:replace="fragments/posts :: displayPost(${post})"></div>
+                    </div>
                 </div>
             </div>
         </div>
