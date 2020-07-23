@@ -15,7 +15,7 @@ public class UserSuggestion {
 
     private final FollowRelationDAO followRelationDAO;
 
-    private static final int MAX_POPULAR_SUGGESTIONS = 3;
+    private static final int MAX_POPULAR_SUGGESTIONS = 5;
 
     public UserSuggestion(FollowRelationDAO followRelationDAO) {
         this.followRelationDAO = followRelationDAO;

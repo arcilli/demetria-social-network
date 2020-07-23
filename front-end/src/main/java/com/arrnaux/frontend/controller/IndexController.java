@@ -14,11 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 public class IndexController {
+
+    private static final int MAX_NUMBER_OF_SUGGESTED_USERS_FROM_CATEGORY = 2;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView displayIndex(HttpServletRequest httpServletRequest) {
@@ -31,8 +34,8 @@ public class IndexController {
             modelAndView.setViewName("home/homeNotSignedIn");
         } else {
             // rename attribute to "newPost"?
-            List<SNUser> suggestedPersons = getSuggestedPersons(loggedUser);
-            List<SNUser> popularPersons = getMostPopularPersons(loggedUser);
+            List<SNUser> suggestedPersons = getSuggestedPersons(loggedUser, MAX_NUMBER_OF_SUGGESTED_USERS_FROM_CATEGORY);
+            List<SNUser> popularPersons = getMostPopularPersons(loggedUser, MAX_NUMBER_OF_SUGGESTED_USERS_FROM_CATEGORY);
             Set<SNUser> usersToFollow = new HashSet<>();
             if (null != suggestedPersons) {
                 usersToFollow.addAll(suggestedPersons);
@@ -53,21 +56,25 @@ public class IndexController {
         return displayIndex(httpServletRequest);
     }
 
-    private List<SNUser> getSuggestedPersons(SNUser loggedUser) {
+    private List<SNUser> getSuggestedPersons(SNUser loggedUser, int noUserLimit) {
         List<String> ids = FriendshipUtilsService.getSuggestedIds(loggedUser);
         if (null != ids) {
             return ids.stream()
                     .map(UserUtilsService::getObfuscatedUserById)
+                    .filter(Objects::nonNull)
+                    .limit(noUserLimit)
                     .collect(Collectors.toList());
         }
         return null;
     }
 
-    private List<SNUser> getMostPopularPersons(SNUser loggedUser) {
+    private List<SNUser> getMostPopularPersons(SNUser loggedUser, int noUserLimit) {
         List<String> ids = FriendshipUtilsService.getMostPopularWhoAreNotAlreadyFollowed(loggedUser);
         if (null != ids) {
             return ids.stream()
                     .map(UserUtilsService::getObfuscatedUserById)
+                    .filter(Objects::nonNull)
+                    .limit(noUserLimit)
                     .collect(Collectors.toList());
         }
         return null;
