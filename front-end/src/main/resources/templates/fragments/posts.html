@@ -80,10 +80,12 @@
             <br/>
             <div class="post-comments card-body flex-item">
                 <div class="post-comment" th:each="comment : ${post.commentList}">
-                    <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
-                       th:text="${comment.owner.getFullName()}"></a>
-                    <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM HH:mm')} + ': '+${comment.content}">
+                    <th:block th:if="${null != comment.owner}">
+                        <a th:href="@{'/profiles/' + ${comment.owner.userName}}"
+                           th:text="${comment.owner.getFullName()}"></a>
+                        <span th:text="' on ' +${#dates.format(comment.creationDate, 'dd MMM HH:mm')} + ': '+${comment.content}">
                     </span>
+                    </th:block>
                 </div>
                 <th:block th:replace="fragments/posts :: createNewComment(${post.id})">
                 </th:block>

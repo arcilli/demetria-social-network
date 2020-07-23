@@ -76,8 +76,12 @@ public class PostController {
             SNUser postOwner = null;
             if (null != snPost.getOwnerId()) {
                 postOwner = UserUtilsService.getObfuscatedUserById(snPost.getOwnerId());
-                // TODO: if the postOwner is null, an exception should be returned, since that's not possible.
-                // (Each post should have an owner).
+            } else {
+                // If the user is null, its account was deleted, so the post needs to be deleted as well.
+                PostsUtilsService.deletePost(
+                        SNPost.builder()
+                                .id(postId)
+                                .build());
             }
             switch (snPost.getVisibility()) {
                 case PUBLIC:

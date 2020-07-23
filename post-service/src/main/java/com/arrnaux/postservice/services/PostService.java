@@ -154,6 +154,9 @@ public class PostService {
                     snPost.setOwner(snUser);
                     UserAsOwnerOperations.addOwnerToComment(snPost);
                     return snPost;
+                } else {
+                    // The user does not exist anymore, so the post will be deleted.
+                    snPostDAO.removePost(postId);
                 }
             }
         } catch (Exception e) {
