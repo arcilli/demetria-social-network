@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.arrnaux</groupId>
     <artifactId>friendship-relation-service</artifactId>
-    <version>2.5-SNAPSHOT</version>
+    <version>2.5</version>
     <name>friendship-relation-service</name>
     <description>Service serving the friendship relation</description>
 
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.arrnaux</groupId>
             <artifactId>demetria-core</artifactId>
-            <version>2.5-SNAPSHOT</version>
+            <version>2.5</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -124,7 +124,7 @@
     </distributionManagement>
 
   <scm>
-    <tag>{project.version}</tag>
+    <tag>2.5</tag>
     <connection>scm:git:git@github.com:arcilli/demetria-social-network.git</connection>
     <developerConnection>scm:git:git@github.com:arcilli/demetria-social-network.git</developerConnection>
     <url>https://github.com/arcilli/demetria-social-network</url>
