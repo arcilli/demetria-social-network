@@ -82,7 +82,7 @@ services:
     volumes:
       - mongo-rs3:/data/db
   rs-setup:
-    image: arcilli/demetria-mongo-replicas:2.5.1
+    image: arcilli/demetria-mongo-replicas:2.5
     networks:
       - my-overlay
     deploy:
@@ -104,7 +104,7 @@ services:
     networks:
       - my-overlay
   orient-db-initial-setup:
-    image: arcilli/demetria-orient-init-setup:2.5.1
+    image: arcilli/demetria-orient-init-setup:2.5
     deploy:
       restart_policy:
         condition: on-failure
