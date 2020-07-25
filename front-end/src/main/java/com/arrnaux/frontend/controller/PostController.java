@@ -101,6 +101,8 @@ public class PostController {
                                 .addObject("newComment", new Comment())
                                 // If the post is private and the user sees it, he's the owner of the post.
                                 .addObject("postOwner", loggedUser);
+                    } else {
+                        modelAndView.addObject("authorized", false);
                     }
             }
             modelAndView.setViewName("posts/singlePost");
