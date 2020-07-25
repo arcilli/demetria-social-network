@@ -69,13 +69,13 @@ public class PostController {
         SNUser loggedUser = (SNUser) request.getSession().getAttribute("user");
         SNPost snPost = PostsUtilsService.getPost(postId);
         if (null != snPost) {
-            // The post exists, so it will be displayed.
-            modelAndView
-                    .addObject("post", snPost)
-                    .addObject("authorized", true);
             SNUser postOwner = null;
             if (null != snPost.getOwnerId()) {
                 postOwner = UserUtilsService.getObfuscatedUserById(snPost.getOwnerId());
+                // The post exists, so it will be displayed.
+                modelAndView
+                        .addObject("post", snPost)
+                        .addObject("authorized", true);
             } else {
                 // If the user is null, its account was deleted, so the post needs to be deleted as well.
                 PostsUtilsService.deletePost(
@@ -94,6 +94,7 @@ public class PostController {
                                             FriendshipUtilsService.checkFollowRelation(loggedUser, postOwner));
                         }
                     }
+                    break;
                 case PRIVATE:
                     // The logged user is viewing its own (private) post.
                     if (null != loggedUser && null != postOwner && loggedUser.getId().equals(postOwner.getId())) {
